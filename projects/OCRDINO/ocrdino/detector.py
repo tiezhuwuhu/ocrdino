@@ -47,7 +47,7 @@ class CappedCdnQueryGenerator(CdnQueryGenerator):
 
 @MODELS.register_module()
 class OCRDINO(DINO):
-    """A single backbone, four-scale DINO, and one final-stage CTC head."""
+    """A single backbone, four-scale DINO, and one final-stage parallel character-query head."""
 
     def __init__(self, *args, recognition_head, dn_max_queries=128,
                  rec_train_cfg=None, rec_test_cfg=None, **kwargs):
@@ -55,7 +55,7 @@ class OCRDINO(DINO):
         if tuple(self.backbone.out_indices) != (0, 1, 2, 3):
             raise ValueError('OCRDINO needs backbone.out_indices=(0,1,2,3)')
         if self.bbox_head.num_classes != 1:
-            raise ValueError('Detection has one text category; characters belong to CTC')
+            raise ValueError('Detection has one text category; characters belong to the region recognizer')
         from .heads import OCRDINOHead
         if not isinstance(self.bbox_head, OCRDINOHead):
             raise TypeError('Use OCRDINOHead for aligned capped-DN supervision')
@@ -122,39 +122,47 @@ class OCRDINO(DINO):
                     predicted.new_zeros((len(positive), 1)), predicted[positive]], dim=1)
                 sizes = candidate_rois[:, 3:5] - candidate_rois[:, 1:3]
                 valid_geometry = (sizes > 0).all(dim=1) & torch.isfinite(candidate_rois).all(dim=1)
-                candidate_widths = torch.zeros_like(positive)
-                candidate_widths[valid_geometry] = self.recognition_head.roi_widths(
+                candidate_slots = torch.zeros_like(positive)
+                candidate_slots[valid_geometry] = self.recognition_head.roi_query_counts(
                     candidate_rois[valid_geometry])
-                required = candidate_widths.new_tensor([
-                    self.recognition_head.required_ctc_steps(gt.texts[i])
+                required = candidate_slots.new_tensor([
+                    self.recognition_head.required_output_positions(gt.texts[i])
                     if not gt.rec_ignore[i] else 0 for i in assigned.tolist()])
                 use = ((overlaps >= self.rec_train_cfg['min_pred_iou']) &
                        (coverage >= .95) &
                        valid_geometry &
-                       (candidate_widths >= required) &
+                       (candidate_slots >= required) &
                        (torch.rand_like(overlaps) < self.rec_train_cfg['pred_box_prob']))
                 crops[assigned[use]] = predicted[positive[use]]
             results.append(crops)
         return results
 
     def _training_rois(self, samples, c2, head_inputs):
-        epoch = MessageHub.get_current_instance().get_info('epoch') or 0
-        use_pred = (self.rec_train_cfg['pred_box_prob'] > 0 and
-                    epoch >= self.rec_train_cfg['pred_box_start_epoch'])
-        boxes = (self._matched_boxes(head_inputs, samples) if use_pred else
-                 [sample.gt_instances.bboxes for sample in samples])
-        rois, texts = [], []
-        for batch_idx, (sample, image_boxes) in enumerate(zip(samples, boxes)):
+        # Check EVERY valid GT before optional predicted crops or max_rois
+        # sampling: an oversized label must never disappear by random chance.
+        gt_rois, texts, locations = [], [], []
+        for batch_idx, sample in enumerate(samples):
             gt = sample.gt_instances
             if not hasattr(gt, 'texts') or not hasattr(gt, 'rec_ignore'):
                 raise ValueError('Use OCRLoadAnnotations and OCRPackDetInputs')
             for index in torch.where(~gt.rec_ignore.bool())[0].tolist():
-                box = image_boxes[index].detach().to(device=c2.device, dtype=torch.float32)
-                rois.append(torch.cat([box.new_tensor([batch_idx]), box]))
+                box = gt.bboxes[index].detach().to(device=c2.device, dtype=torch.float32)
+                gt_rois.append(torch.cat([box.new_tensor([batch_idx]), box]))
                 texts.append(gt.texts[index])
-        if not rois:
+                locations.append((batch_idx, index))
+        if not gt_rois:
             return c2.new_zeros((0, 5), dtype=torch.float32), []
-        rois = torch.stack(rois)
+        rois = torch.stack(gt_rois)
+        self.recognition_head.validate_targets(rois, texts)
+        epoch = MessageHub.get_current_instance().get_info('epoch') or 0
+        use_pred = (self.rec_train_cfg['pred_box_prob'] > 0 and
+                    epoch >= self.rec_train_cfg['pred_box_start_epoch'])
+        if use_pred:
+            boxes = self._matched_boxes(head_inputs, samples)
+            rois = torch.stack([
+                torch.cat([rois[row, :1], boxes[batch_idx][index].detach().to(rois)])
+                for row, (batch_idx, index) in enumerate(locations)])
+            self.recognition_head.validate_targets(rois, texts)
         maximum = self.rec_train_cfg['max_rois']
         if maximum is not None and len(rois) > maximum:
             selected = torch.randperm(len(rois), device=rois.device)[:maximum]
@@ -195,13 +203,14 @@ class OCRDINO(DINO):
             rois.append(torch.cat([
                 instances.bboxes.new_full((len(instances), 1), index),
                 instances.bboxes], dim=1))
-        text, confidence = self.recognition_head.predict(c2, torch.cat(rois))
+        text, confidence, terminated = self.recognition_head.predict(c2, torch.cat(rois))
         offset = 0
         for instances, sample in zip(filtered, batch_data_samples):
             count = len(instances)
             instances.texts = text[offset:offset + count]
             instances.text_scores = confidence[offset:offset + count]
             instances.ocr_scores = instances.scores * instances.text_scores
+            instances.text_terminated = terminated[offset:offset + count]
             if rescale:
                 scale = instances.bboxes.new_tensor(sample.scale_factor)
                 if scale.numel() == 2:

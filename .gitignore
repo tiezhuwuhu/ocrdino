@@ -121,3 +121,9 @@ work_dirs/
 *.pth
 *.py~
 *.sh~
+
+# Local isolated OCRDINO validation environment
+/.test_deps/
+/.test_tmp/
+/.test_pycache/
+/.tmp/

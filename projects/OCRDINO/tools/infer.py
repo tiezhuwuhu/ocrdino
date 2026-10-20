@@ -36,7 +36,8 @@ def main():
             bbox=prediction.bboxes[index].tolist(), text=text,
             detection_score=float(prediction.scores[index]),
             text_score=float(prediction.text_scores[index]),
-            ocr_score=float(prediction.ocr_scores[index])))
+            ocr_score=float(prediction.ocr_scores[index]),
+            text_terminated=bool(prediction.text_terminated[index])))
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(dict(
         image=str(Path(args.image).resolve()), bbox_format='xyxy',

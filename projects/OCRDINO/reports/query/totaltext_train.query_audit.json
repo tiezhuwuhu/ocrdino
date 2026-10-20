@@ -1,0 +1,48 @@
+{
+  "schema_version": "ocrdino.query_audit.v1",
+  "images": 1255,
+  "total_annotations": 9722,
+  "totalGT": 9722,
+  "validrec": 9708,
+  "maxchars": 24,
+  "maxroisperimage": 103,
+  "ignored": 0,
+  "recognition_ignored": 14,
+  "incomplete": 0,
+  "querybucketcounts": {
+    "32": 5339,
+    "64": 3608,
+    "128": 731,
+    "256": 30
+  },
+  "visualwidthbucketcounts": {
+    "32": 5339,
+    "64": 3608,
+    "128": 731,
+    "256": 30
+  },
+  "errors": [],
+  "warnings": [],
+  "query_buckets": [
+    32,
+    64,
+    128,
+    256,
+    500
+  ],
+  "query_width_scale": 16.0,
+  "visual_width_buckets": [
+    32,
+    64,
+    128,
+    256,
+    500
+  ],
+  "visual_width_scale": 16.0,
+  "max_detection_queries": 900,
+  "capacity_rule": "len(text) + 1 EOS; buckets selected from bbox geometry only",
+  "ok": true,
+  "source_annotation": "C:\\Users\\14222\\.codex\\visualizations\\2026\\10\\08\\01a11aeb-7a68-7721-b272-d464193a8739\\ocrdino_english_converted\\annotations\\totaltext_train.json",
+  "images_checked": false,
+  "dictionary_hash": "13339db9a23dbd26881ca704e15eaa9b8711dbd51ec677349950380018c603d8"
+}

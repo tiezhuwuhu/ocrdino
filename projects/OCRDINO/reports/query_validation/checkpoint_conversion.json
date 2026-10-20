@@ -1,0 +1,70 @@
+{
+  "retained_tensor_count": 612,
+  "dropped_tensors": {
+    "bbox_head.cls_branches.0.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.0.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.1.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.1.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.2.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.2.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.3.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.3.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.4.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.4.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.5.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.5.bias": [
+      80
+    ],
+    "bbox_head.cls_branches.6.weight": [
+      80,
+      256
+    ],
+    "bbox_head.cls_branches.6.bias": [
+      80
+    ],
+    "dn_query_generator.label_embedding.weight": [
+      80,
+      256
+    ]
+  },
+  "newly_initialized": [
+    "text classification branches",
+    "DN text label embedding",
+    "C2 projection",
+    "four recognition convolutions",
+    "visual token projection",
+    "shared character content embedding",
+    "three Character Query decoder layers",
+    "character plus EOS classifier"
+  ],
+  "source": "C:\\Users\\14222\\Desktop\\ocrdino\\cn\\dino-4scale_r50_improved_8xb2-12e_coco_20230818_162607-6f47a913.pth",
+  "output": "C:\\Users\\14222\\Desktop\\ocrdino\\twostage\\mmdetection_twostage_wo_ctc\\checkpoints\\ocrdino_init.pth"
+}

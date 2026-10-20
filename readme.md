@@ -1,265 +1,166 @@
-# OCRDINO：DINO 检测与共享特征 CTC 识别
+# OCRDINO：共享特征与 Character Query 的两阶段 OCR
 
-基于 **MMDetection 3.3.0** 的单模型 OCR 第一版，采用 **DINO 文本区域检测 + 共享 C2 区域采样 + 4 层卷积 + 单层 BiLSTM + CTC**。输入一张完整图片，由同一个模型先定位文本区域，再读取区域特征识别字符串。训练数据只需要文本区域的 `bbox + text`，不需要字符框、字符归属或阅读序号标注。
+本副本基于 MMDetection 3.3.0，在一个模型中联合训练 **DINO 文本框检测 + 区域字符识别**。输入为整图和 `bbox + text`，不需要字符框或字符位置。识别路径为 **共享 C2 → 1×1 Conv → RoIAlign → 4Conv → Visual Tokens → 三层 Character Transformer Decoder → 字符/EOS 分类**，使用有序交叉熵，完全移除实际识别路径对 BiLSTM 和 CTC 的依赖。
 
-检测部分继承官方 **R50 DINO-4scale improved**，使用用户准备的 COCO 预训练权重初始化。训练默认使用全部训练图片，不划分验证集，预先指定训练轮数并保留最后一轮权重。本版先面向英文水平单词或单行文字，同时提供明确的字符字典接口，便于之后训练中文。
+本次仅修改 `mmdetection_twostage_wo_ctc`。原项目、`mmdet/` 核心、官方 DINO 配置和 `heads.py` 的检测损失保持不变。旧 CTC 模块和配置在本副本中明确报迁移错误。英文数据继续采用 MLT2017 + SynText1 + SynText2 预训练24轮、Total-Text train微调12轮；不划分验证集，取预定最后一轮，test独立保留。
 
-新增逻辑集中在 `projects/OCRDINO`：项目自己的 `OCRDINO` 继承 MMDetection 的 DINO，独立实现共享 C2、区域识别、有限 DN 和数据接口。原 `mmdet/models/detectors/dino.py` 及 MMDetection 核心实现不作修改。
+## 模型结构与张量形状
 
-**本次四个英文数据包的推荐流程**：先按[数据审计与转换](#四个英文数据包审计与转换)准备数据，再按[24 轮预训练与 12 轮微调](#英文实验24-轮预训练--12-轮-total-text-微调)训练。MLT2017、SynText1、SynText2 合并用于预训练，Total-Text train 用于微调；Total-Text test 单独保留。后面的通用训练示例供其他自备数据使用。
+~~~text
+整图 [B,3,Hp,Wp]
+        │
+        └─ 共享 ResNet-50，只运行一次
+             ├─ C3/C4/C5 → ChannelMapper → 四尺度特征，各256通道
+             │              → 6层 Deformable Encoder
+             │              → Top-900参考框 + 900 Detection Query
+             │              → 6层 DINO Decoder → 文本bbox + detection_score
+             │
+             └─ C2 [B,256,Hp/4,Wp/4]
+                  → 1×1 Conv 256→128
+                  → 按文本bbox RoIAlign [M,128,8,W]
+                  → 4Conv，高度 8→8→4→2→1
+                  → [M,128,1,W] → [M,W,128]
+                  → Linear 128→256 → Visual Tokens [M,W,256]
+                                               │
+共享content [1,1,256] + 字符序号PE [1,N,256]    │
+                  → Character Queries [M,N,256]
+                  → 3层 Transformer Decoder ──┘
+                     Self-Attention → Cross-Attention → FFN
+                  → [M,N,256] → Linear 256→V+1
+                  → [M,N,V+1] 字符/EOS logits
+                  → 首个EOS之前的有序字符串
+~~~
 
-## 模型结构
+`B`为每卡图片数，`M`为一个识别块中的区域数，`W`为视觉采样宽度，`N`为字符槽数，`V`为真实字符类别数。不同区域可有不同`W/N`，同一块中二者一致。训练默认以GT框采样，推理使用DINO预测框。
 
-### 1. “两阶段，但只有一个模型”是什么意思
+### 共享骨干、四尺度检测与两类 Query
 
-两个计算阶段分别是**文本区域检测**和**区域内字符串识别**，它们共用一个 ResNet-50，一次前向完成。识别阶段从共享特征图取样，不将原图裁成小图片后再运行第二个完整 backbone，也不加载另一个独立识别模型。
-
-训练同时计算 DINO 检测损失与 CTC 识别损失。识别分支通过区域特征向共享 R50 反向传播；检测分支通过四尺度 Transformer 向相同 R50 反向传播。因此两个任务共同学习视觉表示。
-
-DINO 配置中的 `as_two_stage=True` 是 DINO 内部“Encoder 候选框初始化 Decoder”的术语，与这里“检测后识别”的两个计算阶段不是同一个划分。
-
-### 2. 整体数据流
-
-```text
-输入整图 [B,3,Hp,Wp]
-                │
-          共享 ResNet-50
-                │
-     ┌──────────┴─────────────────────────────────┐
-     │                                            │
-     ▼                                            ▼
- C3/C4/C5                              C2 [B,256,Hp/4,Wp/4]
-     │                                            │
- ChannelMapper                             1×1 Conv 256→128
-     │                                            │
- P3/P4/P5/P6（各256通道）                   共享高分辨率识别特征
-     │                                            │
- 6层 Deformable Encoder                           │
-     │                                            │
- 单类文本候选 + Top-900                           │
-     │                                            │
- 900个内容query + 图像相关参考框                    │
-     │                                            │
- 6层 DINO Decoder                                 │
-     │                                            │
- 文本前景分数 + bbox ─── 选择文本区域 ──────────────┤
-                                                  ▼
-                                      RoIAlign [M,128,8,W]
-                                                  │
-                                4层卷积：高度8→8→4→2→1
-                                                  │
-                                       序列 [M,W,128]
-                                                  │
-                                单层BiLSTM，每方向hidden=128
-                                                  │
-                                       序列 [M,W,256]
-                                                  │
-                                   Linear 256→V+1（含blank）
-                                                  │
-                                       CTC贪心解码为字符串
-                                                  ▼
-                                     原图bbox + 分数 + text
-```
-
-图示是推理路径。训练默认用 GT 区域代替筛选后的预测框来采样；可选地混入定位质量足够好的匹配预测框。`B` 是每卡图片数，`Hp/Wp` 是补齐后的图片尺寸，`M` 是实际进入识别头的区域数，`W` 是该区域宽度桶，`V` 是字典中的字符种类数。只有一个检测 query 分支，没有字符 query、字符归属头或第二次检测 Decoder 调用。
-
-### 3. Backbone、四尺度特征与 C2 分支
-
-| R50 输出 | stride | 通道数 | 用途 |
+| R50输出 | stride | 通道 | 用途 |
 | --- | ---: | ---: | --- |
-| C2 | 4 | 256 | 用于区域识别，保留较多笔画细节 |
-| C3 | 8 | 512 | 进入四尺度检测 neck |
-| C4 | 16 | 1024 | 进入四尺度检测 neck |
-| C5 | 32 | 2048 | 进入检测 neck，并生成第四个更粗尺度 |
+| C2 | 4 | 256 | 区域识别，保留笔画细节 |
+| C3 | 8 | 512 | DINO neck |
+| C4 | 16 | 1024 | DINO neck |
+| C5 | 32 | 2048 | DINO neck，并生成额外粗尺度 |
 
-检测 neck 保持官方 ChannelMapper：C3/C4/C5 经通道投影得到 256 通道特征，另从 C5 生成名义 stride 64 的特征。四尺度输入的名义 stride 是 8、16、32、64。这里没有额外引入 FPN 或 BiFPN；尺度间交互由 Deformable Transformer 处理。
+DINO输入的名义stride为8、16、32、64，各256通道。C2不进入全图Transformer，因此仍是官方R50-4scale，可复用improved COCO权重。六层Encoder、六层Decoder、900 query、Hungarian Matching、focal/L1/GIoU、辅助层和DN监督保持原版。
 
-C2 经一个无 bias 的 `1×1 Conv(256,128)` 投影后用于区域采样。**整张 C2 不进入 Encoder，也不先放大回整图分辨率。** 保留 C2 输出不改变 R50-4scale 的 Transformer 尺度数，其余检测主体的参数形状仍与官方 checkpoint 对齐。
+Detection Query对应完整文本区域；Character Query对应区域字符串的第1、第2……个字符。900个检测槽限制文本区域数，字符字典大小决定共享分类器类别数，二者独立。上千种汉字不需要上千个检测Query；一个HELLO区域仅占一个检测槽。DINO内部`as_two_stage=True`指Encoder proposals初始化Decoder，与这里“检测后识别”含义不同。识别不运行第二套backbone或检测器。
 
-原图先等比例缩放，再在右下侧补齐到 32 的倍数。采样框使用缩放后的输入像素坐标，RoIAlign 的 `spatial_scale=1/4` 将框映射到 C2；最终输出再恢复为原图坐标。批次 padding 不改变原始标注语义。
+### RoIAlign与四层卷积
 
-### 4. DINO 如何检测文字
-
-检测部分保持六层 Encoder、六层 Decoder、256 维 Transformer 特征和 900 个匹配 query。Encoder 在四尺度特征上使用可变形注意力，输出整图 memory，并给出文本候选分数和参考框；按分数选择 Top-900 参考框，配合可学习的 900 行内容 embedding 进入 Decoder。
-
-Decoder 的 self-attention 让文本候选交互，deformable cross-attention 从四尺度特征读取信息，各层回归头迭代细化参考框。每个 query 只负责一个完整文本区域，分类头输出一个“文本前景”类别；完整文字内容由后面的区域识别头输出。
-
-检测采用 Hungarian 一对一匹配，代价和损失沿用 DINO 的前景 focal、框 L1、GIoU。Encoder 候选、六层 Decoder 和 DN 分支接受各自的检测监督。识别仅运行一次，不在六层 Decoder 上分别生成字符序列。
-
-### 5. 900 个 query、文字长度与字典大小的关系
-
-本版的 900 个 query 对应**900 个文本区域槽位**，不对应 900 个字符。一个区域 `OPEN` 只需要一个检测 query，识别头在该区域的时间步上输出四个字符；一个含 30 个字的文本行也只占一个检测 query。
-
-每个识别时间步使用同一个 `Linear(256,V+1)` 字符分类器。英文的 95 个可打印 ASCII 字符、将来的数千汉字，都是这个分类器可选择的类别；不需要为每种字单独增加一个 query。字典大小决定输出类别轴，序列宽度决定可用时间步，query 数量决定文本实例容量，三者相互独立。
-
-推理默认在检测输出中按分数筛选，最多识别 100 个文本区域；这是为显存和延迟设置的运行限制，并不是 900 个 query 的理论容量。如果一张图有更多区域，需要提高 `model.rec_test_cfg.max_per_img`，并同时检查 `model.test_cfg.max_per_img`。有效训练区域数超过检测 query 容量时应调整 query 容量，而不是将多余 GT 当作背景。
-
-### 6. 区域采样与宽度分桶
-
-区域采样使用 MMCV RoIAlign，输出高度固定为 8。宽度由区域宽高比决定：
-
-```text
-requested_width = ceil(bbox_width / bbox_height × width_scale)
-width_scale = 16
-width_buckets = (32, 64, 128)
-```
-
-将请求宽度向上取到最近的桶，超过最大桶时使用最大桶。相同桶中的区域一起进入识别头，各桶分开计算，不将全部短单词补齐到最长行的宽度。没有跨桶的序列 padding，因此双向 LSTM 不会把补齐区域当作真实右侧上下文。
-
-训练和推理使用相同的几何选桶规则。训练不会根据真实字符串偷偷增加采样宽度，避免训练时才有的额外信息改变输入分布。CTC 能否容纳标注会显式检查，详见下文；桶或宽度比例不够时需要调整配置。
-
-第一版只支持水平轴对齐 bbox，不预测旋转角、四边形或曲线控制点。倾斜文字的外接矩形可以读取部分信息，但不能等价于几何校正。弯曲 Total-Text、竖排、一个框内多行文字，需要后续实现相应的区域表示和展开方式。
-
-### 7. 四层卷积与单层 BiLSTM
-
-| 操作 | 输出形状 | 作用 |
-| --- | --- | --- |
-| RoIAlign，采样率 2 | `[M,128,8,W]` | 从同一 C2 特征提取区域 |
-| 3×3 Conv，stride 1，GN、ReLU | `[M,128,8,W]` | 提取局部笔画结构 |
-| 3×3 Conv，stride `(2,1)`，GN、ReLU | `[M,128,4,W]` | 压缩高度，保留横向位置 |
-| 3×3 Conv，stride `(2,1)`，GN、ReLU | `[M,128,2,W]` | 继续聚合竖直方向信息 |
-| 2×1 Conv，ReLU | `[M,128,1,W]` | 高度压到 1 |
-| 去掉高度维并转置 | `[M,W,128]` | 形成横向序列 |
-| 单层 BiLSTM，每方向 hidden 128 | `[M,W,256]` | 融合左右视觉上下文 |
-| Linear，256→`V+1` | `[M,W,V+1]` | 每个时间步预测字符或 blank |
-
-四个区域卷积均不带 bias。前三层 GroupNorm 使用 32 组，最后一层不添加归一化。BiLSTM 的前向和后向输出拼接，不是相加，也没有堆叠第二层 LSTM。没有词典搜索、额外语言模型或自回归文字 Transformer。
-
-卷积负责视觉特征，LSTM 负责序列上下文，CTC 负责可变长度对齐。字符分类器在所有区域和时间步间共享，因此字符 `A` 不绑定某个固定位置，也不将 `ABCD` 当作一个完整类别。有限训练内容仍会产生数据偏置，不能仅凭这种结构保证只训练 `ABCD` 就一定识别所有新排列。
-
-### 8. CTC 如何使用整串标注训练
-
-给定区域框和文字 `HELLO`，不需要提供每个字母的边界。模型可产生如下时间步路径，其中 `∅` 为 blank：
-
-```text
-H H ∅ E E L ∅ L O O
-```
-
-CTC 先合并相邻重复字符，再删除 blank，得到 `HELLO`。中间 blank 允许两个相邻的 `L` 保留下来。训练时 CTC 对能得到目标字符串的有效路径计算总概率，并不是先人为划出五个字符框。
-
-字典只保存真实字符；blank 固定为 ID 0，字典中第 `i` 个字符对应 ID `i+1`。默认大小写、标点和空格均区分，不自动 lower、不去首尾空格、不把未知字映射成 UNK。空格是可学习字符，blank 是对齐符号，两者不同。
-
-设文字长度为 `L`，相邻相同字符对数为 `R`，必须满足：
-
-```text
-实际时间步 T >= L + R
-```
-
-例如 `BOOK` 长度 4，含一对相邻 `OO`，至少需要 5 个时间步。代码在训练前检查这一条件，不依赖 `zero_infinity=True` 将不可能的样本静默置零。文字有未知字符、非法控制符或序列长度不足时，必须修正字典/标注/宽度配置，或明确设置 `rec_ignore=true`，不能在未说明的情况下丢弃识别监督。
-
-为了稳定训练，RoIAlign、BiLSTM 和 CTC 的数值敏感路径使用 FP32；卷积在 AMP 上下文中运行。CTC 的 FP32 logits/log-softmax 仍然占用显存，中文大字典尤其需要控制区域数和时间步。
-
-### 9. 训练时使用什么区域
-
-默认 `rec_train_cfg.pred_box_prob=0.0`，识别分支使用有效 GT bbox。这让新初始化的识别头首先看到完整、位置可靠的文字。每批最多随机选择 128 个可识别区域，限制识别激活；这个限制只作用于识别任务，全部有效检测 GT 仍参与正常 Hungarian 匹配。
-
-可选地将 `pred_box_prob` 调大。在达到 `pred_box_start_epoch` 后，对与 GT 匹配、IoU 至少为 `min_pred_iou`、覆盖 GT 面积至少 95%，且其宽度桶容得下该转录的预测框，以给定概率替代对应 GT 框；不合格预测仍使用 GT。epoch 按 MMEngine 从 0 开始计数，默认阈值 5 表示第 6 轮起允许混入。它用于减少训练时精确 GT 框与推理时预测框的差异，不是额外的模型。
-
-第一版的采样框坐标不向框回归器传递识别梯度；采样特征仍保留梯度，识别损失更新共享 R50 和识别头。联合训练不等于所有离散选择、Hungarian 匹配与输出文字都可微。
-
-### 10. 损失、有限 DN 与异常监督
-
-| 损失 | 默认权重 | 监督 |
-| --- | ---: | --- |
-| 文本前景 focal | 2.0 | 文本实例与背景 |
-| bbox L1 | 5.0 | 轴对齐区域坐标 |
-| GIoU | 2.0 | 区域重叠与几何关系 |
-| CTC | 1.0 | 完整字符串 |
-
-检测权重沿用 improved DINO，CTC 接在最后的区域特征上。检测辅助层和 DN 损失按原 DINO 方式分别计算，不是只对最后一层进行定位监督。识别有效区域数在多卡下进行同步归一化，避免不同 rank 文字数量不同导致损失权重含义变化。
-
-默认 DN query 总数有硬上限 128。每图只为 DN 随机采样最多 64 个 GT，若本批最多采样 `K` 个，使用 `max(1, floor(128/(2K)))` 组正负去噪副本，实际总槽数不超过 128。DN target 使用同一子集和次序，普通检测匹配始终保留全部 GT。训练 Decoder 长度最多为 `900+128=1028`，推理去掉 DN 后为 900，避免去噪长度随密集文字数量无界增加。全空 GT 批次不生成有效 DN 正例。
-
-异常标注区分处理：
-
-- 框有效、文字未知或损坏：`rec_ignore=true`，保留检测，关闭该区域 CTC。
-- 可定位但整体忽略：`ignore=true`，不作为正例；正常 Hungarian 匹配与 Encoder 候选损失中，未匹配预测覆盖 ignored 区域的比例（IoF）达到 0.5 时，屏蔽其背景分类监督。DN 仍针对其采样到的有效 GT 构造正负监督。
-- 框非有限、非正面积或超界：转换器记录异常，默认排除该框，不删除图片。若因此漏掉可检测文本，该图标记标注不完整，关闭未匹配 query 的背景监督，避免把缺失 GT 当背景。
-- `--clip-boxes` 是显式的数据转换选择，不在训练时静默裁框。坐标问题和原始记录进入审计报告，自动规则不保证语义转录本身正确。
-
-### 11. 推理输出
-
-推理在缩放后的图像坐标中得到检测框，按文本检测分数和区域数量上限筛选后执行识别，再将 bbox 恢复为原图坐标。识别使用 CTC 贪心解码，不做 beam search 或词典纠错。
-
-检测分数与识别分数分别输出。识别分数由贪心解码中实际保留字符的概率几何平均得到，空串分数为 0；它不等于整串完全正确的校准概率。另提供 `ocr_score=检测分数×识别分数` 供排序使用，不覆盖两个原始分数，也不声称乘积经过概率校准。输出可能包含空串，查看结果时应同时检查检测位置和识别内容。
-
-| `pred_instances` 字段 | 含义 |
+| 操作 | 输出形状 |
 | --- | --- |
-| `bboxes` | 原图像素 xyxy：`[x1,y1,x2,y2]` |
-| `scores` / `labels` | 检测前景分数 / 文本类别 0 |
-| `texts` | CTC 解码字符串 |
-| `text_scores` | 识别分数 |
-| `ocr_scores` | 检测与识别分数的乘积 |
+| C2的1×1 Conv，256→128，无bias | `[B,128,Hp/4,Wp/4]` |
+| RoIAlign，height=8，sampling_ratio=2，aligned=True | `[M,128,8,W]` |
+| 3×3 Conv，stride=1，GN(32组)，ReLU | `[M,128,8,W]` |
+| 3×3 Conv，stride=(2,1)，GN，ReLU | `[M,128,4,W]` |
+| 3×3 Conv，stride=(2,1)，GN，ReLU | `[M,128,2,W]` |
+| 2×1 Conv，ReLU | `[M,128,1,W]` |
+| 压缩高度、转置、Linear(128,256) | `[M,W,256]` |
 
-推理脚本 JSON 将它们导出为每条预测的 `bbox/text/detection_score/text_score/ocr_score`，顶层标明 `bbox_format="xyxy"`。注意输出 xyxy 与训练 JSON 的 xywh 格式不同。
+四个区域卷积均无bias，不压缩横向顺序，也不全局平均池化。采样框使用缩放后的输入像素坐标，`spatial_scale=1/4`。框坐标不传识别梯度给DINO回归器；识别特征向共享C2、ResNet-50及新头反向传播。
 
-### 12. 官方预训练权重迁移
+### 两套位置编码与 Cross-Attention
 
-复用官方 R50、四尺度 ChannelMapper、Encoder、Decoder、900 行 query embedding 和兼容的框回归参数。R50 原本就包含 C2，因此保留 C2 输出不需要另找 R50-5scale 权重。
+视觉位置编码标记区域左到右第x个token；字符位置编码标记输出序号i。二者采用标准正弦/余弦位置编码，D=256，位置从0开始：
 
-COCO 的 80 类分类分支与 DN 类别 embedding 不迁移到单类文本任务。新文本前景分类器、C2 的 1×1 投影、四层区域卷积、BiLSTM、字符分类层按本项目初始化。预训练迁移提供定位和视觉表示起点，不赋予模型现成的英文或中文识别能力，识别仍需相应数据训练。
+~~~text
+PE(p,2k)   = sin(p / 10000^(2k/D))
+PE(p,2k+1) = cos(p / 10000^(2k/D))
+~~~
 
-使用转换工具生成新的初始化 checkpoint，不覆盖官方源权重。初始化用于 `load_from`；训练中断恢复则使用训练 checkpoint 的 `--resume`，两种用途不能混用。
+角度用FP32计算后转为特征dtype。初始字符Query为`shared_content + PE(i)`：只有一个共享可学习256维向量，不是500个类别embedding。每层Self-Attention的Q/K/V是当前字符表示；Cross-Attention的**Q为当前字符表示，K=visual+PE(x)，V=visual**。
 
-## 显存控制
+每层包含Self-Attention、Cross-Attention、两层FFN及对应残差和LayerNorm。默认固定为3层、256维、8 heads、FFN 1024、dropout 0.1。没有causal mask、GT字符输入、teacher forcing、自回归、字符级Hungarian或单调位置约束。全部位置并行预测。
 
-本实现将下列约束落实到结构和配置中：
+第3个Query表示第3个字符，不表示图片固定横坐标；视觉位置由Cross-Attention学习。有序监督和位置编码提供学习顺序的机制，**不保证学习到正确对齐，也没有证据表明本版比CTC更准确或稳定**。共享字符分类器也不保证只见过ABCD就能识别所有新排列或未见字符。
 
-1. 主干只运行一次；C2 仅区域采样，不进入全图 Transformer。
-2. 不将 C2 上采样到输入分辨率；同通道下 stride 4 特征的空间面积约为全分辨率的 1/16。
-3. 识别只在最后运行一次；不会对每层 Decoder 或全部背景 query 执行字符序列识别。
-4. 识别区域训练默认最多 128 个、推理默认最多 100 个；短文本按宽度分桶。
-5. 小型识别头使用 128 通道和一层每方向 128 维 BiLSTM。
-6. DN 总数不超过 128；所有有效 GT 的主检测监督保留。
-7. 默认 AMP、R50 activation checkpointing、每卡 batch 1、梯度累积 4。这里的 checkpointing 作用于 R50；没有声称 Encoder/Decoder 已启用重算。
-8. 默认等比例 Resize 的短边目标 800、长边上限 1280，不使用会破坏完整转录的随机裁剪或文字镜像。
+### 动态Query桶与视觉分辨率
 
-识别新增参数约为 `772864 + 257×(V+1)`，包括 C2 投影和整个识别头，不包括 DINO。默认 95 个字符时约 0.80M，6000 个字符时约 2.32M。参数小不代表中间激活没有成本：100 个 `128×8×128` FP32 区域张量本身约 50 MiB；100 个区域、128 步、6001 类的一份 FP32 logits 约 293 MiB，训练还会保存其他激活和梯度。
+~~~text
+requested_slots = ceil(bbox_width / bbox_height * query_width_scale)
+query_width_scale = 16.0
+query_buckets = (32,64,128,256,500)
+~~~
 
-梯度累积改变有效 batch，不要求同时保留所有微批次的计算图，也不能降低单个微批次本身的峰值。有效 batch 为 `每卡 batch × GPU 数 × 累积次数`；单卡默认 4，两卡默认 8，学习率不自动缩放。
+选择不小于需求的最小桶，超出最大桶则上限为500：20→32、50→64、110→128、200→256、350→500。训练和推理使用同一规则，选桶函数不接收文字长度。
 
-**尚无这套模型正式尺寸的服务器峰值显存或 OCR 精度数据。** 小头、AMP 与上限是减少开销的设计依据，不是“保证只占多少 GB”的测试结论。应使用真实样本执行下文 smoke 并观察正式训练中的密集文字和长文本批次。
+视觉宽度单独使用`width_buckets/width_scale`，默认同为`(32,64,128,256,500)/16.0`。增大字符槽时需同时考虑视觉宽度。RoIAlign加宽只是更密集采样C2，不能恢复源图或stride=4已丢失的笔画；水平bbox也不等于弯曲、竖排或多行校正。
 
-## 目录与源码入口
+长度L必须满足`N>=L+1`。默认500槽含EOS，最多监督499个真实Unicode码点；500个真实字符需要显式增加容量。超容量会报出原文字、Query桶和所需槽数，不截断、不利用GT临时升桶、不静默屏蔽。
 
-```text
-mmdetection/
-├── README.md
-├── configs/dino/                         # 官方配置，保持原样
-├── mmdet/                               # MMDetection 核心，保持原样
-├── tools/train.py                       # 原训练入口
-├── tests/test_projects/test_ocrdino/     # 数据、权重、识别与检测测试
-├── data/ocr/
-│   ├── train.json                       # 自行准备的全量聚合标注
-│   └── images/                          # 自行准备的图片
-└── projects/OCRDINO/
-    ├── configs/
-    │   ├── ocrdino_r50_4scale_ctc.py                 # 通用基础配置
-    │   ├── ocrdino_r50_4scale_ctc_pretrain_24e.py    # MLT + Syn1 + Syn2
-    │   └── ocrdino_r50_4scale_ctc_totaltext_12e.py   # Total-Text 微调
-    ├── requirements.txt
-    ├── reports/english_datasets/        # 本地四包审计及转换结果
-    ├── dictionaries/english.json        # 有序 95 字符，blank 不在文件中
-    ├── ocrdino/
-    │   ├── detector.py                  # 共享特征、检测与识别连接
-    │   ├── heads.py                     # 文本检测、ignored 区域和 DN target
-    │   ├── recognition.py               # 区域采样、4 Conv、BiLSTM、CTC
-    │   ├── dataset.py                   # 聚合 JSON 读取
-    │   ├── schema.py / vocabulary.py    # 格式约束与有序字符表
-    │   ├── transforms.py                # 同步加载和打包 bbox/text
-    │   └── hooks.py                     # 训练与 checkpoint 字典一致性
-    ├── tools/
-    │   ├── prepare_dataset.py           # COCO/ReCTS 聚合与审计
-    │   ├── prepare_english_datasets.py   # 四个英文包转换、图片准备与预训练合并
-    │   ├── english_archives.py           # ZIP/TAR/嵌套 ZIP 读取及 EXIF 修复
-    │   ├── build_dictionary.py          # 从转录建立有序字典
-    │   ├── audit_dataset.py             # 开训前全量 CTC 容量/字典/框检查
-    │   ├── convert_checkpoint.py        # 官方 COCO 权重转换
-    │   ├── smoke_test.py                # 真实数据训练检查与显存报告
-    │   └── infer.py                     # 单图推理输出 JSON
-```
+`max_rois`抽样前检查全部有效GT，预测框混入后及head内再次检查。离线审计复用几何规则，并报告视觉桶及可能的视觉分辨率不足。图片resize舍入和预测框变化可能改变桶，运行时检查不可省略。
 
-建议按数据集、检测器、识别头、权重迁移工具的顺序阅读；DINO 主体实现仍在 MMDetection 原类中复用。
+### 字符、EOS、Ignore与损失
+
+真实字符ID为0..V-1，EOS为V，共V+1类。没有blank或PAD预测类别。`-100`仅为CE的ignore_index，不占类别。95个可打印ASCII字符包含大小写、空格和标点；字典顺序及Unicode语义保持，未知有效字符明确报错。
+
+~~~text
+Query:   Q1 Q2 Q3 Q4 Q5 Q6  Q7 ... QN
+Target:   H  E  L  L  O EOS -100...-100
+~~~
+
+每个区域的损失定义：
+
+~~~text
+loss_char = mean(CE(logits[i], text[i]), i=0...L-1)
+loss_eos  = CE(logits[L], EOS)
+region_loss = loss_char + lambda_eos * loss_eos   # 默认1.0
+loss_rec = loss_weight * mean(region_loss)       # 默认1.0
+loss_total = loss_dino + loss_rec
+~~~
+
+先平均区域内真实字符CE，再加该区域EOS CE，最后平均有效区域。EOS后所有槽不计算损失，不因大量空槽稀释监督。真实字符位置预测EOS会被惩罚，不能仅学习结束符逃避字符损失。无需字符框的原因是第i槽直接监督字符串第i字，空间对齐交给注意力学习。
+
+DDP每rank的区域损失之和除以`全局有效区域数/world_size`，经梯度平均得到全局区域平均。正分母可以小于1，不能夹成1；仅用极小正数防零。空本地批次也参与collective，为C2和全部识别参数保留零计算图。
+
+### 训练区域和输出
+
+默认以GT bbox识别，`pred_box_prob=0`，每批随机选择最多128个识别区域，正常检测GT全部保留。`rec_ignore`仅屏蔽识别，`ignore`延续原ignored监督，无效几何仍记录并设`annotation_complete=false`。
+
+可选后期混入预测框，保留原IoU、GT覆盖率、概率条件；容量条件改为预测框几何Query桶容得下`len(text)+1`，不合格则回退GT。默认`pred_box_start_epoch=5`按零起始epoch表示第6轮。
+
+推理每图最多识别100个区域，所有槽并行argmax，读到首个EOS停止，重复字符不合并：`H E L L O EOS A B → HELLO`。首槽EOS得到空串、分数0。没有EOS时输出全部字符，记录`text_terminated=false`；占满500槽的未结束结果不等于合法499字加EOS序列。
+
+`text_score`为EOS前输出字符概率的几何平均，不计EOS，不是校准后的整串正确概率。`ocr_score=detection_score*text_score`仅供排序。分桶和分块后按原区域索引回填，框在采样后恢复原图坐标。
+
+| 输出字段 | 含义 |
+| --- | --- |
+| `bbox` | 原图绝对像素xyxy，与训练xywh不同 |
+| `detection_score` | 文本检测分数 |
+| `text` | 首个EOS之前的字符串 |
+| `text_score` | 输出字符概率几何平均，空串0 |
+| `ocr_score` | 检测与识别分数乘积 |
+| `text_terminated` | 是否出现EOS |
+
+## 显存与计算约束
+
+保留DN总槽上限128与900匹配Query，训练检测Decoder总长最多1028；DN子采样不减少正常检测GT。C2不进入整图Transformer，识别只执行一次，不处理全部背景Query，也不在DINO六层输出上重复识别。
+
+按相同`(W,N)`分组，默认`chunk_size=8`。训练`with_cp=True`对每块RoIAlign、4Conv、Decoder和区域CE做非重入重计算，保存标量损失，反向重算并恢复dropout RNG。单纯循环分块仍会保存所有训练激活，不能声称同样节省显存。分块不改变区域损失和归一化；不同块大小的dropout随机样本可能不同。
+
+Attention设`need_weights=False`，允许支持的后端使用SDPA，不保证任何硬件都走Flash Attention。RoIAlign用FP32 feature/rois；卷积、Linear和Attention跟随AMP；CE及解码log-softmax用FP32。
+
+500槽Self-Attention为平方开销。显式存一份8区域、8头、500×500的FP32 attention矩阵约61MiB，尚未计其他层、反向和检测；这不是实测峰值。可先减小chunk_size；调整Query或视觉桶必须重新审计，不可截断标签。
+
+默认每卡batch1、累积4、AMP、AdamW、R50 activation checkpointing。单卡有效batch4，两卡8，LR不自动缩放；累积不减少单个微批次峰值。CPU验证不能替代CUDA AMP/DDP、正式尺寸显存、收敛或OCR准确率验证。
+
+## 代码入口
+
+以下路径相对于`projects/OCRDINO/`：
+
+| 文件 | 内容 |
+| --- | --- |
+| `ocrdino/recognition_query.py` | 4Conv、PE、Decoder、CE和分块重计算 |
+| `ocrdino/recognition_capacity.py` | 几何桶与len+1规则 |
+| `ocrdino/detector.py` | 共享C2、区域选择、容量检查和输出 |
+| `ocrdino/vocabulary.py`、`hooks.py` | 字符/EOS、hash和checkpoint保护 |
+| `ocrdino/dataset.py`、`transforms.py` | bbox+text读取和字段对齐，延续原版 |
+| `ocrdino/heads.py` | 原检测损失与DN对应关系，未修改 |
+| `configs/ocrdino_r50_4scale_query*.py` | 通用、24轮预训练、12轮微调 |
+| `tools/audit_dataset.py`、`prepare_english_datasets.py` | Query容量审计与四包转换 |
+| `tools/convert_checkpoint.py`、`smoke_test.py`、`infer.py` | 权重初始化、GPU检查和推理 |
+| `tools/cpu_smoke_test.py`、`cpu_ddp_check.py` | 完整模型CPU检查、识别头两进程Gloo检查 |
 
 ## 环境安装：只使用 pip
 
@@ -276,7 +177,7 @@ python -m pip install mmcv==2.1.0 --only-binary=mmcv \
   -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html
 python -m pip install -r requirements/runtime.txt
 python -m pip install -r projects/OCRDINO/requirements.txt
-python -m pip install -e .
+python -m pip install -e . --no-build-isolation
 
 python -c "import torch, mmcv, mmengine, mmdet; from mmcv.ops import MultiScaleDeformableAttention, RoIAlign; print('torch',torch.__version__,'CUDA',torch.version.cuda,'available',torch.cuda.is_available()); print('mmcv',mmcv.__version__,'mmengine',mmengine.__version__,'mmdet',mmdet.__version__)"
 ```
@@ -325,7 +226,7 @@ MMCV wheel 必须匹配 PyTorch 编译的 CUDA 与 PyTorch 版本，以 `torch.v
 }
 ```
 
-此处 `...` 仅为文档省略，不是可复制的真实字符字典。实际文件包含从 U+0020 空格到 U+007E 波浪线的 95 个不同单字符。blank ID 0 由识别头添加。字典顺序决定分类器权重的含义，不能只保持字符数量相同就更换顺序。
+此处 `...` 仅为文档省略，不是可复制的真实字符字典。实际文件包含从 U+0020 空格到 U+007E 波浪线的 95 个不同单字符。真实字符 ID 为0..94，EOS为95；没有blank/PAD预测类别。字典顺序决定分类器权重的含义，不能只保持字符数量相同就更换顺序。
 
 ### 转换已有 COCO 风格 bbox + text 数据
 
@@ -391,9 +292,9 @@ MLT 图片 ZIP 实际有 10,000 张图，但 JSON 只引用 9,999 张；`0060000
 
 ### `rec` 怎样还原成文字
 
-按这批数据实际使用的字符表：`0..94 → chr(code+32)`，对应 95 个可打印 ASCII 字符；`96` 是尾部 padding；`95` 是不能从当前 JSON 还原原字符的编码。**源标签 ID 不是本模型的 CTC 类别 ID**：先转为真实字符串，再由模型的有序字符字典编码。
+按这批数据实际使用的字符表：`0..94 → chr(code+32)`，对应 95 个可打印 ASCII 字符；`96` 是尾部 padding；`95` 是不能从当前 JSON 还原原字符的编码。**源数据特殊编码与模型字符/EOS编码须分别处理**：先转为真实字符串，再由模型的有序字符字典编码。
 
-例如 `[67,79,84,84,79,78,96,...]` 转成 `cotton`，不能把重复的两个 `t` 合并。CTC 去重只发生在模型预测解码时，不能用于 GT 标签转换。
+例如 `[67,79,84,84,79,78,96,...]` 转成 `cotton`，不能把重复的两个 `t` 合并。本模型训练和预测都保留重复字符，不做CTC去重。
 
 具体处理规则如下：
 
@@ -418,7 +319,7 @@ Total-Text 有两张图片不能只按源 JSON 宽高裁剪，否则会误删真
 
 当前模型使用水平 `bbox`，转换不使用 Bezier 或 polygon 来做弯曲文字矫正。Total-Text 中倾斜和弯曲文本仍会进入其水平包围框，框内可能带较多背景；这限制了此版的识别能力，不能将它视为已经复现曲线文本模型或官方 polygon 端到端评测。
 
-完整机器可读结果见 [审计索引](projects/OCRDINO/reports/english_datasets/README.md)。本次覆盖全量标注和图片成员存在性；Total-Text 全部图片检查了头部尺寸/方向，其他三包未逐张解码或人工核对文字。默认宽度桶 `(32,64,128)`、`width_scale=16` 对全部未屏蔽转录均满足 CTC 的 `L+相邻重复数` 容量；单图最多 333 个检测 GT，低于 900 query 容量。
+此前 CTC 版本完成的源数据扫描、转换和 Total-Text 图片检查保留在[历史数据审计索引](projects/OCRDINO/reports/english_datasets/README.md)；其中旧 CTC 容量与配置测试不是本版验收结果。本版对合并预训练 JSON 和 Total-Text train/test 重新执行了完整 Query 容量审计，使用 (32,64,128,256,500) 桶和 L+1 规则，错误和警告均为 0；单图最多 333 个检测 GT。新报告见 [pretrain](projects/OCRDINO/reports/query/pretrain.query_audit.json)、[Total-Text train](projects/OCRDINO/reports/query/totaltext_train.query_audit.json)、[Total-Text test](projects/OCRDINO/reports/query/totaltext_test.query_audit.json)。本轮没有重复提取或逐张解码原始图片。
 
 ### 在服务器转换和准备图片
 
@@ -437,7 +338,7 @@ Total-Text 有两张图片不能只按源 JSON 宽高裁剪，否则会误删真
 ```bash
 python -m pip install Pillow
 python projects/OCRDINO/tools/prepare_english_datasets.py \
-  --source-root /root/autodl-tmp/data/eng \
+  --source-root /root/autodl-tmp/data/english_sources \
   --output-root /root/autodl-tmp/data/ocrdino_english \
   --extract-images \
   --temp-dir /root/autodl-tmp/ocrdino_convert_tmp
@@ -471,299 +372,235 @@ ocrdino_english/
 
 只想转换某个包时可加 `--datasets totaltext` 等；仅当本次同时选择 `mlt2017 syntext1 syntext2` 时才生成 `pretrain.json`。SynText2 使用外层 `syntext2/train.json`，不再合并内层的另一份 `annotations/ecms_v1_maxlen25.json`，避免重复。
 
-## 从英文扩展到中文
 
-用训练集转录构造自己的字典：
+## 新旧checkpoint与中文扩展
 
-```bash
-python projects/OCRDINO/tools/build_dictionary.py \
-  --input "$OCRDINO_DATA_ROOT/train.json" \
-  --output "$OCRDINO_DATA_ROOT/dictionary.json"
-export OCRDINO_DICTIONARY="$OCRDINO_DATA_ROOT/dictionary.json"
-```
+官方COCO checkpoint继续转换为detection-only初始化：去掉80类分类分支及DN类别embedding，保留兼容的R50、neck、Encoder、Decoder、900行query embedding和框回归参数。C2投影、四层CNN、视觉Linear、共享content、字符Decoder和分类器随机初始化。
 
-字典必须覆盖所有需要识别监督的字符，真实 Unicode 字符保留，不自动繁简转换或大小写合并。第一次用自定义字典训练时应重新建立相应字符输出层。之后恢复训练和推理必须用与 checkpoint 一致的有序字典；字典钩子检查并将字符表写入 checkpoint 元信息。
+旧CTC与新Query都可能输出96类，但旧blank=0/字符1..V，新字符0..V-1/EOS=V，**同形状不代表可加载**。新head保存`recognition_version`与有序字典`dictionary_hash`；即使strict=False，旧CTC/LSTM参数、缺版本或字典顺序不同也会抛错。Runner的`after_load_checkpoint`还检查新架构、EOS、ignore_index和字典元信息。
 
-从英文训练权重扩展中文不等于把环境变量换成更长字典就能严格加载。若要保留已训练的英文字符权重，需要另行按字符映射迁移输出层；当前提供的是从官方 COCO DINO 初始化任意字典的流程。第一版没有声称未见汉字也能被识别。
+不直接恢复旧CTC训练checkpoint，不自动迁移其识别权重。新Query预训练到微调用完整新OCR权重，不再转换；同阶段恢复才加`--resume`。原`recognition.py`及三个旧CTC配置只保留明确错误提示。
 
-长行可增加宽度桶，例如：
+中文通过`build_dictionary.py`生成有序Unicode字典，格式不变。改变字典须新建字符分类器，不能把不同字典权重直接加载。扩长时同时考虑视觉和Query桶，例如：
 
-```bash
-# 在训练命令后增加；先检查真实数据与显存，再采用。
---cfg-options 'model.recognition_head.width_buckets=[32,64,128,256]'
-```
+~~~bash
+--cfg-options 'model.recognition_head.width_buckets=[32,64,128,256,512]' \
+  'model.recognition_head.query_buckets=[32,64,128,256,512]'
+~~~
 
-也可调整 `width_scale`。增加最大桶只使足够宽的区域进入更大桶；若较窄框内有很长转录，需要检查标注及实际选桶宽度，而不只修改全局最大值。更大的字典和时间步都会增加 logits/CTC 的显存。
+## Linux GPU服务器使用
 
-## 官方预训练权重准备
+在项目根目录执行，先完成前面纯pip安装。原数据源只读，转换输出可放项目内部：
 
-本地源权重是：
+~~~bash
+export PYTHONPATH="$PWD:$PYTHONPATH"
+python projects/OCRDINO/tools/prepare_english_datasets.py \
+  --source-root /root/autodl-tmp/data/english_sources \
+  --output-root "$PWD/data/english" --extract-images \
+  --temp-dir "$PWD/work_dirs/convert_tmp"
 
-```text
-C:\Users\14222\Desktop\ocrdino\cn\dino-4scale_r50_improved_8xb2-12e_coco_20230818_162607-6f47a913.pth
-```
-
-上传到服务器后，先转换为单类检测初始化权重：
-
-```bash
-mkdir -p checkpoints
-python projects/OCRDINO/tools/convert_checkpoint.py \
-  --source /root/autodl-tmp/checkpoint/dino-4scale_r50_improved_8xb2-12e_coco_20230818_162607-6f47a913.pth \
-  --output checkpoints/ocrdino_init.pth \
-  --report checkpoints/ocrdino_init.report.json
-
-export OCRDINO_PRETRAINED="$PWD/checkpoints/ocrdino_init.pth"
-```
-
-转换报告列出保留和排除的参数。它不是训练恢复文件；第一次训练通过 `OCRDINO_PRETRAINED` 读取，不要对转换文件使用 `--resume`。配置默认读取 `checkpoints/ocrdino_init.pth`，没有准备该文件时应先转换，避免不知情地从零开始训练。
-
-## 英文实验：24 轮预训练 → 12 轮 Total-Text 微调
-
-此流程使用上一节生成的 `ocrdino_english`，运行目录始终为本仓库根目录。先完成环境安装、带 `--extract-images` 的数据转换，以及上一节官方 COCO 权重转换。两个阶段使用**同一个 95 字符有序字典和相同模型结构**。
-
-### 1. 设置路径并做训练前检查
-
-```bash
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
-export OCRDINO_DATA_ROOT=/root/autodl-tmp/data/ocrdino_english
+export OCRDINO_DATA_ROOT="$PWD/data/english"
 export OCRDINO_IMAGES=''
 export OCRDINO_DICTIONARY="$PWD/projects/OCRDINO/dictionaries/english.json"
-export OCRDINO_PRETRAINED="$PWD/checkpoints/ocrdino_init.pth"
 export OCRDINO_BATCH_SIZE=1
 export OCRDINO_ACCUMULATION=4
 export OCRDINO_WORKERS=4
+~~~
+
+已有`ocrdino.text.v1`数据可复用，不必重新提图，但要重新审计Query容量。四包转换的file_name包含images/，所以OCRDINO_IMAGES为空；自备file_name=example.jpg时按实际目录设为images/等。
+
+### 配置检查与数据审计
+
+~~~bash
+python -c "from mmengine import Config; c=Config.fromfile('projects/OCRDINO/configs/ocrdino_r50_4scale_query_pretrain_24e.py'); print(c.model.recognition_head); print(c.train_dataloader.dataset); print(c.train_cfg)"
 
 python projects/OCRDINO/tools/audit_dataset.py \
   "$OCRDINO_DATA_ROOT/annotations/pretrain.json" \
   --dictionary "$OCRDINO_DICTIONARY" --image-root "$OCRDINO_DATA_ROOT" \
-  --width-buckets 32 64 128 --width-scale 16 --max-queries 900 \
-  --output work_dirs/pretrain_data_audit.json
+  --query-buckets 32 64 128 256 500 --query-width-scale 16 \
+  --visual-width-buckets 32 64 128 256 500 --visual-width-scale 16 \
+  --max-queries 900 --output work_dirs/pretrain_query_audit.json
 
 python projects/OCRDINO/tools/audit_dataset.py \
   "$OCRDINO_DATA_ROOT/annotations/totaltext_train.json" \
   --dictionary "$OCRDINO_DICTIONARY" --image-root "$OCRDINO_DATA_ROOT" \
-  --width-buckets 32 64 128 --width-scale 16 --max-queries 900 \
-  --output work_dirs/totaltext_data_audit.json
+  --query-buckets 32 64 128 256 500 --query-width-scale 16 \
+  --visual-width-buckets 32 64 128 256 500 --visual-width-scale 16 \
+  --max-queries 900 --output work_dirs/totaltext_query_audit.json
+~~~
+
+审计参数对应head的query_buckets/query_width_scale与width_buckets/width_scale，修改模型时同步审计。max-queries是DINO检测槽数。图片根目录指向整个data/english，不再追加images/。
+
+### COCO初始化与GPU smoke
+
+~~~bash
+python projects/OCRDINO/tools/convert_checkpoint.py \
+  --source /root/autodl-tmp/checkpoint/dino-4scale_r50_improved_8xb2-12e_coco_20230818_162607-6f47a913.pth \
+  --output checkpoints/ocrdino_init.pth \
+  --report checkpoints/ocrdino_init.report.json
+export OCRDINO_PRETRAINED="$PWD/checkpoints/ocrdino_init.pth"
 
 CUDA_VISIBLE_DEVICES=0 python projects/OCRDINO/tools/smoke_test.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_pretrain_24e.py \
+  projects/OCRDINO/configs/ocrdino_r50_4scale_query_pretrain_24e.py \
   --checkpoint "$OCRDINO_PRETRAINED" --device cuda:0 --steps 2 \
-  --output work_dirs/english_pretrain_smoke.json
-```
+  --output work_dirs/query_gpu_smoke.json
+~~~
 
-这里 `--image-root` 必须指向整个数据根目录。全量审计确认路径、框、字典和序列容量；smoke 检查真实 GPU 前向、反向和峰值显存。每卡 batch 1、累积 4 是起始配置，不能据此预先承诺特定显存峰值。调整 batch 后需在自己的服务器重新测量。
+转换不会覆盖源权重，也拒绝覆盖已有输出；已有本项目转换结果可直接复用。GPU smoke用真实Dataset、模型和CUDA算子检查前向/反向/预测及峰值显存，不代表整套数据极端批次或收敛。该工具明确要求CUDA。
 
-### 2. MLT2017 + SynText1 + SynText2 预训练 24 轮
+### 单卡：24轮预训练→12轮微调
 
-```bash
+~~~bash
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_pretrain_24e.py \
-  --work-dir work_dirs/ocrdino_pretrain24
-```
+  projects/OCRDINO/configs/ocrdino_r50_4scale_query_pretrain_24e.py \
+  --work-dir work_dirs/ocrdino_query_pretrain24
 
-每轮遍历合并后的 159,049 张图，不人为给三个来源各分配同样的采样配额。SynText1+2 占约 93.71% 的图片，因此是合成样本占主导的预训练；这里的 24 轮是**整个合并集的 24 次遍历**，并非每轮只取一个小子集。DDP 为对齐各 rank 的长度可能补齐极少量样本。
-
-预训练 AdamW 基础学习率 `1e-4`，主干乘数 0.1；前 500 个 dataloader iteration warmup，第 19、22 轮的里程碑各乘 0.1。AMP、有限 DN、共享 C2、识别区域上限、梯度累积及 R50 checkpointing 均继承基础配置。单卡默认有效 batch 为 4；两卡相同配置为 8，未自动缩放学习率。
-
-完成后取 `work_dirs/ocrdino_pretrain24/epoch_24.pth`。不划分验证集，不按测试集挑选 checkpoint。
-
-### 3. 用完整 OCR 权重微调 Total-Text 12 轮
-
-```bash
-export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_pretrain24/epoch_24.pth"
-
+export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_query_pretrain24/epoch_24.pth"
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_totaltext_12e.py \
-  --work-dir work_dirs/ocrdino_totaltext12
-```
+  projects/OCRDINO/configs/ocrdino_r50_4scale_query_totaltext_12e.py \
+  --work-dir work_dirs/ocrdino_query_totaltext12
+~~~
 
-微调只读 `annotations/totaltext_train.json` 的 1,255 张图，加载上一阶段的 backbone、检测分支、C2 投影和完整识别头。**不要再对这个 OCR checkpoint 执行 `convert_checkpoint.py`，也不要在切换阶段时加 `--resume`。** 配置用 `load_from` 加载模型参数、`resume=False`，重新建立优化器和训练计数，从第 1 轮开始完成 12 轮。
+预训练每轮遍历合并159,049张图，基础LR=1e-4，里程碑19/22；微调每轮遍历1,255张Total-Text train图片，LR=5e-5，里程碑8/11。均warmup 500 dataloader iterations、backbone LR乘0.1。合成图约占预训练图片93.71%，没有等额重采样。
 
-微调基础学习率 `5e-5`，主干仍乘 0.1，warmup 500 iteration，第 8、11 轮的里程碑各乘 0.1。这是首版明确给定的实验计划，还没有验证集调参结论。最后使用 `work_dirs/ocrdino_totaltext12/epoch_12.pth`。
+微调用load_from加载第24轮完整Query模型，resume=False重建优化器及计数，从第1轮跑12轮。**不再转换OCR权重，不在跨阶段时加--resume。** 最终使用`work_dirs/ocrdino_query_totaltext12/epoch_12.pth`，它不是验证集挑选的best。
 
-### 4. 两卡、同阶段续训与最终推理
+### 双卡DDP、恢复与推理
 
-若改用两卡，将对应阶段的单卡命令替换为：
-
-```bash
-# 预训练；环境变量与上面保持一致
+~~~bash
 CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2 --master_port=29500 \
-  tools/train.py projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_pretrain_24e.py \
-  --launcher pytorch --work-dir work_dirs/ocrdino_pretrain24
+  tools/train.py projects/OCRDINO/configs/ocrdino_r50_4scale_query_pretrain_24e.py \
+  --launcher pytorch --work-dir work_dirs/ocrdino_query_pretrain24
 
-# 预训练完成后再微调
-export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_pretrain24/epoch_24.pth"
+# 预训练完成后再执行
+export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_query_pretrain24/epoch_24.pth"
 CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2 --master_port=29500 \
-  tools/train.py projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_totaltext_12e.py \
-  --launcher pytorch --work-dir work_dirs/ocrdino_totaltext12
-```
+  tools/train.py projects/OCRDINO/configs/ocrdino_r50_4scale_query_totaltext_12e.py \
+  --launcher pytorch --work-dir work_dirs/ocrdino_query_totaltext12
 
-仅在**同一阶段中断后恢复**时，保持该阶段配置、工作目录和字典不变，在原启动命令末尾加 `--resume`。此时恢复的是该阶段优化器和进度。新阶段使用不同工作目录，避免把预训练进度当成微调进度。两个专用配置固定各自的 24/12 轮、数据文件、学习率和日程，不使用通用配置的 `OCRDINO_EPOCHS/OCRDINO_LR/OCRDINO_TRAIN_JSON` 来决定这些值；需要变更时明确编辑专用配置或使用 `--cfg-options`。
-
-最终单图推理：
-
-```bash
 CUDA_VISIBLE_DEVICES=0 python projects/OCRDINO/tools/infer.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_totaltext_12e.py \
-  work_dirs/ocrdino_totaltext12/epoch_12.pth \
+  projects/OCRDINO/configs/ocrdino_r50_4scale_query_totaltext_12e.py \
+  work_dirs/ocrdino_query_totaltext12/epoch_12.pth \
   "$OCRDINO_DATA_ROOT/images/totaltext/test/0000001.jpg" \
-  --device cuda:0 --out work_dirs/totaltext_example_pred.json
-```
+  --device cuda:0 --out work_dirs/query_prediction.json
+~~~
 
-`totaltext_test.json` 已单独准备，但当前训练配置不启用验证和测试 loop，也没有实现 Total-Text 官方 polygon/lexicon 评测器。不要将单图推理或训练损失当作官方端到端 OCR 指标；以后评测时需使用独立的评测流程，并说明当前水平框输出及异常转录处理方式。
+同阶段中断时在原配置/工作目录命令末尾加--resume，恢复该阶段优化器与进度。字典和结构保持一致。训练关闭val/test loop，test不参与训练；没有实现Total-Text官方polygon/lexicon评测器，单图预测不能当作官方OCR指标。
 
-## 自备数据：先执行真实 GPU smoke
-
-数据和字典准备好后，先完整检查字典覆盖、单图 query 容量、实际宽度桶与 `L+R` 的 CTC 可行性：
-
-```bash
-export OCRDINO_DATA_ROOT=/root/autodl-tmp/data/ocr
-export OCRDINO_TRAIN_JSON=train.json
-export OCRDINO_DICTIONARY="$PWD/projects/OCRDINO/dictionaries/english.json"
-
-python projects/OCRDINO/tools/audit_dataset.py \
-  "$OCRDINO_DATA_ROOT/train.json" \
-  --dictionary "$OCRDINO_DICTIONARY" \
-  --image-root "$OCRDINO_DATA_ROOT/images" \
-  --width-buckets 32 64 128 --width-scale 16 --max-queries 900 \
-  --output work_dirs/dataset_audit.json
-```
-
-调整过识别宽度、query 数量或图片目录时，审计命令也要使用相同设置。全量预检查可以发现随机采样 smoke 尚未碰到的长转录。接着运行真实 GPU smoke：
-
-```bash
-export OCRDINO_DATA_ROOT=/root/autodl-tmp/data/ocr
-export OCRDINO_TRAIN_JSON=train.json
-export OCRDINO_DICTIONARY="$PWD/projects/OCRDINO/dictionaries/english.json"
-export OCRDINO_PRETRAINED="$PWD/checkpoints/ocrdino_init.pth"
-
-CUDA_VISIBLE_DEVICES=0 python projects/OCRDINO/tools/smoke_test.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py \
-  --checkpoint "$OCRDINO_PRETRAINED" \
-  --device cuda:0 --steps 2 \
-  --output work_dirs/ocrdino_smoke.json
-```
-
-smoke 使用训练配置和真实 Dataset，检查模型实际前向、反向与优化步骤，并记录运行报告及 CUDA 峰值显存。有限的 smoke 样本不能代表整套数据最高密度、最长文本或正式训练精度；正式训练仍需观察峰值和异常样本。
-
-## 自备数据：通用全量训练，不划分验证集
-
-以下是基础配置的自备数据示例；四个英文数据包采用上面的专用 24→12 配置。基础配置默认 30 epochs、每卡 batch 1、累积 4、AdamW 学习率 `1e-4`、主干学习率乘数 0.1、AMP、R50 activation checkpointing。前 500 次 iteration 线性 warmup，在总轮数的 80% 和 90% 降低学习率。没有启用验证或测试 loop。
-
-```bash
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
-export OCRDINO_DATA_ROOT=/root/autodl-tmp/data/ocr
-export OCRDINO_TRAIN_JSON=train.json
-export OCRDINO_DICTIONARY="$PWD/projects/OCRDINO/dictionaries/english.json"
-export OCRDINO_PRETRAINED="$PWD/checkpoints/ocrdino_init.pth"
-export OCRDINO_BATCH_SIZE=1
-export OCRDINO_ACCUMULATION=4
-export OCRDINO_WORKERS=4
-export OCRDINO_EPOCHS=30
-
-CUDA_VISIBLE_DEVICES=0 python tools/train.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py \
-  --work-dir work_dirs/ocrdino_ctc_v1
-```
-
-配置已经使用 `AmpOptimWrapper`，不需要再加 `--amp`。每轮保存 checkpoint，保留最近三轮及最后权重。完成 30 轮后使用 `work_dirs/ocrdino_ctc_v1/epoch_30.pth`，它是预定最后一轮，不能称为验证集选出的 best。
-
-两卡 DDP：
-
-```bash
-CUDA_VISIBLE_DEVICES=0,1 torchrun --nproc_per_node=2 --master_port=29500 \
-  tools/train.py projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py \
-  --launcher pytorch --work-dir work_dirs/ocrdino_ctc_v1_2gpu
-```
-
-从最近训练 checkpoint 恢复：
-
-```bash
-CUDA_VISIBLE_DEVICES=0 python tools/train.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py \
-  --work-dir work_dirs/ocrdino_ctc_v1 --resume
-```
-
-恢复时保留原字典、数据与模型结构；训练恢复会读取优化器和训练进度。修改字符顺序后继续恢复会改变分类语义，因此字典一致性检查不能绕开。
+通用`ocrdino_r50_4scale_query.py`默认30轮；专用24/12配置固定各自数据和日程。配置已启用AmpOptimWrapper，无需再加--amp。
 
 | 环境变量 | 默认值/用途 |
 | --- | --- |
-| `OCRDINO_DATA_ROOT` | `data/ocr`，图片和聚合 JSON 的根目录 |
-| `OCRDINO_TRAIN_JSON` | `train.json`，相对数据根目录或绝对路径 |
-| `OCRDINO_IMAGES` | `images/`，图片目录，相对数据根目录或绝对路径 |
-| `OCRDINO_DICTIONARY` | `projects/OCRDINO/dictionaries/english.json` |
-| `OCRDINO_PRETRAINED` | 转换后的初始化 checkpoint，默认 `checkpoints/ocrdino_init.pth` |
-| `OCRDINO_BATCH_SIZE` | 每卡 1 |
-| `OCRDINO_ACCUMULATION` | 4 |
-| `OCRDINO_WORKERS` | 4，本机调试可设为 0 |
-| `OCRDINO_EPOCHS` | 30 |
-| `OCRDINO_LR` | 0.0001 |
-| `OCRDINO_WORK_DIR` | `work_dirs/ocrdino_ctc_v1` |
+| OCRDINO_DATA_ROOT | 通用data/ocr，专用data/english |
+| OCRDINO_IMAGES | 通用images/，专用空字符串 |
+| OCRDINO_TRAIN_JSON | 仅通用配置：train.json |
+| OCRDINO_DICTIONARY | projects/OCRDINO/dictionaries/english.json |
+| OCRDINO_PRETRAINED | 转换后的COCO权重，默认checkpoints/ocrdino_init.pth |
+| OCRDINO_FINETUNE_FROM | 新Query预训练第24轮完整权重 |
+| OCRDINO_BATCH_SIZE / OCRDINO_ACCUMULATION / OCRDINO_WORKERS | 1 / 4 / 4 |
+| OCRDINO_EPOCHS / OCRDINO_LR | 仅通用：30 / 1e-4 |
+| OCRDINO_WORK_DIR | 通用输出目录 |
+| OCRDINO_PRETRAIN_WORK_DIR / OCRDINO_FINETUNE_WORK_DIR | 专用输出目录，可由--work-dir覆盖 |
 
-可选预测框识别训练示例：
+## Windows本地开发
 
-```bash
-# 加在训练命令后；默认仍是纯 GT 框识别训练。
---cfg-options model.rec_train_cfg.pred_box_prob=0.2 \
-  model.rec_train_cfg.pred_box_start_epoch=5 \
-  model.rec_train_cfg.min_pred_iou=0.7
-```
+在PowerShell进入副本，使用兼容PyTorch/MMCV/MMEngine解释器：
 
-训练图片上的损失和可视结果只能用于检查拟合与程序运行。没有独立评测集时，不能给出可信的泛化 OCR 指标；未来可用独立 bbox+text 数据评测检测、识别和端到端结果。
+~~~powershell
+Set-Location 'C:\Users\14222\Desktop\ocrdino\twostage\mmdetection_twostage_wo_ctc'
+$env:PYTHONPATH = "$PWD;$env:PYTHONPATH"
+$env:OCRDINO_DICTIONARY = "$PWD\projects\OCRDINO\dictionaries\english.json"
+$env:OCRDINO_WORKERS = '0'
 
-## 单图推理
+# 仅解析配置，不导入自定义模型
+python -c "from mmengine import Config; c=Config.fromfile('projects/OCRDINO/configs/ocrdino_r50_4scale_query.py', import_custom_modules=False); print(c.model.recognition_head); print(c.train_cfg)"
 
-保持训练时相同的字典：
-
-```bash
-export OCRDINO_DICTIONARY="$PWD/projects/OCRDINO/dictionaries/english.json"
-CUDA_VISIBLE_DEVICES=0 python projects/OCRDINO/tools/infer.py \
-  projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py \
-  work_dirs/ocrdino_ctc_v1/epoch_30.pth \
-  /root/autodl-tmp/data/ocr/images/example.jpg \
-  --device cuda:0 --out work_dirs/ocrdino_pred.json
-```
-
-推理输出 JSON 包含原图 bbox、文本检测分数、识别内容和识别分数。`--score-thr` 可调整检测阈值；调整它只改变哪些检测区域进入识别，不是重新训练。单张训练图预测不能替代独立数据上的评测。
-
-## 当前验证范围
-
-本次本地验证：45 项测试通过，两个依赖 Torch 的测试模块被跳过；OCRDINO 的 28 个 Python 源码文件通过 AST 语法检查。测试覆盖字符字典、异常标注保留、CTC 时间步容量、输入文件保护、嵌套 ZIP/TAR、EXIF 去除且像素不变、源 `rec` 解码、跨数据集 ID 合并和两阶段配置中的路径/日程，以及预训练权重筛选规则；权重筛选测试使用张量形状替身，不等于已经加载真实权重。
-
-四个真实压缩包的全部 JSON 已实际转换，合并后的 159,049 图 / 1,887,466 框再次通过 schema、字典覆盖和 CTC 容量检查。Total-Text 的 1,555 张图片已实际提取，并通过尺寸/EXIF 校验；两张修复图额外验证了解码像素前后一致。其余三包检查了全部图片成员存在性，未在本地提取完整图片集。实际结果保存在 `projects/OCRDINO/reports/english_datasets/`，这是数据准备验证，不是 OCR 精度验证。
-
-本机测试解释器没有 PyTorch、MMCV。另借助现有 MMEngine 0.10.7 缓存，以 `Config.fromfile(..., import_custom_modules=False)` 实际验证了两个阶段配置的继承合并和 `pretty_text` 序列化，但没有导入自定义模型或构建 Runner。识别头与检测器的运行时测试模块共两项被跳过，未执行真实权重转换、模型构建、CTC 张量数值计算或 GPU 前向反向。因此不能把本地检查表述成“训练已经跑通”。请在安装依赖后的服务器执行：
-
-```bash
+# 完整兼容环境：注册、构建及数值测试
 python -m pip install pytest
 python -m pytest -o addopts='' tests/test_projects/test_ocrdino -q -rs
-```
 
-默认 `find_unused_parameters=False`，配合当前 ResNet 内置的重入 activation checkpointing；识别无有效区域、去噪无 GT 的分支都显式保留参数的零梯度路径。没有开启 `find_unused_parameters=True` 来搜索 checkpoint 内部的参数。DDP 行为仍需在目标多卡环境验证。
+# 换成实际JSON路径；省略image-root仅检查标注
+python projects/OCRDINO/tools/audit_dataset.py `
+  'data\english\annotations\pretrain.json' `
+  --dictionary $env:OCRDINO_DICTIONARY `
+  --query-buckets 32 64 128 256 500 --query-width-scale 16 `
+  --visual-width-buckets 32 64 128 256 500 --visual-width-scale 16 `
+  --output work_dirs\windows_query_audit.json
 
-服务器完整 CUDA 训练、CUDA ops、AMP、DDP、多轮收敛、OCR 精度和正式尺寸峰值显存，仍需执行上述单元测试、真实 GPU smoke 及训练命令验证。小样本 smoke 通过也不代表已验证多轮收敛。
+# 源权重只读，输出仅在副本内部；同名输出存在时不要重复转换
+python projects/OCRDINO/tools/convert_checkpoint.py `
+  --source 'C:\Users\14222\Desktop\ocrdino\cn\dino-4scale_r50_improved_8xb2-12e_coco_20230818_162607-6f47a913.pth' `
+  --output checkpoints\ocrdino_init.pth `
+  --report checkpoints\ocrdino_init.report.json
+~~~
 
-标准库数据/转换测试可独立执行；识别和检测测试需要兼容的 PyTorch、MMCV、MMEngine、MMDetection 环境：
+仅装MMEngine时可用import_custom_modules=False检查配置，但不等于构建模型。CPU版Torch/MMCV可做CPU数值验证，不能运行CUDA smoke；正式训练推荐Linux兼容CUDA环境。所有安装使用pip，不使用mim。
 
-```bash
-python -m unittest discover -s tests/test_projects/test_ocrdino -p 'test_data.py'
-python -m unittest discover -s tests/test_projects/test_ocrdino -p 'test_checkpoint.py'
-python -m pip install pytest
-python -m pytest tests/test_projects/test_ocrdino -q -o addopts=''
-```
+## 本次实际验收：2026-10-16
 
-`-o addopts=''` 清除原仓库 pytest.ini 的额外插件参数，使本项目测试不依赖原仓库完整开发测试插件集。纯标准库测试通过仅证明相应逻辑，不替代 CUDA smoke。
+**92 项测试、38 个子测试通过，0 失败、0 跳过。** 使用 Python 3.10.20、PyTorch 2.1.2+cpu、torchvision 0.16.2+cpu、MMCV 2.1.0 的真实 CPU 算子和 MMEngine 0.10.7。依赖由 pip 隔离安装到本副本的 `.test_deps/`，未修改全局 Python 环境。
 
-## 设计依据
+[完整验收报告](projects/OCRDINO/reports/query_validation/README.md)保存测试名称、18项对应关系、原始日志和复跑方式；[pytest XML](projects/OCRDINO/reports/query_validation/pytest.xml)保存逐项执行结果。
 
-- [DINO：DETR with Improved DeNoising Anchor Boxes](https://arxiv.org/abs/2203.03605)：query 集合检测、参考框细化与去噪训练。
-- [MMDetection R50 DINO-4scale improved 配置](https://github.com/open-mmlab/mmdetection/blob/main/configs/dino/dino-4scale_r50_improved_8xb2-12e_coco.py)：检测主体和官方预训练起点。
-- [FOTS](https://arxiv.org/abs/1801.01671)：共享整图特征、区域采样与 CNN/BiLSTM/CTC 的单模型检测识别思路。
-- [CRNN](https://arxiv.org/abs/1507.05717)：从二维文字视觉特征到一维序列与 CTC 转录。
-- [TransDETR 当前公开识别头](https://github.com/weijiawu/TransDETR/blob/main/models/head/rec_head_ctc.py)：Transformer 检测框架连接区域卷积、单层 BiLSTM 与 CTC 的代码先例。当前代码与论文识别头叙述不能不加区分地视为同一实验配置。
-- [CTC 原论文](https://www.cs.toronto.edu/~graves/icml_2006.pdf) 与 [PyTorch CTCLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CTCLoss.html)：无字符位置标注的序列对齐训练。
+| 编号 | 要求 | 状态 | 实际证据 |
+| --- | --- | --- | --- |
+| 1 | MMEngine 正确解析配置 | 通过 | `test_training_configs.py::test_mmengine_resolves_official_dino_inheritance` 解析三个新配置并检查官方 DINO 继承；完整 smoke 还执行 custom_imports 与构建 |
+| 2 | MODELS 注册、构建识别头 | 通过 | `test_registered_head_has_required_production_defaults` 用真实注册器构建默认 256 维、3 层、8 头识别头 |
+| 3 | RoIAlign + 4Conv 形状 | 通过 | `test_real_roi_convolution_shapes_and_loss_gradients_reach_shared_c2` 使用真实 MMCV RoIAlign，检查 H=8 到 H=1 |
+| 4 | Character Query 的位置编码 | 通过 | `test_positions_and_shared_content_define_distinct_ordered_queries` 检查同一内容向量加不同正弦位置 |
+| 5 | Decoder 输出形状 | 通过 | `test_decoder_parallel_shape_and_visual_gradient`；默认真实完整模型也完成前后向 |
+| 6 | 字典与 EOS ID | 通过 | 默认英文 V=95，EOS=95，输出 96 类；HELLO 目标逐项检查 |
+| 7 | 无 PAD / blank 类别 | 通过 | 检查无 `pad_idx`、`blank_idx`，无 LSTM / CTCLoss 模块 |
+| 8 | HELLO + EOS 训练目标 | 通过 | `test_hello_targets_have_one_eos_no_pad_class_and_keep_ll` 得到 H E L L O EOS -100 -100 |
+| 9 | LL 不合并 | 通过 | 字典与解码测试保留 HELLO 中两个 L；无 EOS 的 LLLL 也保留 |
+| 10 | EOS 后 Query 不计损失 | 通过 | `test_slots_after_eos_have_exactly_zero_loss_gradient` 修改后续 logits 不改变 loss，后续 logits 梯度严格为零 |
+| 11 | 全 EOS 不能优于正确输出 | 通过 | `test_all_eos_is_penalized_more_than_correct_characters_and_eos` |
+| 12 | bbox 动态选桶 | 通过 | `test_geometry_buckets_are_independent_and_identical_in_train_eval` 覆盖边界与上限 |
+| 13 | 容量不足显式报错 | 通过 | 容量、未知字符、空标签错误；`max_rois` 采样前校验全部有效 GT；499 字符加 EOS 接受，500 字符加 EOS 拒绝 |
+| 14 | 训练、推理选桶规则相同 | 通过 | train/eval 对同一几何得到完全相同视觉宽度与 Query 数 |
+| 15 | 空 GT 零 loss 与参数图参与 | 通过 | head 测试、完整模型空 GT backward、真实 Gloo 单 rank/双 rank 全空三种覆盖 |
+| 16 | 识别梯度传到 C2 与 head | 通过 | 真实 RoIAlign 的 C2 梯度非零；额外完整模型只反传 `loss_rec`，共享 ResNet stem 梯度非零 |
+| 17 | 框与文字正确对应 | 通过 | 解码桶顺序回填测试；多图、无效框过滤、空图、按检测分数排序、坐标恢复与 text_scores / EOS 标志对应 |
+| 18 | 字典顺序不一致拒绝 checkpoint | 通过 | 包括 MMEngine `strict=False`，缺 hash、旧 CTC/LSTM、错误识别版本均拒绝 |
 
-本项目实现保留这些方法的核心关系，具体宽度分桶、头部规模和 DINO 接入由本项目实现；没有声称复现其论文指标。新增代码沿用仓库 Apache 2.0 许可证，数据与预训练权重的使用按各自发布方说明执行。
+除上述单元测试外，执行了：
+
+- **完整模型 CPU 前向、反向和推理**：保留 R50、四尺度、900 个检测 Query、6+6 层 DINO 和默认三层字符 Decoder，加载实际转换的官方 checkpoint；输入为 `[1,3,256,256]` 合成图，分别检查有 GT 和空 GT。额外仅反传 `loss_rec` 时，共享 `backbone.conv1.weight` 梯度范数为 **0.07932898**。该脚本没有执行优化器更新或真实数据训练。
+- **真实两进程 CPU/Gloo DDP**：对识别头检查两 rank 区域数 `[1,2]`、`[0,1]`、`[0,0]`，与全局区域平均参考的最大参数梯度误差为 **2.38e-7**。这里使用较小识别头、dropout=0、chunk_size=1 和激活重计算，未运行完整 DINO 的 GPU DDP。
+- **全量新容量审计**：对已有合并预训练、Total-Text train/test JSON 使用新 Query 桶和 `len(text)+1` 规则复核，均为 **0 错误、0 警告**。本轮复核对象是标注 JSON，不是重新解码全部数据图片。
+- **源码边界检查**：与修改前 SHA-256 基线比较，`mmdet/`、官方 `configs/dino/`、OCRDINO 的 `heads.py`、`dataset.py`、`transforms.py` 均未改动。详细文件清单见[完整性报告](projects/OCRDINO/reports/query_validation/source_integrity.json)。
+
+CPU 测试对不同 chunk 的 loss/梯度等价、dropout 重计算一致性、保存激活存储减少作了检查。保存激活的 CPU 检查不能替代 GPU 峰值显存测量。
+
+### 复跑本机 CPU 检查
+
+以下命令复用本次在副本内安装的依赖；该解释器自身环境没有被安装或升级包。不要把 Windows 的 `.test_deps` 搬到 Linux 使用。
+
+~~~powershell
+Set-Location 'C:\Users\14222\Desktop\ocrdino\twostage\mmdetection_twostage_wo_ctc'
+$env:PYTHONPATH = "$PWD\.test_deps;$PWD"
+$env:PYTHONDONTWRITEBYTECODE = '1'
+$env:TEMP = "$PWD\.test_tmp"
+$env:TMP = $env:TEMP
+$env:MPLCONFIGDIR = "$PWD\.test_tmp\matplotlib"
+$env:OMP_NUM_THREADS = '4'
+$env:MKL_NUM_THREADS = '4'
+$python = 'C:\Users\14222\anaconda3\envs\data_treate\python.exe'
+
+& $python -B -m pytest -o 'addopts=' -p no:cacheprovider tests/test_projects/test_ocrdino -q
+& $python -B projects/OCRDINO/tools/cpu_smoke_test.py
+& $python -B projects/OCRDINO/tools/cpu_ddp_check.py
+~~~
+
+完整 CPU 模型脚本默认读取副本内 `checkpoints/ocrdino_init.pth`，输出位于 `projects/OCRDINO/reports/query_validation/`。本次已完成该 checkpoint 的转换与加载：保留 612 个 tensor，去掉 15 个 COCO 类别相关 tensor；转换报告见[checkpoint_conversion.json](projects/OCRDINO/reports/query_validation/checkpoint_conversion.json)。
+
+### 尚未验证与实际限制
+
+- **未执行 CUDA 算子、FP16 AMP、真实 GPU 峰值显存、完整模型双 GPU/NCCL DDP**；服务器应先跑前面的 GPU smoke。没有依据承诺这一版在指定显卡上占用多少 GB。
+- 未执行真实数据上的优化器训练、24轮预训练和12轮微调；尚无收敛、字符准确率、整串准确率或 Total-Text 官方端到端指标。
+- 字符位置编码和有序 CE 只是对齐的学习机制，不能保证对齐成功、未见排列泛化或优于 CTC。区域水平框仍不具备曲线矫正、多行顺序或竖排识别能力。
+- 本批源数据原有 25 位转录上限、未知字符与缺少原始 split 映射的问题仍存在；模型支持更长序列不能恢复源标注中已经丢失的文字。
+- 中文大词表、500槽长文本的真实视觉信息与学习效果未训练验证。扩大字符容量时需一起检查图像清晰度、C2分辨率、视觉桶和显存。
 
 ## 导出最后一轮模型：bestepoch.pth
 
@@ -779,14 +616,14 @@ python -m pytest tests/test_projects/test_ocrdino -q -o addopts=''
 
 ~~~bash
 python projects/OCRDINO/tools/export_model.py \
-  --source work_dirs/ocrdino_pretrain24/epoch_24.pth
+  --source work_dirs/ocrdino_query_pretrain24/epoch_24.pth
 ~~~
 
-默认输出 `work_dirs/ocrdino_pretrain24/bestepoch.pth`。如果从FP32续训目录完成训练，`--source` 应改为该目录的 `epoch_24.pth`；以实际保存路径为准。也可以指定独立输出：
+默认输出 `work_dirs/ocrdino_query_pretrain24/bestepoch.pth`。如果从FP32续训目录完成训练，`--source` 应改为该目录的 `epoch_24.pth`；以实际保存路径为准。也可以指定独立输出：
 
 ~~~bash
 python projects/OCRDINO/tools/export_model.py \
-  --source work_dirs/ocrdino_pretrain24/epoch_24.pth \
+  --source work_dirs/ocrdino_query_pretrain24/epoch_24.pth \
   --output checkpoints/bestepoch.pth
 ~~~
 
@@ -795,7 +632,7 @@ python projects/OCRDINO/tools/export_model.py \
 用于Total-Text新阶段微调时，可以设置：
 
 ~~~bash
-export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_pretrain24/bestepoch.pth"
+export OCRDINO_FINETUNE_FROM="$PWD/work_dirs/ocrdino_query_pretrain24/bestepoch.pth"
 ~~~
 
 继续使用原12轮微调配置的 `load_from`，或将该文件作为单图推理的checkpoint参数。**导出文件不再支持恢复旧优化器和训练进度，不能用于 `--resume`。** 断点续训仍用保留的完整 `epoch_24.pth`。

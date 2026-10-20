@@ -25,6 +25,7 @@ def load_helper(filename):
 
 
 prepare = load_helper('prepare_dataset')
+capacity = prepare._load_module('recognition_capacity')
 DATASETS = ('mlt2017', 'syntext1', 'syntext2', 'totaltext')
 TRAIN_SOURCES = ('mlt2017', 'syntext1', 'syntext2')
 # Verified against source JPEG headers and annotation positions. Their boxes
@@ -79,14 +80,20 @@ def clip_bbox(bbox, width, height):
     return clipped
 
 
-def chosen_width(bbox, buckets=(32, 64, 128), width_scale=16.):
-    requested = math.ceil(bbox[2] / bbox[3] * width_scale)
-    return next((width for width in buckets if width >= requested), buckets[-1])
+def chosen_width(bbox, buckets=capacity.DEFAULT_BUCKETS, width_scale=16.):
+    return capacity.select_geometry_bucket(bbox[2], bbox[3], buckets, width_scale)
 
 
 def convert_document(source, dataset, split, full_length_policy='rec-ignore',
-                     width_buckets=(32, 64, 128), width_scale=16.):
-    """Convert in place to avoid retaining two large annotation object graphs."""
+                     query_buckets=capacity.DEFAULT_BUCKETS, query_width_scale=16.,
+                     visual_width_buckets=capacity.DEFAULT_BUCKETS,
+                     visual_width_scale=16.):
+    """Convert in place; audit every reliable string without GT-selected buckets."""
+    query_buckets = capacity.validate_buckets(query_buckets, 'query_buckets')
+    visual_width_buckets = capacity.validate_buckets(
+        visual_width_buckets, 'visual_width_buckets')
+    query_width_scale = capacity.validate_width_scale(query_width_scale, 'query_width_scale')
+    visual_width_scale = capacity.validate_width_scale(visual_width_scale, 'visual_width_scale')
     if dataset not in DATASETS or split not in ('train', 'test'):
         raise ValueError('Unknown source dataset or split')
     if not isinstance(source, dict) or not isinstance(source.get('images'), list):
@@ -129,6 +136,7 @@ def convert_document(source, dataset, split, full_length_policy='rec-ignore',
     summary['image_frame_repairs'] = len(repairs)
     next_id = 1
     errors = []
+    query_counts, visual_counts = Counter(), Counter()
     for index in range(total_annotations):
         raw = original_annotations[index]
         source_id = raw.get('id')
@@ -183,12 +191,19 @@ def convert_document(source, dataset, split, full_length_policy='rec-ignore',
             summary['recognition_ignored_regions'] += 1
         else:
             summary['recognition_supervised_regions'] += 1
-            needed = len(text) + sum(a == b for a, b in zip(text, text[1:]))
-            available = chosen_width(bbox, width_buckets, width_scale)
+            needed = capacity.required_output_positions(text)
+            available = chosen_width(bbox, query_buckets, query_width_scale)
+            visual_width = chosen_width(bbox, visual_width_buckets, visual_width_scale)
+            query_counts[str(available)] += 1
+            visual_counts[str(visual_width)] += 1
+            if needed > visual_width:
+                summary['visual_width_below_required_positions'] += 1
             if needed > available:
-                errors.append(dict(kind='ctc_capacity', annotation_id=annotation['id'],
+                errors.append(dict(kind='character_query_capacity', annotation_id=annotation['id'],
                                    source_annotation_id=source_id, image_id=image['id'],
-                                   text=text, required_steps=needed, input_steps=available))
+                                   text=text, required_positions=needed, query_bucket=available,
+                                   visual_width=visual_width,
+                                   reason='Query bucket selected from bbox geometry cannot contain text plus EOS'))
         # Replacing releases the original Bezier arrays and unused attributes.
         original_annotations[index] = annotation
         if index and index % 250000 == 0:
@@ -200,7 +215,7 @@ def convert_document(source, dataset, split, full_length_policy='rec-ignore',
     summary['images_with_no_detection_gt'] = sum(not counts[i['id']] for i in images)
     summary['max_detection_gt_per_image'] = max(counts.values(), default=0)
     if summary['max_detection_gt_per_image'] > 900:
-        errors.append(dict(kind='query_capacity', max_gt=summary['max_detection_gt_per_image'],
+        errors.append(dict(kind='detection_query_capacity', max_gt=summary['max_detection_gt_per_image'],
                            configured_queries=900))
     document = dict(schema_version=prepare.schema.DATASET_VERSION,
                     categories=[dict(id=1, name='text')], images=images,
@@ -208,7 +223,13 @@ def convert_document(source, dataset, split, full_length_policy='rec-ignore',
     prepare.schema.validate_document(document)
     report = dict(dataset=dataset, split=split, summary=dict(summary),
                   full_length_policy=full_length_policy,
-                  ctc_width_buckets=list(width_buckets), ctc_width_scale=width_scale,
+                  recognition_architecture=prepare.vocabulary.QUERY_ARCHITECTURE,
+                  query_buckets=list(query_buckets), query_width_scale=query_width_scale,
+                  visual_width_buckets=list(visual_width_buckets),
+                  visual_width_scale=visual_width_scale,
+                  query_bucket_counts=dict(query_counts),
+                  visual_width_bucket_counts=dict(visual_counts),
+                  capacity_rule='len(text) + 1 EOS; geometry-only buckets',
                   image_repairs=repairs, errors=errors,
                   image_headers_checked=False, ok=not errors,
                   notes=[
@@ -216,7 +237,9 @@ def convert_document(source, dataset, split, full_length_policy='rec-ignore',
                       'Source has no language field; ASCII-decodable is not an English language label.',
                       'Positive intersections are clipped; original boxes remain in source_bbox.',
                       'Full 25-slot text may be truncated upstream; missing characters cannot be recovered.',
-                      'Image extraction and header validation occur only with --extract-images.'])
+                      'Image extraction and header validation occur only with --extract-images.',
+                      'Query capacity is checked against text plus EOS; source repeated letters are unchanged.',
+                      'Visual width is audited separately and may need increasing for long-text detail.'])
     return document, report
 
 
@@ -298,17 +321,22 @@ def main():
     parser.add_argument('--extract-images', action='store_true')
     parser.add_argument('--temp-dir', help='Disk space for one nested ZIP at a time (up to about 10.4 GB)')
     parser.add_argument('--full-length-policy', choices=('rec-ignore', 'keep'), default='rec-ignore')
-    parser.add_argument('--width-buckets', type=int, nargs='+', default=[32, 64, 128])
-    parser.add_argument('--width-scale', type=float, default=16.)
+    parser.add_argument('--query-buckets', type=int, nargs='+', default=list(capacity.DEFAULT_BUCKETS))
+    parser.add_argument('--query-width-scale', type=float, default=16.)
+    parser.add_argument('--visual-width-buckets', type=int, nargs='+', default=list(capacity.DEFAULT_BUCKETS))
+    parser.add_argument('--visual-width-scale', type=float, default=16.)
     args = parser.parse_args()
     source_root, output_root = Path(args.source_root).resolve(), Path(args.output_root).resolve()
     if (source_root == output_root or source_root in output_root.parents or
             output_root in source_root.parents):
         parser.error('Source and output roots must be separate, non-nested directories')
-    buckets = args.width_buckets
-    if (not buckets or buckets != sorted(set(buckets)) or min(buckets) < 1 or
-            not math.isfinite(args.width_scale) or args.width_scale <= 0):
-        parser.error('Require positive increasing width buckets and positive scale')
+    try:
+        capacity.validate_buckets(args.query_buckets, 'query_buckets')
+        capacity.validate_buckets(args.visual_width_buckets, 'visual_width_buckets')
+        capacity.validate_width_scale(args.query_width_scale, 'query_width_scale')
+        capacity.validate_width_scale(args.visual_width_scale, 'visual_width_scale')
+    except ValueError as error:
+        parser.error(str(error))
     if len(set(args.datasets)) != len(args.datasets):
         parser.error('Datasets must not repeat')
     annotation_root = output_root / 'annotations'
@@ -321,12 +349,13 @@ def main():
                 original = archive.load_annotations(split)
                 document, report = convert_document(
                     original, name, split, args.full_length_policy,
-                    tuple(buckets), args.width_scale)
+                    tuple(args.query_buckets), args.query_width_scale,
+                    tuple(args.visual_width_buckets), args.visual_width_scale)
                 del original
                 report_path = annotation_root / (name + '_' + split + '.audit.json')
                 if not report['ok']:
                     prepare.write_json(report_path, report)
-                    raise ValueError('Conversion cannot meet CTC/query capacity; inspect ' + str(report_path))
+                    raise ValueError('Conversion cannot meet Character Query/EOS or detection capacity; inspect ' + str(report_path))
                 if args.extract_images:
                     headers = Counter()
                     for index, item in enumerate(document['images'], 1):
@@ -358,7 +387,11 @@ def main():
     prepare.write_json(annotation_root / 'conversion_summary.json', dict(
         reports=reports, training_sources=list(TRAIN_SOURCES),
         totaltext_test_in_training=False, images_extracted=args.extract_images,
-        full_length_policy=args.full_length_policy))
+        full_length_policy=args.full_length_policy,
+        recognition_architecture=prepare.vocabulary.QUERY_ARCHITECTURE,
+        query_buckets=args.query_buckets, query_width_scale=args.query_width_scale,
+        visual_width_buckets=args.visual_width_buckets,
+        visual_width_scale=args.visual_width_scale))
     print('Complete. JSON-only conversion does not prepare training images.'
           if not args.extract_images else 'Complete. Images extracted and headers checked.')
 

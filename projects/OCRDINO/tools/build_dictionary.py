@@ -28,7 +28,7 @@ def build_dictionary(documents):
     ordered = sorted(characters, key=ord)
     prepare.vocabulary.CharacterDictionary(ordered)
     return dict(schema_version=prepare.vocabulary.DICTIONARY_VERSION, characters=ordered), dict(
-        characters=len(ordered), classes_with_blank=len(ordered) + 1,
+        characters=len(ordered), classes_with_eos=len(ordered) + 1, eos_id=len(ordered),
         accepted_transcriptions=accepted, skipped_transcriptions=skipped)
 
 

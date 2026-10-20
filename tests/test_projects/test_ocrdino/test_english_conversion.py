@@ -27,7 +27,7 @@ def document(text='BOOK'):
 
 
 class EnglishConversionTest(unittest.TestCase):
-    def test_source_repeats_are_not_ctc_collapsed(self):
+    def test_source_repeats_are_preserved(self):
         text, reasons = CONVERT.decode_rec(rec('BOOKkeeper!!'))
         self.assertEqual(text, 'BOOKkeeper!!')
         self.assertEqual(reasons, [])
@@ -126,12 +126,15 @@ class EnglishConversionTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 CONVERT.merge_pretraining(paths + [Path('totaltext_test.json')], output_path)
 
-    def test_ctc_impossible_is_reported_not_silently_masked(self):
+    def test_query_eos_capacity_error_is_reported_not_silently_masked(self):
         source = document('A' * 24)
         source['annotations'][0]['bbox'] = [10, 20, 10, 50]
-        output, report = CONVERT.convert_document(source, 'syntext1', 'train')
+        output, report = CONVERT.convert_document(
+            source, 'syntext1', 'train', query_buckets=(8, 16))
         self.assertFalse(report['ok'])
-        self.assertEqual(report['errors'][0]['kind'], 'ctc_capacity')
+        self.assertEqual(report['errors'][0]['kind'], 'character_query_capacity')
+        self.assertEqual(report['errors'][0]['required_positions'], 25)
+        self.assertEqual(report['errors'][0]['query_bucket'], 8)
         self.assertFalse(output['annotations'][0]['rec_ignore'])
 
 

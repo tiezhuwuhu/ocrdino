@@ -1,8 +1,9 @@
-"""Keep dictionary identity explicit in datasets and saved checkpoints."""
+"""Keep dictionary identity and Character Query semantics in checkpoints."""
 from mmengine.hooks import Hook
 from mmengine.model import is_model_wrapper
 
 from mmdet.registry import HOOKS
+from .vocabulary import recognition_metadata, validate_checkpoint_metadata
 
 
 @HOOKS.register_module()
@@ -28,9 +29,12 @@ class OCRDictionaryHook(Hook):
             elif tuple(current.dictionary.chars) != expected:
                 raise ValueError('Dataset/model character dictionaries differ in content or order')
 
+    def after_load_checkpoint(self, runner, checkpoint):
+        # MMEngine Runner calls this after reading the file but BEFORE loading
+        # its tensors into the model. Head buffers also guard direct state loads.
+        validate_checkpoint_metadata(
+            checkpoint, self._model(runner).recognition_head.dictionary)
+
     def before_save_checkpoint(self, runner, checkpoint):
-        model = self._model(runner)
-        checkpoint.setdefault('meta', {})['ocrdino'] = dict(
-            architecture='dino_c2_conv4_bilstm1_ctc',
-            characters=list(model.recognition_head.dictionary.chars),
-            blank=0, bbox_format='xyxy', dictionary_case_sensitive=True)
+        dictionary = self._model(runner).recognition_head.dictionary
+        checkpoint.setdefault('meta', {})['ocrdino'] = recognition_metadata(dictionary)

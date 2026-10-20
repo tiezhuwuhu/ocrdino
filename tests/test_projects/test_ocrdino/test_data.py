@@ -32,12 +32,14 @@ def source():
 
 
 class TestCharacterDictionary(unittest.TestCase):
-    def test_case_sensitive_and_blank_separate_from_space(self):
+    def test_case_sensitive_zero_based_chars_and_eos_separate_from_space(self):
         dictionary = vocabulary.CharacterDictionary([' ', 'A', 'a', '中'])
-        self.assertEqual(dictionary.blank_idx, 0)
+        self.assertEqual(dictionary.eos_idx, 4)
+        self.assertFalse(hasattr(dictionary, 'blank_idx'))
+        self.assertFalse(hasattr(dictionary, 'pad_idx'))
         self.assertEqual(dictionary.num_classes, 5)
-        self.assertEqual(dictionary.encode('Aa 中'), [2, 3, 1, 4])
-        self.assertEqual(dictionary.decode([0, 2, 2, 1, 4]), 'AA 中')
+        self.assertEqual(dictionary.encode('Aa 中'), [1, 2, 0, 3])
+        self.assertEqual(dictionary.decode([1, 1, 0, 3, 4, 2]), 'AA 中')
 
     def test_unknown_is_an_error_not_silent_replacement(self):
         dictionary = vocabulary.CharacterDictionary(['A'])
@@ -175,15 +177,15 @@ class TestAudit(unittest.TestCase):
     def setUp(self):
         self.dictionary = vocabulary.CharacterDictionary(PROJECT / 'dictionaries' / 'english.json')
 
-    def test_adjacent_repeats_require_extra_ctc_steps(self):
+    def test_text_plus_eos_must_fit_geometry_selected_queries(self):
         raw = source()
-        raw['annotations'][0]['text'] = 'A' * 17
+        raw['annotations'][0]['text'] = 'A' * 32
         document, _ = prepare.convert_coco(raw)
         report = auditor.audit_dataset(document, self.dictionary)
         self.assertFalse(report['ok'])
-        self.assertEqual(report['errors'][0]['kind'], 'ctc_alignment')
-        self.assertEqual(report['errors'][0]['required_steps'], 33)
-        self.assertEqual(report['errors'][0]['input_steps'], 32)
+        self.assertEqual(report['errors'][0]['kind'], 'character_query_capacity')
+        self.assertEqual(report['errors'][0]['required_positions'], 33)
+        self.assertEqual(report['errors'][0]['query_bucket'], 32)
         self.assertEqual(report['errors'][0]['annotation_id'], 1)
 
     def test_unknown_mixed_chinese_english_does_not_silently_train(self):
@@ -202,8 +204,8 @@ class TestAudit(unittest.TestCase):
         document['annotations'].append(extra)
         report = auditor.audit_dataset(document, self.dictionary, max_queries=1)
         self.assertEqual(report['maxroisperimage'], 2)
-        self.assertEqual(report['widthbucketcounts'], {'32': 2})
-        self.assertEqual(report['errors'][0]['kind'], 'query_capacity')
+        self.assertEqual(report['querybucketcounts'], {'32': 2})
+        self.assertEqual(report['errors'][0]['kind'], 'detection_query_capacity')
 
     def test_source_output_paths_cannot_collide(self):
         with self.assertRaisesRegex(ValueError, 'overwrite'):

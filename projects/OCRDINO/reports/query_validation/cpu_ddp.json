@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "backend": "gloo",
+  "world_size": 2,
+  "device": "cpu",
+  "torch": "2.1.2+cpu",
+  "activation_checkpointing": true,
+  "chunk_size": 1,
+  "dropout": 0.0,
+  "scope": "Real DDP recognition head, including actual MMCV RoIAlign; not full-detector DDP or CUDA",
+  "cases": [
+    {
+      "regions_per_rank": [
+        1,
+        2
+      ],
+      "average_loss": 2.489220380783081,
+      "global_reference_loss": 2.489220380783081,
+      "maximum_parameter_gradient_error": 1.7881393432617188e-07,
+      "all_parameters_participated": true
+    },
+    {
+      "regions_per_rank": [
+        0,
+        1
+      ],
+      "average_loss": 2.402900457382202,
+      "global_reference_loss": 2.402900457382202,
+      "maximum_parameter_gradient_error": 2.384185791015625e-07,
+      "all_parameters_participated": true
+    },
+    {
+      "regions_per_rank": [
+        0,
+        0
+      ],
+      "average_loss": 0.0,
+      "global_reference_loss": 0.0,
+      "maximum_parameter_gradient_error": 0.0,
+      "all_parameters_participated": true
+    }
+  ]
+}

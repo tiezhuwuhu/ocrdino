@@ -36,7 +36,8 @@ def convert_state_dict(state):
         retained_tensor_count=len(retained), dropped_tensors=dropped,
         newly_initialized=['text classification branches', 'DN text label embedding',
                            'C2 projection', 'four recognition convolutions',
-                           'single BiLSTM', 'CTC classifier'])
+                           'visual token projection', 'shared character content embedding',
+                           'three Character Query decoder layers', 'character plus EOS classifier'])
 
 
 def main():

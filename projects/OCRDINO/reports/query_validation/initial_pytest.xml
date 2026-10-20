@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="42" time="15.624" timestamp="2026-10-16T10:22:31.082518+08:00" hostname="LAPTOP-3SJ9TBT5"><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_registered_head_has_required_production_defaults" time="0.014" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_positions_and_shared_content_define_distinct_ordered_queries" time="0.004" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_cross_attention_reads_positioned_keys_but_unmodified_visual_values" time="0.011" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_decoder_parallel_shape_and_visual_gradient" time="0.005" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_hello_targets_have_one_eos_no_pad_class_and_keep_ll" time="0.002" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_region_loss_matches_character_mean_plus_eos" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_slots_after_eos_have_exactly_zero_loss_gradient" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_all_eos_is_penalized_more_than_correct_characters_and_eos" time="0.002" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_geometry_buckets_are_independent_and_identical_in_train_eval" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_capacity_and_unknown_text_raise_before_sampling" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_real_roi_convolution_shapes_and_loss_gradients_reach_shared_c2" time="0.004"><failure message="TypeError: apply() takes no keyword arguments">def test_real_roi_convolution_shapes_and_loss_gradients_reach_shared_c2():
+        torch.manual_seed(3)
+        head = make_head(with_cp=False)
+        c2, rois, texts = fixture_inputs()
+        input_shapes, output_shapes = [], []
+        pre = head.convs.register_forward_pre_hook(
+            lambda _module, args: input_shapes.append(tuple(args[0].shape)))
+        post = head.convs.register_forward_hook(
+            lambda _module, _args, result: output_shapes.append(tuple(result.shape)))
+&gt;       loss = head.loss(c2, rois, texts)['loss_rec']
+
+tests\test_projects\test_ocrdino\test_recognition_query.py:198: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+projects\OCRDINO\ocrdino\recognition_query.py:383: in loss
+    value = self._chunk_loss(*args)
+projects\OCRDINO\ocrdino\recognition_query.py:352: in _chunk_loss
+    logits = self._logits_from_projected(features, rois, width, count)
+projects\OCRDINO\ocrdino\recognition_query.py:325: in _logits_from_projected
+    regions = roi_align(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'mmcv.ops.roi_align.RoIAlignFunction'&gt;
+args = (tensor([[[[ 0.4730,  0.3967, -0.3717,  ...,  0.5300, -1.3747, -0.1316],
+          [-0.2994, -1.3006, -1.2052,  ...,  ...0329,  ...,  0.5383,  0.0446, -0.6812]]]],
+       grad_fn=&lt;ConvolutionBackward0&gt;), tensor([[ 0.,  0.,  0., 32., 32.]]))
+kwargs = {'output_size': (8, 8), 'spatial_scale': 0.25, 'sampling_ratio': 2, 'pool_mode': 'avg', ...}
+
+    @classmethod
+    def apply(cls, *args, **kwargs):
+        if not torch._C._are_functorch_transforms_active():
+            # See NOTE: [functorch vjp and autograd interaction]
+            args = _functorch.utils.unwrap_dead_wrappers(args)
+&gt;           return super().apply(*args, **kwargs)  # type: ignore[misc]
+E           TypeError: apply() takes no keyword arguments
+
+.test_deps\torch\autograd\function.py:539: TypeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_chunking_and_nonreentrant_checkpoint_keep_loss_and_gradients" time="0.006"><failure message="TypeError: apply() takes no keyword arguments">def test_chunking_and_nonreentrant_checkpoint_keep_loss_and_gradients():
+        torch.manual_seed(4)
+        full = make_head(chunk_size=8, with_cp=False)
+        chunked = make_head(chunk_size=1, with_cp=True)
+        chunked.load_state_dict(full.state_dict())
+        c2, rois, texts = fixture_inputs()
+        # Two same-bucket regions exercise actual splitting, different buckets
+        # catch accidental late-bound closure values during backward recompute.
+        rois = torch.cat([rois, rois[:1]], dim=0)
+        texts.append('BB')
+        other = c2.detach().clone().requires_grad_()
+&gt;       first = full.loss(c2, rois, texts)['loss_rec']
+
+tests\test_projects\test_ocrdino\test_recognition_query.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+projects\OCRDINO\ocrdino\recognition_query.py:383: in loss
+    value = self._chunk_loss(*args)
+projects\OCRDINO\ocrdino\recognition_query.py:352: in _chunk_loss
+    logits = self._logits_from_projected(features, rois, width, count)
+projects\OCRDINO\ocrdino\recognition_query.py:325: in _logits_from_projected
+    regions = roi_align(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'mmcv.ops.roi_align.RoIAlignFunction'&gt;
+args = (tensor([[[[ 0.4126,  0.4787, -0.7059,  ..., -0.1387,  0.4935,  0.4874],
+          [ 0.4868, -0.2771,  0.2761,  ..., -...75]]]],
+       grad_fn=&lt;ConvolutionBackward0&gt;), tensor([[ 0.,  0.,  0., 32., 32.],
+        [ 0.,  0.,  0., 32., 32.]]))
+kwargs = {'output_size': (8, 8), 'spatial_scale': 0.25, 'sampling_ratio': 2, 'pool_mode': 'avg', ...}
+
+    @classmethod
+    def apply(cls, *args, **kwargs):
+        if not torch._C._are_functorch_transforms_active():
+            # See NOTE: [functorch vjp and autograd interaction]
+            args = _functorch.utils.unwrap_dead_wrappers(args)
+&gt;           return super().apply(*args, **kwargs)  # type: ignore[misc]
+E           TypeError: apply() takes no keyword arguments
+
+.test_deps\torch\autograd\function.py:539: TypeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_checkpoint_recomputation_preserves_dropout_rng" time="0.006"><failure message="TypeError: apply() takes no keyword arguments">def test_checkpoint_recomputation_preserves_dropout_rng():
+        torch.manual_seed(8)
+        plain = make_head(dropout=.1, chunk_size=1, with_cp=False)
+        checked = make_head(dropout=.1, chunk_size=1, with_cp=True)
+        checked.load_state_dict(plain.state_dict())
+        c2, rois, texts = fixture_inputs()
+        other = c2.detach().clone().requires_grad_()
+        torch.manual_seed(100)
+&gt;       first = plain.loss(c2, rois, texts)['loss_rec']
+
+tests\test_projects\test_ocrdino\test_recognition_query.py:241: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+projects\OCRDINO\ocrdino\recognition_query.py:383: in loss
+    value = self._chunk_loss(*args)
+projects\OCRDINO\ocrdino\recognition_query.py:352: in _chunk_loss
+    logits = self._logits_from_projected(features, rois, width, count)
+projects\OCRDINO\ocrdino\recognition_query.py:325: in _logits_from_projected
+    regions = roi_align(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'mmcv.ops.roi_align.RoIAlignFunction'&gt;
+args = (tensor([[[[-2.9871e-01, -2.1701e-01, -1.4984e-01,  ...,  4.3637e-01,
+            2.7944e-01,  3.8595e-01],
+          ...789e-01,
+           -6.5055e-01,  5.7683e-02]]]], grad_fn=&lt;ConvolutionBackward0&gt;), tensor([[ 0.,  0.,  0., 32., 32.]]))
+kwargs = {'output_size': (8, 8), 'spatial_scale': 0.25, 'sampling_ratio': 2, 'pool_mode': 'avg', ...}
+
+    @classmethod
+    def apply(cls, *args, **kwargs):
+        if not torch._C._are_functorch_transforms_active():
+            # See NOTE: [functorch vjp and autograd interaction]
+            args = _functorch.utils.unwrap_dead_wrappers(args)
+&gt;           return super().apply(*args, **kwargs)  # type: ignore[misc]
+E           TypeError: apply() takes no keyword arguments
+
+.test_deps\torch\autograd\function.py:539: TypeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_checkpoint_reduces_saved_regional_activation_storage" time="0.004"><failure message="TypeError: apply() takes no keyword arguments">def test_checkpoint_reduces_saved_regional_activation_storage():
+        torch.manual_seed(11)
+        head = make_head(chunk_size=1, width_buckets=(32,), query_buckets=(32,))
+        c2, rois, texts = fixture_inputs()
+    
+        def saved_bytes(with_cp):
+            head.with_cp = with_cp
+            storage = {}
+    
+            def pack(tensor):
+                block = tensor.untyped_storage()
+                storage[block.data_ptr()] = block.nbytes()
+                return tensor
+    
+            with torch.autograd.graph.saved_tensors_hooks(pack, lambda tensor: tensor):
+                loss = head.loss(c2, rois, texts)['loss_rec']
+            assert loss.requires_grad
+            return sum(storage.values())
+    
+&gt;       assert saved_bytes(True) &lt; saved_bytes(False)
+
+tests\test_projects\test_ocrdino\test_recognition_query.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_projects\test_ocrdino\test_recognition_query.py:265: in saved_bytes
+    loss = head.loss(c2, rois, texts)['loss_rec']
+projects\OCRDINO\ocrdino\recognition_query.py:380: in loss
+    value = checkpoint(self._chunk_loss, *args,
+.test_deps\torch\_compile.py:24: in inner
+    return torch._dynamo.disable(fn, recursive)(*args, **kwargs)
+.test_deps\torch\_dynamo\eval_frame.py:328: in _fn
+    return fn(*args, **kwargs)
+.test_deps\torch\_dynamo\external_utils.py:17: in inner
+    return fn(*args, **kwargs)
+.test_deps\torch\utils\checkpoint.py:458: in checkpoint
+    ret = function(*args, **kwargs)
+projects\OCRDINO\ocrdino\recognition_query.py:352: in _chunk_loss
+    logits = self._logits_from_projected(features, rois, width, count)
+projects\OCRDINO\ocrdino\recognition_query.py:325: in _logits_from_projected
+    regions = roi_align(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'mmcv.ops.roi_align.RoIAlignFunction'&gt;
+args = (tensor([[[[-7.2683e-03,  5.0199e-01, -8.2399e-01,  ...,  3.0806e-01,
+           -1.1511e+00,  2.6324e-01],
+          ...763e+00,
+            1.2120e-01, -8.0555e-01]]]], grad_fn=&lt;ConvolutionBackward0&gt;), tensor([[ 0.,  0.,  0., 32., 32.]]))
+kwargs = {'output_size': (8, 32), 'spatial_scale': 0.25, 'sampling_ratio': 2, 'pool_mode': 'avg', ...}
+
+    @classmethod
+    def apply(cls, *args, **kwargs):
+        if not torch._C._are_functorch_transforms_active():
+            # See NOTE: [functorch vjp and autograd interaction]
+            args = _functorch.utils.unwrap_dead_wrappers(args)
+&gt;           return super().apply(*args, **kwargs)  # type: ignore[misc]
+E           TypeError: apply() takes no keyword arguments
+
+.test_deps\torch\autograd\function.py:539: TypeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_empty_rank_still_reduces_and_touches_all_parameters" time="0.005" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_fractional_ddp_mean_is_not_clamped_to_one" time="0.003"><failure message="TypeError: apply() takes no keyword arguments">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CF664617B0&gt;
+
+    def test_fractional_ddp_mean_is_not_clamped_to_one(monkeypatch):
+        head = make_head(with_cp=False)
+        c2, rois, texts = fixture_inputs()
+&gt;       single = head.loss(c2, rois[:1], texts[:1])['loss_rec']
+
+tests\test_projects\test_ocrdino\test_recognition_query.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+projects\OCRDINO\ocrdino\recognition_query.py:383: in loss
+    value = self._chunk_loss(*args)
+projects\OCRDINO\ocrdino\recognition_query.py:352: in _chunk_loss
+    logits = self._logits_from_projected(features, rois, width, count)
+projects\OCRDINO\ocrdino\recognition_query.py:325: in _logits_from_projected
+    regions = roi_align(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'mmcv.ops.roi_align.RoIAlignFunction'&gt;
+args = (tensor([[[[-2.8434e-01, -1.0532e-01,  1.3317e-01,  ...,  2.3569e-01,
+           -2.6791e-01, -8.1383e-02],
+          ...887e-01,
+           -4.2596e-01,  2.4281e-01]]]], grad_fn=&lt;ConvolutionBackward0&gt;), tensor([[ 0.,  0.,  0., 32., 32.]]))
+kwargs = {'output_size': (8, 8), 'spatial_scale': 0.25, 'sampling_ratio': 2, 'pool_mode': 'avg', ...}
+
+    @classmethod
+    def apply(cls, *args, **kwargs):
+        if not torch._C._are_functorch_transforms_active():
+            # See NOTE: [functorch vjp and autograd interaction]
+            args = _functorch.utils.unwrap_dead_wrappers(args)
+&gt;           return super().apply(*args, **kwargs)  # type: ignore[misc]
+E           TypeError: apply() takes no keyword arguments
+
+.test_deps\torch\autograd\function.py:539: TypeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_decode_preserves_repeats_eos_and_box_order" time="0.004" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_checkpoint_dictionary_and_architecture_guards_also_reject_strict_false" time="0.013" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs0]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs1]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs2]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs3]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs4]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs5]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs6]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs7]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs8]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition_query" name="test_invalid_configurations_fail_early[kwargs9]" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_detector" name="test_dn_cap_targets_correspond_to_exact_sampled_gt" time="0.004" /><testcase classname="tests.test_projects.test_ocrdino.test_detector" name="test_empty_gt_dn_keeps_valid_empty_shapes" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_detector" name="test_ignored_region_and_incomplete_image_do_not_teach_background" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_detector" name="test_inference_crops_resized_coordinates_then_rescales_only_output" time="0.001" /><testcase classname="tests.test_projects.test_ocrdino.test_training_configs.TestTrainingStages" name="test_both_stages_use_the_same_model_and_dataset_namespace" time="0.006" /><testcase classname="tests.test_projects.test_ocrdino.test_training_configs.TestTrainingStages" name="test_finetune_loads_full_ocr_checkpoint_without_resuming_coco_init" time="0.005" /><testcase classname="tests.test_projects.test_ocrdino.test_training_configs.TestTrainingStages" name="test_old_generic_stage_variables_cannot_change_the_requested_plan" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_training_configs" name="test_mmengine_resolves_official_dino_inheritance" time="0.030"><failure message="AttributeError: 'ConfigDict' object has no attribute 'num_feature_levels'">self = {'type': 'OCRDINO', 'num_queries': 900, 'with_box_refine': True, 'as_two_stage': True, 'data_preprocessor': {'type': '...ox_prob': 0.0, 'pred_box_start_epoch': 5, 'min_pred_iou': 0.7}, 'rec_test_cfg': {'score_thr': 0.3, 'max_per_img': 100}}
+name = 'num_feature_levels'
+
+    def __getattr__(self, name):
+        try:
+&gt;           value = super().__getattr__(name)
+
+.test_deps\mmengine\config\config.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.test_deps\addict\addict.py:67: in __getattr__
+    return self.__getitem__(item)
+.test_deps\mmengine\config\config.py:138: in __getitem__
+    return self.build_lazy(super().__getitem__(key))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = {'type': 'OCRDINO', 'num_queries': 900, 'with_box_refine': True, 'as_two_stage': True, 'data_preprocessor': {'type': '...ox_prob': 0.0, 'pred_box_start_epoch': 5, 'min_pred_iou': 0.7}, 'rec_test_cfg': {'score_thr': 0.3, 'max_per_img': 100}}
+name = 'num_feature_levels'
+
+    def __missing__(self, name):
+&gt;       raise KeyError(name)
+E       KeyError: 'num_feature_levels'
+
+.test_deps\mmengine\config\config.py:105: KeyError
+
+During handling of the above exception, another exception occurred:
+
+    def test_mmengine_resolves_official_dino_inheritance():
+        import pytest
+        Config = pytest.importorskip('mmengine').Config
+        paths = [CONFIGS / 'ocrdino_r50_4scale_query.py', PRETRAIN, FINETUNE]
+        for path in paths:
+            with patch.dict(os.environ, {}, clear=True):
+                cfg = Config.fromfile(str(path), import_custom_modules=False)
+            assert cfg.model.type == 'OCRDINO'
+            assert cfg.model.backbone.type == 'ResNet'
+            assert cfg.model.backbone.depth == 50
+            assert tuple(cfg.model.backbone.out_indices) == (0, 1, 2, 3)
+            assert cfg.model.backbone.with_cp is True
+            assert cfg.model.num_queries == 900
+&gt;           assert cfg.model.num_feature_levels == 4
+
+tests\test_projects\test_ocrdino\test_training_configs.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = {'type': 'OCRDINO', 'num_queries': 900, 'with_box_refine': True, 'as_two_stage': True, 'data_preprocessor': {'type': '...ox_prob': 0.0, 'pred_box_start_epoch': 5, 'min_pred_iou': 0.7}, 'rec_test_cfg': {'score_thr': 0.3, 'max_per_img': 100}}
+name = 'num_feature_levels'
+
+    def __getattr__(self, name):
+        try:
+            value = super().__getattr__(name)
+            if isinstance(value, (LazyAttr, LazyObject)) and not self.lazy:
+                value = value.build()
+        except KeyError:
+&gt;           raise AttributeError(f"'{self.__class__.__name__}' object has no "
+                                 f"attribute '{name}'")
+E           AttributeError: 'ConfigDict' object has no attribute 'num_feature_levels'
+
+.test_deps\mmengine\config\config.py:113: AttributeError</failure></testcase><testcase classname="tests.test_projects.test_ocrdino.test_training_configs" name="test_legacy_configs_require_explicit_migration" time="0.003" /><testcase classname="tests.test_projects.test_ocrdino.test_recognition" name="test_retired_recognition_path_requires_explicit_migration" time="0.001" /></testsuite></testsuites>

@@ -1,0 +1,3145 @@
+{
+  "date": "2026-10-16",
+  "scope": "C:\\Users\\14222\\Desktop\\ocrdino\\twostage\\mmdetection_twostage_wo_ctc",
+  "baseline_files": 661,
+  "changed_baseline_files": [
+    "README.md",
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_pretrain_24e.py",
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_totaltext_12e.py",
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_ctc.py",
+    "projects/OCRDINO/ocrdino/__init__.py",
+    "projects/OCRDINO/ocrdino/detector.py",
+    "projects/OCRDINO/ocrdino/hooks.py",
+    "projects/OCRDINO/ocrdino/recognition.py",
+    "projects/OCRDINO/ocrdino/vocabulary.py",
+    "projects/OCRDINO/reports/english_datasets/README.md",
+    "projects/OCRDINO/tools/audit_dataset.py",
+    "projects/OCRDINO/tools/build_dictionary.py",
+    "projects/OCRDINO/tools/convert_checkpoint.py",
+    "projects/OCRDINO/tools/infer.py",
+    "projects/OCRDINO/tools/prepare_english_datasets.py",
+    "tests/test_projects/test_ocrdino/test_checkpoint.py",
+    "tests/test_projects/test_ocrdino/test_data.py",
+    "tests/test_projects/test_ocrdino/test_detector.py",
+    "tests/test_projects/test_ocrdino/test_english_conversion.py",
+    "tests/test_projects/test_ocrdino/test_recognition.py",
+    "tests/test_projects/test_ocrdino/test_training_configs.py"
+  ],
+  "new_scoped_files": [
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_query.py",
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_query_pretrain_24e.py",
+    "projects/OCRDINO/configs/ocrdino_r50_4scale_query_totaltext_12e.py",
+    "projects/OCRDINO/ocrdino/recognition_capacity.py",
+    "projects/OCRDINO/ocrdino/recognition_query.py",
+    "projects/OCRDINO/reports/query/pretrain.query_audit.json",
+    "projects/OCRDINO/reports/query/totaltext_test.query_audit.json",
+    "projects/OCRDINO/reports/query/totaltext_train.query_audit.json",
+    "projects/OCRDINO/reports/query_validation/README.md",
+    "projects/OCRDINO/reports/query_validation/checkpoint_conversion.json",
+    "projects/OCRDINO/reports/query_validation/cpu_ddp.json",
+    "projects/OCRDINO/reports/query_validation/cpu_ddp.log",
+    "projects/OCRDINO/reports/query_validation/cpu_model_smoke.json",
+    "projects/OCRDINO/reports/query_validation/cpu_model_smoke.log",
+    "projects/OCRDINO/reports/query_validation/initial_pytest.xml",
+    "projects/OCRDINO/reports/query_validation/install_mmcv.log",
+    "projects/OCRDINO/reports/query_validation/install_torch.log",
+    "projects/OCRDINO/reports/query_validation/install_tqdm.log",
+    "projects/OCRDINO/reports/query_validation/pytest.log",
+    "projects/OCRDINO/reports/query_validation/pytest.xml",
+    "projects/OCRDINO/reports/query_validation/source_integrity.json",
+    "projects/OCRDINO/tools/cpu_ddp_check.py",
+    "projects/OCRDINO/tools/cpu_smoke_test.py",
+    "tests/test_projects/test_ocrdino/test_query_contract.py",
+    "tests/test_projects/test_ocrdino/test_recognition_query.py"
+  ],
+  "missing_baseline_files": [],
+  "protected_file_count": 614,
+  "all_protected_unchanged": true,
+  "protected_files": [
+    {
+      "path": "mmdet/__init__.py",
+      "sha256": "e131d165b6d4453631988e16203539f61005afdd484ee4e917b0e33efaadbfac",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/registry.py",
+      "sha256": "6b085aea402f5afa3b97a405af8b0a728cedc8e8d60aceb7dd446df9490ed4da",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/version.py",
+      "sha256": "0824dc55f83d673d5066d01630e09e5e5b1750523483fedc012bbfe97770ff8f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/apis/__init__.py",
+      "sha256": "421080851494721102f8f200b1c96c7956f162156aba348b60d608112c79d2bc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/apis/det_inferencer.py",
+      "sha256": "e3b431aa513c638831a043fd4563e2a0ba10f8aac702ae0899fdd5f987c1a405",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/apis/inference.py",
+      "sha256": "f2ce909830847c00562cc398efb0b0f3a215d7f48a5c1d4b74557ccad00c856d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/cascade_rcnn/cascade_mask_rcnn_r50_fpn_1x_coco.py",
+      "sha256": "cb82d9def1e1a24441b53576a8e6dcb14a4fdd4208fb40f99ed3f9fd17bcb001",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.py",
+      "sha256": "f4d9135f05f28142a632aa76e0dfc72d46b4b15c9f68d324b8f7634ec50f6ba5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/lsj_100e_coco_detection.py",
+      "sha256": "523775cdf2b9539bbcf9e5bc83cd593b5fec67941b0495db1a60e83e5b369524",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/lsj_100e_coco_instance.py",
+      "sha256": "520082ed5b79f6f565f48a74eafd6ec6403f5baa7f23a3a5d69fba3ad1047365",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/lsj_200e_coco_detection.py",
+      "sha256": "3781dc1d441ca925ef05af6592c079a4e75383eb1a801d04869eb8b922316f56",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/lsj_200e_coco_instance.py",
+      "sha256": "0aa7011b194ceb227a3003ec1e1b1d4dbbc6e8f783367037f6bec0df6a38a422",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ms_3x_coco_instance.py",
+      "sha256": "be3452934d30af0137f68c8a168b5adb9529e8c042df4d13733c6d8a5cc57339",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ms_3x_coco.py",
+      "sha256": "bd9d3f2908e29b120951358b1399238b3ccd104a4adeb79768f7b455eeda6258",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ms_90k_coco.py",
+      "sha256": "4ad6e8b324cd5f7ff1634057ceba44027b493deda97b61bcfa243894a8d31267",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ms_poly_3x_coco_instance.py",
+      "sha256": "f195bab04602e9cca1de02d3b225fc3ff25b25b7358cfd0502cfa9bdd6e6f636",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ms_poly_90k_coco_instance.py",
+      "sha256": "95d9541c2287b27122d70157e44ba2e2271a3646e1d924e1f036b2e789610cee",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ssj_270_coco_instance.py",
+      "sha256": "71676fdad5d98727c763c33cacb49ba5c10434dfe7fea25978623e52266b1e85",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/common/ssj_scp_270k_coco_instance.py",
+      "sha256": "2afc2015232297a322149c875b749d844e6bb945c712c98d6de7d6548d95f536",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/deformable_detr/deformable_detr_r50_16xb2_50e_coco.py",
+      "sha256": "f0e49440e1f5789d1bc27248197516fb436dac9d412cc650f8fe15d41d5c113b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/deformable_detr/deformable_detr_refine_r50_16xb2_50e_coco.py",
+      "sha256": "aec6526562713df284a8834d871ad5f3244c1dac1e9eb0b81859770ab6342757",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/deformable_detr/deformable_detr_refine_twostage_r50_16xb2_50e_coco.py",
+      "sha256": "0b10bd49aba05b0c5851bb2b0d0e29479375ad6a21709e57e40f563c0e159d32",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/detr/detr_r101_8xb2_500e_coco.py",
+      "sha256": "64b3edbd7fde1887462770104b623fdf5c56350d17bceed062ace015681fe714",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/detr/detr_r18_8xb2_500e_coco.py",
+      "sha256": "d38430b3d04dd21e80de0d4f7def53871311585ef00a032c3f94f77c05b31485",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/detr/detr_r50_8xb2_150e_coco.py",
+      "sha256": "4a11661f16f12f4c7d2389ba9148a181bc4ce9756e568a7c15ab84d481f4e1bc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/detr/detr_r50_8xb2_500e_coco.py",
+      "sha256": "cdd0b478dcca5de3c3f4b411671aa7c0c155345b14bfa4496a8f718fdc44f995",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_4scale_r50_8xb2_12e_coco.py",
+      "sha256": "5829407cb0635a4e4faa99f4ff067b16fb8bf9afabbf3fbe9bdfdc3b8bb8960c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_4scale_r50_8xb2_24e_coco.py",
+      "sha256": "1e9212f77a8840e9cf4841ce47e349f86cf42e7986cd45ad97b670ef429adc26",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_4scale_r50_8xb2_36e_coco.py",
+      "sha256": "e4f22adac19f5a0850cb650c43f43c65f4a1e5feabf23f33083d834dbf71aa96",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_4scale_r50_improved_8xb2_12e_coco.py",
+      "sha256": "80838ebbbde2e9b0c229f5a822bd8b7909727ffafcddd836df9a245aaecd7563",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_5scale_swin_l_8xb2_12e_coco.py",
+      "sha256": "665806a155fa50cc368057977f3a1f177b6bc3bfbfd712010c6cabb9ad9e9e4d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/dino/dino_5scale_swin_l_8xb2_36e_coco.py",
+      "sha256": "ee3b44854fa371ec1c48aaba770a646b708f2341da8a9b47cef6843dcab04af2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py",
+      "sha256": "a423ae8c488c0dae232e6529475482c7877708db95fba646943ad6f49e40579c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/maskformer/maskformer_r50_ms_16xb1_75e_coco.py",
+      "sha256": "1a7c2ba8fcfae3d086805372022c8d519449a1b39c3092e28474ca3d3cf57d03",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/maskformer/maskformer_swin_l_p4_w12_64xb1_ms_300e_coco.py",
+      "sha256": "a160867438eab8281047c2d26a6855e4d47cc5bcd46a5e28b016fe330007982d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_caffe_fpn_1x_coco.py",
+      "sha256": "50b98a38005e5a22603256f11ff1d73d29e14c7807fc80f3e30081e4c97495be",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_caffe_fpn_ms_poly_3x_coco.py",
+      "sha256": "56a54a983fe3bb3dff955ae66680bf846ecbc0c7b8586f24eb817efb18f6d302",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_fpn_1x_coco.py",
+      "sha256": "f6551892aabd29aa69203d1c5f02bac6e9b5f2e92006efc95150ddb626cfe76f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_fpn_2x_coco.py",
+      "sha256": "3d530a769fec067bbf1bfd052aec2709f8768d9ab4dac80cffa508b88033a48a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_fpn_8xb8_amp_lsj_200e_coco.py",
+      "sha256": "d1a06d2ee582f45121e1e54b963a89e843fda944aa231db31b77182e614caf4d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r101_fpn_ms_poly_3x_coco.py",
+      "sha256": "9d1627c29e76fb3a66a096857d080897a8df76cbe0037c7db6c2b3eac8f60c4e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r18_fpn_8xb8_amp_lsj_200e_coco.py",
+      "sha256": "a0eb9811fbf29eda7f367a7b05a236a02bcedd411b6ab6890ed76a46fa575700",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py",
+      "sha256": "97589108c95f6f20632ba6942c247aaac8fb461801d86d506f57ab3b09314906",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_1x_coco.py",
+      "sha256": "0b439b5e2bcc112647f55a1b5d5b900cce4e0a35b35b861cdfe82e2c55078946",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_ms_1x_coco.py",
+      "sha256": "e0fc6bfc7db310f0ae0ece92a4baaa5a7157ffdb5e95f54bb559cc1e1d4adf4a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_ms_poly_1x_coco.py",
+      "sha256": "ce0ec4fa954f70975a472c2e800094fbe4af7e38ff1da8c1a889f01784bc2d2a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_ms_poly_2x_coco.py",
+      "sha256": "5388de49345d9b8df3959538b0f6fcd86f6846f59b02df1e762ed5d4a497fa39",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_ms_poly_3x_coco.py",
+      "sha256": "ec5d13648fb51bd49d9027b1fc9dfe162441c6309794b4af3358f2df53ccf150",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_poly_1x_coco_v1.py",
+      "sha256": "ad3d0f580e3caa509a427d9cb2c6aa742100c04db1e2a532321e2a740d5b5427",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_coco.py",
+      "sha256": "60fa74935cc73eada51716542ae898765f4ee3943bd342d818471f6e3489a570",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_1x_wandb_coco.py",
+      "sha256": "20622600ee5e503b66fa751afc4e10e4bcf4990491293608a3d38432176ab099",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_2x_coco.py",
+      "sha256": "61751085ba3a44c15d8b84faa3759f9ae60625c500e63b148191b804cf16fc4f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_8xb8_amp_lsj_200e_coco.py",
+      "sha256": "b4cb878299c68e130883a2ce4d65e98d72de8ac6c070c589b13f587f5d93436e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_amp_1x_coco.py",
+      "sha256": "9ad46ebad6fc877c3c5f77696b81699fb06b11a0cb377a0e3b93237d02e08732",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_ms_poly_-3x_coco.py",
+      "sha256": "773c8501f432f675f5175513ad6a7d22720ccbef39eac4a465fcd4f34993a9fe",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_r50_fpn_poly_1x_coco.py",
+      "sha256": "900ee4aa6f72c0b7bb55e992a9a6b699ee20c3a4a754effb65966ae0e4111373",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x4d_fpn_1x_coco.py",
+      "sha256": "6f8459d7f21e37c1da778ba15d33fb6843426dbc017ba6b989af87f4e8763185",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x4d_fpn_2x_coco.py",
+      "sha256": "cb231afbc490f83e4a5d942841558ad8f5fe778e2423d90b19a3de5ff103b955",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x4d_fpn_ms_poly_3x_coco.py",
+      "sha256": "1ed662d3e2133ad68b74aaba77f7d38ece81c26df9c2576f105a5149b8c86ae5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x8d_fpn_1x_coco.py",
+      "sha256": "1d738bfd4b6b52228d5b39716d61d2a1d923b4678000e37ca7a61cf7533a66c0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x8d_fpn_ms_poly_1x_coco.py",
+      "sha256": "37baa43c9f040f5083caef7ebc9b642b69e39a40067c1a8773f10d47c1d2c16b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_32x8d_fpn_ms_poly_3x_coco.py",
+      "sha256": "b5adf97e55197afc26141f410f9fb29524ca250c5c72ab50fabde0895ff309f2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_64_4d_fpn_1x_coco.py",
+      "sha256": "121b65ac519e4a052a7533586f79b89a9f90842db826c666779e2611d45a56e3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_64x4d_fpn_2x_coco.py",
+      "sha256": "03df0da7bf9ac9460597e4fff109d905e1e65b795904553d29cf061512fe91a9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/mask_rcnn/mask_rcnn_x101_64x4d_fpn_ms_poly_3x_coco.py",
+      "sha256": "0a47cc626d5f04c15faec0c71b2ed4a6d36d7732b70b4de8807b12fb41fdc846",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/panoptic_fpn/panoptic_fpn_r101_fpn_1x_coco.py",
+      "sha256": "1c9b770cc07cb5be012fc528bdcb0f28a8640de09f35295d7ed3fec2ae8b9543",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/panoptic_fpn/panoptic_fpn_r101_fpn_ms_3x_coco.py",
+      "sha256": "d1f13f57490b7efa56e0008456e121bd92d7239117b2a05309459fb0aa82e2e0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/panoptic_fpn/panoptic_fpn_r50_fpn_1x_coco.py",
+      "sha256": "41cfa5f2febac639a667d288427dfe992297fad9db3f7bedfd43b0cfdd8f74de",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/panoptic_fpn/panoptic_fpn_r50_fpn_ms_3x_coco.py",
+      "sha256": "3ef536a70e788a402ea08971f46beb2d8176e06ae9dea5de96ca2b9022648032",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/qdtrack/qdtrack_faster_rcnn_r50_fpn_4e_base.py",
+      "sha256": "58928d9ee6b047c7e6712c3659e5895b735f3aaccb6be63b6f37d13153ea22ec",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/qdtrack/qdtrack_faster_rcnn_r50_fpn_8xb2-4e_mot17halftrain_test-mot17halfval.py",
+      "sha256": "dcfd342df206c2823a17ad36afd3ced636bdf98b171656ef51582630f75fb1fa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/retinanet/retinanet_r50_fpn_1x_coco.py",
+      "sha256": "0a0b69a4e395ad41edd73336ba07b5801c375bb84b97e8892ab2fd2f8be10bd6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/retinanet/retinanet_tta.py",
+      "sha256": "cbeb5a5c5083073e5d65ec1ef562165723dd0cf821b8472389c9943d469fea7e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_ins_l_8xb32_300e_coco.py",
+      "sha256": "bd96f53dd2730b2c80cfbf47c7f101e51cf21f2c4fa3fa5aa30d7678ee474aa5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_ins_m_8xb32_300e_coco.py",
+      "sha256": "b99ce281c60b60368900f0b5606e794a817713702adb2a34693581dbe1defa1a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_ins_s_8xb32_300e_coco.py",
+      "sha256": "c0a6b193985b8b8b7e3f76aae1801af31898e0c5750d4c898af7ae3c247a811d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_ins_tiny_8xb32_300e_coco.py",
+      "sha256": "9d4df9ad2524a98551be775e3fcc621304a33db11b0c6f5f80c2a7d535a59fcd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_ins_x_8xb16_300e_coco.py",
+      "sha256": "495f2ebe2476b97431fc8a439914e891a0ca1c41532d8808e7ceed13b30b453b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_l_8xb32_300e_coco.py",
+      "sha256": "3d29869b4e9744f1a33dd2b6430a8eaa0c13d6c18806d3f88da9f90ed4aebd88",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_m_8xb32_300e_coco.py",
+      "sha256": "b558d74b87502d56328f4301100b1e0d8128c83f99a0ca300746830dba42c3f8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_s_8xb32_300e_coco.py",
+      "sha256": "1d48559e7810dd5accc31e0a04d2748ed1076c722c764d30f3e8c47de352246f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_tiny_8xb32_300e_coco.py",
+      "sha256": "29fbba04ec9b760e53ad1fc4751599a0280db269115b7098603a889d757b2ea9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_tta.py",
+      "sha256": "fdba839dee8c9fbea84fd29ecf01d33fb26bea200b492efa4154503be9ac960f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/rtmdet/rtmdet_x_8xb32_300e_coco.py",
+      "sha256": "b302f7f8483088611fb7614d2647442a39419188b858a23d51d0989c52057642",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/default_runtime.py",
+      "sha256": "bfd93719672e850d8495595f774863110b2541ac1f90f211a96a8bb4ec5517aa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/datasets/coco_detection.py",
+      "sha256": "adca91787a462ec31b7f711dd839e4a0b3a640fa89438d2d27cbe0162caa424f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/datasets/coco_instance_semantic.py",
+      "sha256": "4dbe92cccae6e6418d228eb53e1a179207ef560e53b3bc7375231bf1831c64d1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/datasets/coco_instance.py",
+      "sha256": "074fef82a5f57e4af3522fb7b115d9b9e483ad0026b70c39d8485cfd670f4c0a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/datasets/coco_panoptic.py",
+      "sha256": "52a1618495398109a7219eb2c19b6b0c2c986afbe1340e9eea43c01d27d7579e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/datasets/mot_challenge.py",
+      "sha256": "5ff2e5758d0d723c48df323aacd57c46dc8dbf09d54abb20987ba100edfa1ec0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/cascade_mask_rcnn_r50_fpn.py",
+      "sha256": "f93c61530a22be62ae6531caacb169360988dfee0b7ae719d0afd18290c08ee8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/cascade_rcnn_r50_fpn.py",
+      "sha256": "3915ede6bcc2fe4a3ee3757e6d742811671aaa172ca02c6ede7d3bae259cd410",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/faster_rcnn_r50_fpn.py",
+      "sha256": "dcf0aa1310599a1cbe67f56aafdd6f9d2a0d9757330d079f689b68eabfd4e6ce",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/mask_rcnn_r50_caffe_c4.py",
+      "sha256": "a2b861f1869b92f438dea08cd1015fedc71ce74b87093c8e24da6d71217e031f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/mask_rcnn_r50_fpn.py",
+      "sha256": "7545f734ec27107934325b72c4edd523ff88b7f9d3166c9377784b7b70a51921",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/models/retinanet_r50_fpn.py",
+      "sha256": "682be263ae30fe17ad30e2473a865e94bae14da521108ab93d1a6a87ec30df8b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/schedules/schedule_1x.py",
+      "sha256": "d770ed8b6e3a2b9cbcb06f45aea7c7b77161b8de018e42cf71ee5f67ca8665aa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/configs/_base_/schedules/schedule_2x.py",
+      "sha256": "73e9fd82a8e0b8b1987d3aa430f56d95fa8217c896e0abafba55ec0f48835d55",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/__init__.py",
+      "sha256": "98d7397bdf4053c8d951c1c84ac1f050f75ddc5080b49944f743083833dc9d75",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/ade20k.py",
+      "sha256": "8856df344b445ae89dcd4d0047e43da804ce5cb82b497f213591117bca5d3b61",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/base_det_dataset.py",
+      "sha256": "69098a85a396b59a5526b1bd074eb36769ec3aedd5fd8706210962eefcc9f67c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/base_semseg_dataset.py",
+      "sha256": "f3f48dc1f80e7d412e7f09b68f5c0fb82296b71e373d04f0600b5f54e37d4f86",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/base_video_dataset.py",
+      "sha256": "3c38086c6ff4ace50c66b91c1db4827deb77de72d0a2cbe424f64ceb623c5851",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/cityscapes.py",
+      "sha256": "d4ec0c222d495f782e929c64e8c59017c83754954d08f43c864cab35da2340ad",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/coco_caption.py",
+      "sha256": "0d110fb69456836e630299c6c98a460f109472614777676d6f65ac7d99137333",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/coco_panoptic.py",
+      "sha256": "af5aa53ebd071e0a8a0561a1f228cf0d5c6eb4d1770787b5251cfe130b267242",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/coco_semantic.py",
+      "sha256": "1e0c443fafd1e51bf1fae2921d8c3cc7f6979df769e70fd8d915120a1f30b059",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/coco.py",
+      "sha256": "918ebe75587dd727dd54594f5a1921dd4990e033751915324144b2695c833bf4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/crowdhuman.py",
+      "sha256": "666d7088724cdbc68c0846185126171659886c49e2c503e536c8ea2cad6cd462",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/dataset_wrappers.py",
+      "sha256": "4a10bda6fde4db65d52d74aa7db6489e7b052c0ef9e365e4071581c81b13301b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/deepfashion.py",
+      "sha256": "e3d598f12ec9f6ffd0fe281b17553ec12bd688043ecbc3c156613896daf56c41",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/dod.py",
+      "sha256": "5dec9fe911240abafc4a4061abd3358d59efab0dfe10421107835d59b407a9ef",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/dsdl.py",
+      "sha256": "27d6f849567b2280bde58f00bee5c7508341f662845a4bcbe911ba0976d4eed1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/flickr30k.py",
+      "sha256": "218c63e9f6be8d1d414009e86591318e4c52e3fed9f85ce853927e19fc5ef9b3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/isaid.py",
+      "sha256": "ef61c49ed08d124bfdabec9f79353493de2573923600d7404960583b46608c82",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/lvis.py",
+      "sha256": "ca736c7cd2648f2c41e4868c31900f124a78fe51d34df0640776ea5c61971a19",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/mdetr_style_refcoco.py",
+      "sha256": "5c1250f0b140ec0c703f1897026d7f3324a0243b951d8c4d9e8ee44c9bfecd6e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/mot_challenge_dataset.py",
+      "sha256": "3e49530e00890ec842287930e9ef8e9b4cd11cdd8a2a8a424ba078d9b65958ce",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/objects365.py",
+      "sha256": "9badb7bcba70b3aaa339481b1e3e0fb610c2ae141eb383eb2aa0a374558e44c0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/odvg.py",
+      "sha256": "eda9c714dc9543931734719ac366eaefefa71f42ce82b271cb5897d6136da1e5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/openimages.py",
+      "sha256": "8883dfce854f3779748cdf16e3e4e366976812619cd52a6c0f912661dbc14d18",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/refcoco.py",
+      "sha256": "76dbab462ede849985652d121ed7fc64fb775574467a702eb15e5d7ee8857f6e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/reid_dataset.py",
+      "sha256": "cb6a9a821baf39d622452d9670fcf8fbf63bea856ecbb6495022d987f99aa601",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/utils.py",
+      "sha256": "905f65795ee3f5df76cf43ec48968973167b8b7b2b467190e00dd59c2208eb74",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/v3det.py",
+      "sha256": "501ce637c987c201b45fb92cd3253387aea982e999a78e64d58473bdb546dc9a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/voc.py",
+      "sha256": "24f3d4193d197c62381bce386201c670f6423e64304247af49e2c4e8743cc84f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/wider_face.py",
+      "sha256": "b6589c54c0771a7d0f984a035c41e363c517cc5fcf90a21a1888b10b6a0a8b49",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/xml_style.py",
+      "sha256": "528a08b71712c660df92ff82bfe2bfd6b2373e403fe432f9c433de51e612fdd3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/youtube_vis_dataset.py",
+      "sha256": "59ffb4516d9a01bc694ade2e4ccca9bfa0e11e557a9fc31743b3865749b02173",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/api_wrappers/__init__.py",
+      "sha256": "771ee1320559e7d671abfb16ce4bfb9d274fd2ec1747d22ff6f5078da5c3ca63",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/api_wrappers/coco_api.py",
+      "sha256": "22dab8dc57519cd568eaa9b97bc43023b89842522397c0cab7627b06eb95e37e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/api_wrappers/cocoeval_mp.py",
+      "sha256": "ec3235fee56e16b8d7fb3ccc17691195e42a53771bb733d939285ec5b45a6990",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/__init__.py",
+      "sha256": "2314af1c7184c0b66dc5a4c9adbc3044876ddaed88a8fdca279517a073713a5d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/batch_sampler.py",
+      "sha256": "a6d6636394df398d24677d3fc4b6c0d9ff4319f84e99b8902cbaa70f597e27e2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/class_aware_sampler.py",
+      "sha256": "03e7bab47b48ffbf1311aeea8c359b936de19daea6b163c6838497baebe66308",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/custom_sample_size_sampler.py",
+      "sha256": "3caf4ad2d1f331366253464f8c54ed6be6d54c60ad09b1a0c455f57b4280e2ca",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/multi_data_sampler.py",
+      "sha256": "aa781fa11e27c92e812f049d51a7d422eab4aab4922b7ecfc1b140075e4b7724",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/multi_source_sampler.py",
+      "sha256": "3ee2770b2bd67a6d1cf7a60d21896c28f8bae6d7957a7b2be910811a339eec23",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/samplers/track_img_sampler.py",
+      "sha256": "6831f3654deb29c2e7a097a2fb142f43069b6f7d35d4adf9c42f7fba915a6ba6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/__init__.py",
+      "sha256": "f6ef177ebe1310c53456bd65ec1cc71e289dc07f44c3f5120dc78d1ed6ada143",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/augment_wrappers.py",
+      "sha256": "23040cecac46a39b4b864216627f978d82426c79f63ce62d65fac2dd8a7f490e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/colorspace.py",
+      "sha256": "9f31fb1fc92ee498e852afa518246bf824b8f96c1ee665ec539ceb3e1e475894",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/formatting.py",
+      "sha256": "ca032738f4cda71ca3284851c1f2e27c3af9ef8a2c822027fc5116e5a5d836e5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/frame_sampling.py",
+      "sha256": "ff5b07d31ac7053bb897b796c6c8cc41196cc90de2d883a6c53345f1f6c2ba33",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/geometric.py",
+      "sha256": "5da2a27e8c55c89aa96a8814c418d4f8d86c154bcf7f4240586b17674751b03c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/instaboost.py",
+      "sha256": "4032eb3964d42c488f657e13aefeede38618bdd3985e203b001a1f6b1be61098",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/loading.py",
+      "sha256": "9d9af6d105a4f34c1764cd07196553f0d66ae057d6d66b7ba45683c4f6a78243",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/text_transformers.py",
+      "sha256": "277c73ab50f89e1fa0394ceb796ce03be36943899577205051df97222452ff80",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/transformers_glip.py",
+      "sha256": "5a9872f6683bd2d973c419d3bd83640e32560c74e0d75c14e40cea7149f980fc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/transforms.py",
+      "sha256": "711ac067cb67375f3788b0d9f4b1f4dd0e57a159a41de67e84fadc6285ebf4da",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/datasets/transforms/wrappers.py",
+      "sha256": "248a2fd969901003322573cbf6dd422e3b7d60ec7b51ae2466dc26d8168503fa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/__init__.py",
+      "sha256": "36a92271384e56bde81b53e6eaf3d037f17f1ab8bd40f73102aa26d8425ece9c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/__init__.py",
+      "sha256": "5c786b9a037f05d4644654851d7e5d63f0efeb0f44c0bf0408ad3e4a5a511389",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/checkloss_hook.py",
+      "sha256": "39e208e2d93662f68b3d7a101218b4714df9470e24535af3c510a9f0125d12c2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/mean_teacher_hook.py",
+      "sha256": "a1f36cddfdb92e7aa4be74a332d59ef5bdf1082b62e12f8683324768c817ec08",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/memory_profiler_hook.py",
+      "sha256": "55ec358570df34a813507ce43a031e5a816a2c1103385dec177809e6389872cd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/num_class_check_hook.py",
+      "sha256": "6fd39c9cfde292ff30613e3c07eb491a375d8f4e63ab3c585904cd48cd575ce8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/pipeline_switch_hook.py",
+      "sha256": "d61c0c01bac3cf5d74e70ece1440c8c0f33b20ab40ddcfff3a5dacf56b97f965",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/set_epoch_info_hook.py",
+      "sha256": "5f684c60f9ad83784f29a214d15deebeee9bdce6feb4a31066d1aa66f517298a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/sync_norm_hook.py",
+      "sha256": "5914a93446cf8dae0b7fcc592b56d01191430834833708db55a881db6fbad8d1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/utils.py",
+      "sha256": "fce3933efa01f815d1dc09255fd7fb065230e81548640a109dabee86190da773",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/visualization_hook.py",
+      "sha256": "2ba4e0713c6e464614bff86ef5eeee358bfe5ed628dd01fa1761ba75b4c50ae6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/hooks/yolox_mode_switch_hook.py",
+      "sha256": "75fdde70434d8cef8bcce777f67688e1f78012e4d5bc9721514c28cc7e6676c8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/optimizers/__init__.py",
+      "sha256": "0a9bd7ef42b04a3ee48d78b69746f639047ee7836abe5683ecdc9c48b6516a62",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/optimizers/layer_decay_optimizer_constructor.py",
+      "sha256": "c4ce19a93da61231df9d50f683325b69c55d421dbd13b91bbe9c7c2bca6b89f4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/runner/__init__.py",
+      "sha256": "3e9f6efcde6397bce285cf613e230c73cfeb9853317d7564abfc1a3e814037fe",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/runner/loops.py",
+      "sha256": "a4417312c2f079e76bb4e3526168c719a5822bd4b08fbeb8beeb40d5821c1530",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/schedulers/__init__.py",
+      "sha256": "fc3e644d934ba5fcd249a4c7ecf9d07ab0a49dcc76671c7d17da1f550d025860",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/engine/schedulers/quadratic_warmup.py",
+      "sha256": "b4d2718279708a2d492e75bf922200b23e95d5b5b4f1e7d45f41f59d5b1652da",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/__init__.py",
+      "sha256": "af78cf776207bfce050b962dd1b224e13fbe64d81b2dc4e9d0f8ff5dd9f9b020",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/evaluator/__init__.py",
+      "sha256": "72b5031a4a7c67f41c5dbebbc91cb0ae1db7fcc0bbf4f3522c37e3210a9ab4a8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/evaluator/multi_datasets_evaluator.py",
+      "sha256": "01a04c85c896d338298f88b60982f53de979eab1efbe1d67e099b46640247b23",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/__init__.py",
+      "sha256": "2cf5a7037a3047d71da8bf56d8a11ce6b204f1f5f31f70fdc5703e459fcec168",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/bbox_overlaps.py",
+      "sha256": "83bf5df140ba72612ada4ca11c6c4ac4fe6efb4d950245776c6096bbbf5bd36b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/cityscapes_utils.py",
+      "sha256": "6d0fe15fefff652b61a7354df10af04ca50c0fc5878cb04d30175558289d798b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/class_names.py",
+      "sha256": "31f61fc7150bdbd8ead73716282683725ed705ff2266d516f08eb0760eae9746",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/mean_ap.py",
+      "sha256": "40932f2854981e48e155a64ab607c0712a28d908d7e524de81557384f2c66918",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/panoptic_utils.py",
+      "sha256": "8a1540bd5409f42ba3f1d1039e38ab81f538036e55039320de6cc1bdb17ec8f1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/recall.py",
+      "sha256": "0463a42472323f7053a9885ac2cb31b8ffae9a1d687c153c4085deb9cd0ebf0c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/ytvis.py",
+      "sha256": "3145d15d9af08af892ee0aa32916682315952065fdf5783747d27072d10126e4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/functional/ytviseval.py",
+      "sha256": "3addb986dac1810fc25f927540fe233ad28e0c9657236230180921710cd9d3c2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/__init__.py",
+      "sha256": "97f783db1bcafa5c8e295dcd18451e0b9acff1552138b93610adc54d9bf3e0cc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/base_video_metric.py",
+      "sha256": "c85c0a7239f71513d724699f7b8b3eb553f1b0097f0e09cdbbb168212ddf1e0e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/cityscapes_metric.py",
+      "sha256": "638bed72a2906e3c185bd3a038f0c89bb84e91c0f96f9388195b93f7ab132461",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/coco_caption_metric.py",
+      "sha256": "0efa26b6da545f5c8ab6a132c3f3846a03702f0447cf5d3d3573639531c19904",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/coco_metric.py",
+      "sha256": "92ef92a07b9c25916e4836f8de2923e65c0ab0ab6da4dc956d1951be0145b344",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/coco_occluded_metric.py",
+      "sha256": "3b5e82b75bfdc02eeada4c330499048c9c4283bb1c5183db841ae9fb591fefad",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/coco_panoptic_metric.py",
+      "sha256": "4b0b6bc9b1c7dea7e7bcd1bf792ca33a56ffc1a01f1c6c2499897a81048ecf32",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/coco_video_metric.py",
+      "sha256": "fa6b2524071974710b1748da8c54c65760c3a9e3a06d44673ed2105107461b4f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/crowdhuman_metric.py",
+      "sha256": "62c03a0d8d5ef18fd9180f7e946b34f51a061c93651b4315cd4f28d001369f7f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/dod_metric.py",
+      "sha256": "aec2097b7186e499b607b63ae370a9bb1f8d7059f02602eebcd0d00495a29aff",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/dump_det_results.py",
+      "sha256": "de32fc0c5e227cb1f29ef75dd3d500dbe40bc92f0b6cba4665e270c0096a6548",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/dump_odvg_results.py",
+      "sha256": "fc83c16f177651d48dc3ed5b12a9dc38fca0f98fcf086be12a5d768cc83cad89",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/dump_proposals_metric.py",
+      "sha256": "786e75a3655b23c45c4c0d003f2c410616170814756c867fccd883c75a2b1a23",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/flickr30k_metric.py",
+      "sha256": "fcca620ad324299851ae10eb9e8ddd243d50d63d26ace3e3f7d292b2081628dc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/grefcoco_metric.py",
+      "sha256": "b15b4e056b9de7bc50244cfc8a7a716e32e2353f4efee0082df391618158908e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/lvis_metric.py",
+      "sha256": "ee9d306a8c8ae97ff5e1122bc9d1cd41b8fa62381d5ea01668bb77fa85b914b0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/mot_challenge_metric.py",
+      "sha256": "357a123ca5bb084488b2ecbafbda9594b6f681aa2c0fd63504d43a339a49c302",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/openimages_metric.py",
+      "sha256": "fcf3fd24dc02ba442ac2cd54cf7e60453ef4ee5f67ba73f159df3f065ed9b099",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/ov_coco_metric.py",
+      "sha256": "85bde259b4138064089a68b50c7196d61ad2aeb263d6b2c750204131cb9dd414",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/refexp_metric.py",
+      "sha256": "67116164afdccd4a7eb3d96e8ab8c73ad0c3c9d4dd4f1d40eb076ef074cb1d5d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/refseg_metric.py",
+      "sha256": "333369337dfe50fd01842e3743568d60ecd1b9068a4f8040cbdf09a6cae5bb9d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/reid_metric.py",
+      "sha256": "fbf412facfaa2b816cb44f46649a2c7c453b4ba3cf6ead939c1cd5a4884d5696",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/semseg_metric.py",
+      "sha256": "12b51c749c953ad5c090b565539cf5932ef89d71abc59f7304a92df299aa1f9a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/voc_metric.py",
+      "sha256": "17cd7e2cd4c86f3fb1f4f380747329723642c066a1059dd0222d58b4e0c61a8f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/evaluation/metrics/youtube_vis_metric.py",
+      "sha256": "ef5e0d867bacda59b2762de442d9e725db570ff7190cbb6c52d75a3898dbde5d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/__init__.py",
+      "sha256": "edac3bafb1e21caf5ec6ce46432980d4c2874e7bfaccee71b1f5c8a91c61cd05",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/__init__.py",
+      "sha256": "1ff75957abc73dfe39d60b278d5bd3b67d514f8e072eb1859989a5eb0ba868f5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/csp_darknet.py",
+      "sha256": "4d2de11a93f3ab781f8f4e0449d6068faf3b9daa215260f42939141e3fca2cc3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/cspnext.py",
+      "sha256": "c1a648077eb845f4d6b6a0dd2f1ea6ead55fb9b200330ad4ff3776ffa2adcc7f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/darknet.py",
+      "sha256": "e1d5ac4946932e868e808e1923b8a5a6e4ed375e14a6d9c6842a309f78b59a71",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/detectors_resnet.py",
+      "sha256": "9ca86a0b0b52873b4c34459afe7b139aa240d81f4915cf0b4f59e69fec856ccb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/detectors_resnext.py",
+      "sha256": "b1d8b9ce680747acca67c44696135a5e2cb587da7c1fa97a2a9a7fc992cd3891",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/efficientnet.py",
+      "sha256": "344b1e5a20538e4dd32d55123d8df7a8cc6b3974807a0d7ad3166e3e5abace8b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/hourglass.py",
+      "sha256": "134fd737d8f12649a059ad020bfa3e983dd3abbc511fae69b1896acc2c899031",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/hrnet.py",
+      "sha256": "4939ce698ef4906f76f2ae6c93e01651e109732b20762c6855cb0deb3acb0f65",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/mobilenet_v2.py",
+      "sha256": "8ba29fb37a8230d3a1832dd35c29bd5ebde5a86fffe97dc1a49e4768a85780e2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/pvt.py",
+      "sha256": "1ad1966b67735908610354c2fcc2ebc9af738cc2897e5e93acfb4b11df6193a6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/regnet.py",
+      "sha256": "7118896167888a883d798deae40dd3866984c0352eb29ceb2a512bb2e4a344bf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/res2net.py",
+      "sha256": "4454b58b770dbc96ed66c725fa348f15e29f051977fc995910848ad0b29379c1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/resnest.py",
+      "sha256": "5f61f5cbf792e4c7884615e56b48ba1c601fc9ea2f922df488e52ab666977637",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/resnet.py",
+      "sha256": "daee7c055c0c3a5f847b72caa0b6d9aa09754a5fcc606f50a0e17b53d152b085",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/resnext.py",
+      "sha256": "d416faf43a9ccb5a299101b9882f102551f7f4e1fb970061b1144635bd001859",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/ssd_vgg.py",
+      "sha256": "c3b243b548f9143cbd49084ccb2c3dcd8d68d280107c43875f578eb9f3f1b0f9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/swin.py",
+      "sha256": "a1fc5debfbd749174a75b4709e54d7e7232c89d14b33adb5df069cdb8f659861",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/backbones/trident_resnet.py",
+      "sha256": "7426a8c99a575d7480cdade998f5ec66daf249287c3ef1c3e75948b33166e5b5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/data_preprocessors/__init__.py",
+      "sha256": "fd6cee0816d11c60b3b5c0cb79366b48c61943fa54834c9d0ffa0cdb5ecce394",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/data_preprocessors/data_preprocessor.py",
+      "sha256": "dadf8e4b9d35b6204d404653450501532e9b1b39e2fbaba0eb436c526c5d0d71",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/data_preprocessors/reid_data_preprocessor.py",
+      "sha256": "66371c9e60f9a8e051552665c1423096fb00601c9ef2da48001671563ed4496e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/data_preprocessors/track_data_preprocessor.py",
+      "sha256": "0193d7a1ae01fc783f9a55bdc04959926aa614d61325726e7b69659d0e698456",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/__init__.py",
+      "sha256": "6067e3fbe3a21b96713ce1f8606479a57287f9b89a7784af61bc393929079837",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/anchor_free_head.py",
+      "sha256": "161c15a0e3450ae88fa1acb21d605854a46698e97e8dcb68fa040d2dc738b6bc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/anchor_head.py",
+      "sha256": "d3513a6dda874381d82366d89700f5c1e9a5c3c01abced8492020f14bb1fed09",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/atss_head.py",
+      "sha256": "02078b2196daffba27bb2a37f2cb5c415ca85e1e0da1e66d962546b3d64f0339",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/atss_vlfusion_head.py",
+      "sha256": "ea80bded39a14d88e39247481061781d291e1af3117835bc49b2f792c5ec409c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/autoassign_head.py",
+      "sha256": "46eadd2e1fa5783e2bfb296eb6ea40d3c4703e7cda30f2bd94b329cc2f1ff218",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/base_dense_head.py",
+      "sha256": "fe8ec0358a4a3264ca439f805bd8d1b67ae89451ca88a31eb35d2d2e10df261f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/base_mask_head.py",
+      "sha256": "d198cd11c61c4b460655c2e63997a5fab8f6973ce960bac59dceecdd2c74739d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/boxinst_head.py",
+      "sha256": "f816eee50c269003d89ad0755364cb8972ce41447fffee86f58491f3b59e6f18",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/cascade_rpn_head.py",
+      "sha256": "3b97e3d55bae879fe984de0f272c28881fc994dbbc96552865698b490669c406",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/centernet_head.py",
+      "sha256": "c2d581ffb56cdd14a1bd10b710e03af8f572d0437b25541886de53bf714c5f6e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/centernet_update_head.py",
+      "sha256": "7b84d55404db201ac54bb8bd52ece753b51dc36cbb9a81477e445ee5c2f51b5c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/centripetal_head.py",
+      "sha256": "c05fb7ffdf7c45b745bdb96b66f57e5ae34121970c9a8e6f57919c6d8a0ccfa2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/condinst_head.py",
+      "sha256": "3c705cc30ecf695d8399acf875a967dad8884022b20ec3a94e7a2ee37d724de1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/conditional_detr_head.py",
+      "sha256": "c3c65ca616706df383074c89dab52f9ff699119104e6d4b70fa7deb0d5bc97da",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/corner_head.py",
+      "sha256": "b1d1dce3c2f7eb97854c7d65994ffad1ec8ec0e882b8dd7eb4a53e5897ee2722",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/dab_detr_head.py",
+      "sha256": "46361a707dccd87cd06caa2fd06a3595aabba77b0c3c2dbe3a890794307d2d9d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ddod_head.py",
+      "sha256": "41f8549a06f97986ea4d9b95d2bbf5e5bd1f721bc024ea6e3b0a36be9c5e83bd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ddq_detr_head.py",
+      "sha256": "79d8a8232c0a31e43fe33642afadcd954befa0f84211172410c8d2a7105248df",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/deformable_detr_head.py",
+      "sha256": "d4ee4a2f1f8c29fe83eed86a968c09686ffd5232507c3ea71ef5aaa669e5bf05",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/dense_test_mixins.py",
+      "sha256": "a07cbfee4d36287d63e7bd53e111e0bc84bf1bdccc876f435cb67fc10c07ed7b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/detr_head.py",
+      "sha256": "5aa3bd7c4d3b5df1b6eecc7211d3d6dfab3933e240e71a41e425ee9d7d1d3338",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/dino_head.py",
+      "sha256": "cf8707aac5e56004af29c828f4890ce8136047bc3203d360eacbb06f86378bba",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/embedding_rpn_head.py",
+      "sha256": "9710daf17032ed3bafd56e387dcb6afff5ebf015ce21f32c59f8c4a8ef8b42a4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/fcos_head.py",
+      "sha256": "388a28a8e5f0921a19b1f4a43164096a204798a2eb698c1c2c615b837278563e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/fovea_head.py",
+      "sha256": "7cf214a404b7265c1c903c99f5d3557e6066d2617b4e5a7738207607a453f5fe",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/free_anchor_retina_head.py",
+      "sha256": "6d1fae5bf0883188a2ee3c52b79020b427faf9a6e57eeb711101a8de7038deec",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/fsaf_head.py",
+      "sha256": "f14a22def095b6f3660daa0ea2a8e9b2e333634de2c9822e7b5262ef347429c6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ga_retina_head.py",
+      "sha256": "b06c84f94a82f5290357d691b11127f80764801bc79bf095d88988f637e621c9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ga_rpn_head.py",
+      "sha256": "a246e194eb246923c844247959f8490ddad9f787760aba6f26a7e9b156d1fc01",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/gfl_head.py",
+      "sha256": "4ea60cc3980317666ed52ef374f530a30d90b588885e4f3851b922f403109db8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/grounding_dino_head.py",
+      "sha256": "c15aa9ff59d98eedaa0bcd32283f3f0e3a727ee6a62283e9d9bfb5d495a8ce72",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/guided_anchor_head.py",
+      "sha256": "6d65cbb8a5d07128afc6d46583467dada6c915b426a68b99976498758c4415ce",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/lad_head.py",
+      "sha256": "aa6163d1069fc8480cccdc37cd11fcd69910f0d2d459a3e7a703dbdb4d4411ea",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ld_head.py",
+      "sha256": "c8fab21da468aeff3235f48c14943a8568c2da3e1170cddf138aef3dba150868",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/mask2former_head.py",
+      "sha256": "3bd60a26562cc469efbd7d29186209f983b19f757a856ff9cd08a95d62db387a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/maskformer_head.py",
+      "sha256": "417ba05d0286957b5a189d642d68abc7ab88e1a2edae2f501089ac6d584fb91e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/nasfcos_head.py",
+      "sha256": "d8ee1dbc6f6c3d8fa8b66b9d089b1732cd38519838bcf1cfbb5ec7596e8223b7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/paa_head.py",
+      "sha256": "7a1f88040aa25904b09a5c9389668123820262cd8d739be43a4acb492b016dfa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/pisa_retinanet_head.py",
+      "sha256": "ee04a6d814abc10c6273e5a961b3d6d628a5b3bec31c87701ad1ffc0f96ffc2a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/pisa_ssd_head.py",
+      "sha256": "a8369a5a729da22be35fc4644f6b8d3358182bf6672149a47347cbac95a561cf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/reppoints_head.py",
+      "sha256": "fd7868c9711646f7c126c6f6c332929d61a2cdf4a59205d0491379afa91cfe54",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/retina_head.py",
+      "sha256": "10fae55d956a09d8d51a9dde5fb65b0702b6c203175d53afabf02763d937e079",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/retina_sepbn_head.py",
+      "sha256": "04b4981c55d7cf754dad7faed2510a4f90f52d1f635e6e5dec1b71fdaadc0ab5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/rpn_head.py",
+      "sha256": "805a78231acd6aafae4c15d7c1e72584c4778c7c043b39edb2221c3afe935f2d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/rtmdet_head.py",
+      "sha256": "29772e02658d80c9a8092679c60a884e9d15153456b0769fa7a97f5d9caad306",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/rtmdet_ins_head.py",
+      "sha256": "b0aae03cbc68e86580cbfff36f1e789f437f444ad0030047f35c0499aa5a6d4b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/sabl_retina_head.py",
+      "sha256": "f324b9a2d8a1f9553eac642a1681d6995d113c280f6df5ce2fdd3488512e9696",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/solo_head.py",
+      "sha256": "ede4680306c358aac46faac1bc5dc67fc44384f44bf7166f469e6028f8aa0423",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/solov2_head.py",
+      "sha256": "c376e8aab7ef20b08db2b8c50f7593dc453ecf138aaf224062ca5f054e4c24d4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/ssd_head.py",
+      "sha256": "4acb1756b9fb397f2a1eb12ad31ce4a0afbe45e74c948d3184a15c6d23bb70fa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/tood_head.py",
+      "sha256": "c8605771affb590fcd5b7b16ea19b54e510f731729de71899034969ce730bda0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/vfnet_head.py",
+      "sha256": "af3a133e9882a7fcc9640ebe80ad54cfde8b94307fa34e8b9047847edf1a621a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/yolact_head.py",
+      "sha256": "e887edc704eb7c83238a1c1a93770fd7b7ab15f933f5f3b4995a3e91c4193e90",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/yolo_head.py",
+      "sha256": "97b0e216e130a5d853a13a14ff8331a44f848462f05123a6ae56496d1864e5fa",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/yolof_head.py",
+      "sha256": "c742e97ffeb70cf512e1b437204d1f21b7076e4cfdfdb05290bc8d89606564ff",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/dense_heads/yolox_head.py",
+      "sha256": "9ace6750457ce284ac29378b3c0a69f5d2111b3332c26da0a7dae6d93d9fc68c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/__init__.py",
+      "sha256": "00f7eb8686c4a298242ba0167b2100396f848902aaf4323ec5d356857adfbedf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/atss.py",
+      "sha256": "5c13c98e3a0021d19cc9c776574a8c809a5acd3d9bb6d8f27c3710652dfe18bb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/autoassign.py",
+      "sha256": "1c12dd8fa31f4bb5562c8ecc2010328160241195971398037f9e69b501f340e3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/base_detr.py",
+      "sha256": "33d9939835eaef6da208f34ae2bda3420c2a62d6894fe794587d775912524923",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/base.py",
+      "sha256": "d21a83e573eb06c4fcdfdcb2032b5b324d122abca055902cd96acc674c0ed150",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/boxinst.py",
+      "sha256": "e9a0392ca7b516e115ce7d9da847ec3794b3235c0a5047815e861ed71e972e98",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/cascade_rcnn.py",
+      "sha256": "b73eb8ca9b94e278a3307459e8fbdc8dd59a59c52e368db8a553fade45929f2c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/centernet.py",
+      "sha256": "8757b898f2cd6ec3826d5558ea26bc91ef5de1c4dc85db8c61f3665fa050eb29",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/condinst.py",
+      "sha256": "d58c96e7bdc6f85a27ad288a30d57fdb4f5d46cbdd87ecd70ea85829f785aa24",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/conditional_detr.py",
+      "sha256": "0d997b1a0b417f87a42964d70c9cc7c3d2d731fa79c289a059a309b3eb54a943",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/cornernet.py",
+      "sha256": "5d6af13f5f7c39b7601e2362e6816ece6f5d587bb0aafebb1eb288850e7f3fed",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/crowddet.py",
+      "sha256": "0c2d06140e024a2e3f6b7dd2a973fae20f77180996dda57042da545f4c1603c1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/d2_wrapper.py",
+      "sha256": "47b26842217fe350559ebe2aba74b538dfb1bd1a96b22098a60cbe83e83d9c0b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/dab_detr.py",
+      "sha256": "203ea70e43bdbc30aaf3e8d585cbfcc6b7bcadd24632927bdec6de1f38abc72b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/ddod.py",
+      "sha256": "7b950dda7e84807c22332633f31051feca9ff84f23dad00cbb948758988ccc54",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/ddq_detr.py",
+      "sha256": "8be8fd570e8b7e3735c050fbd57af89768db6451cbcaf942cab6a1681e9394b8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/deformable_detr.py",
+      "sha256": "c9bd83339b18c14eb2d772801ba3042df80ad97a92692d76439d437a7bc0e242",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/detr.py",
+      "sha256": "883801b8d68f4542202506bdcb7e367347ab0f02f1a49687866ef49130c97c30",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/dino.py",
+      "sha256": "1066ddce52f385525e2cf182d6e3806f3e67cf86fc5b9f63c590c44e96ad3334",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/fast_rcnn.py",
+      "sha256": "59d0002aaed156006a67392932e86ab064fd1a34a204bafcc2875d412031facc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/faster_rcnn.py",
+      "sha256": "d4c877c2bee68bcbd18833fdb2390533880fa6dacfe5fbf98e9ddccaecf335d1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/fcos.py",
+      "sha256": "adb3d0ee42c56a9322f60a15fd5c7ad5d51a28c457b0617378906d74a873d639",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/fovea.py",
+      "sha256": "62fec954b249fd735cf8322f5092dbf40a62e8f9d04b3aff51fec8762a44e2d0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/fsaf.py",
+      "sha256": "fdfd3e40283635796d5c4abc3aebf0d7a7082429117edb85af679e88c7f39bc5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/gfl.py",
+      "sha256": "3320cfebe538dec6ab6a2da40660162ae5a019d92ab9d5adfa567a690590df3e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/glip.py",
+      "sha256": "02326d7a0684d996b931dfb6afcec06b2335ba55583b9f20b7c63d077e2e6aa6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/grid_rcnn.py",
+      "sha256": "3ab5d7b26e97d874b0331611667d4d2ee27fa43af51179411d76862e11f60d12",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/grounding_dino.py",
+      "sha256": "657e5e6119d37b13ccedacd3c8e629b438e95b4939fc38727b1c61bc9a99fb60",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/htc.py",
+      "sha256": "9a09f5d8b3e29526f963a7d4c698e9d666064beb4c8022bd72ebd22d971d774f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/kd_one_stage.py",
+      "sha256": "34042c0b78d1287cd27e06846a6028672ca0123a62484db1aeaa87fe5edbc598",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/lad.py",
+      "sha256": "45effe1c127315241dbec2d0de5e383b022951334ab52bc003799af40a7dabb0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/mask_rcnn.py",
+      "sha256": "7c4a7683d13eadd37df3c1b5641bb9e37e145822e63dbfe37dfd696ed3894d4a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/mask_scoring_rcnn.py",
+      "sha256": "e5dfef40dda9527a8eda75d62ae62e6b2746f81467ced8a4b36ee4688f7162bd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/mask2former.py",
+      "sha256": "12537d0b4f4e597f72eb077181dfca20e51ab6e651ecd774e3eb8254a52d9830",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/maskformer.py",
+      "sha256": "ba6032307cb050f78da73f1cb748562ea9fb7bfbb78d0ac02099116893f11a08",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/nasfcos.py",
+      "sha256": "92de08df0ea2e99f95257cc614e85c6146496e963073182f98a0bbc52f8c0077",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/paa.py",
+      "sha256": "f693d6ca85ec2627bbf1bfdbdbc58394fdee6d171605da6782f0102ba65ab0ba",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/panoptic_fpn.py",
+      "sha256": "00d77c41c7e67d7881370822c545be3b3e44de6a466e708130db72a2d389a9ad",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/panoptic_two_stage_segmentor.py",
+      "sha256": "38d8268fa6ecee6d136f166b7f497d8da36896251b7d34051b01a8d4a999c87a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/point_rend.py",
+      "sha256": "249f1a7ad74bfe3aa9c1ae854dc3502ee09d3d24fa9ddbd28e64432b9806e76d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/queryinst.py",
+      "sha256": "a46567612efb056ae85094f1dadefc5b02236b54893bad78859616e9c36afc8c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/reppoints_detector.py",
+      "sha256": "74a15c1e3c00e109e9a48c7590bd27703605c6a267858f786b7a79f976551fcf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/retinanet.py",
+      "sha256": "c24f845f283b052c4b88c5f8154d6b9eb3e7302108b612b0f0ea796b07061dd2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/rpn.py",
+      "sha256": "aee8d1623f1cd459f2e3584dd1cd5a20412000f52a391b368366e6559b59132e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/rtmdet.py",
+      "sha256": "f973f5e10176aa27db00a6f3f58991fa6825c45115fe0a7b08626400faff957e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/scnet.py",
+      "sha256": "c3b6edc7427573e76780545d7dcba769a9203173fd42cb141f6df04f66e720cd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/semi_base.py",
+      "sha256": "7f104bb3d73a2b13419decbc85e06656913762a3bdb441f7559110eec1a6a77a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/single_stage_instance_seg.py",
+      "sha256": "106bdf09ed8f6e16715d2aabbaa3b35ce718c3c8a1026d9646156ef42f22529c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/single_stage.py",
+      "sha256": "dfc4b30e80d62c2dfe258ac925296c3bad158a29230c8b3c3c2a840c03ad9e83",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/soft_teacher.py",
+      "sha256": "e8550ec302526f98471e82c7d6b5fea11fcedc27cd78d937d53ff42de5fc72e4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/solo.py",
+      "sha256": "7bdfa8650337f07e692c43675fbfec1d3f19923adf0450bf9310093a0bab790c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/solov2.py",
+      "sha256": "ee3971eedb2ba6f52de5d49b4f90c1bd2b29c7552315755512065a9ca513e322",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/sparse_rcnn.py",
+      "sha256": "f4555086eba392995a011eaacf181e632201106f3e0ebd0d2196fdbb087be0a9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/tood.py",
+      "sha256": "79cca5aeac5156909a76c95abfe7e4f9d058ba9546a9e16cf2db37f7a604d3a1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/trident_faster_rcnn.py",
+      "sha256": "d95590265a9d915c6357424767b2b649bee6fc827b536f82014479ceb92886cb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/two_stage.py",
+      "sha256": "986e98799df3cfa169a2fd5eba482c07d7a0fe90b8c2a250c9a43f66106d2f71",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/vfnet.py",
+      "sha256": "e31629dcd4844f8af10a2f184faaf3d7a43e901515805ff04a20632dc4f4bbf2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/yolact.py",
+      "sha256": "4c06b6e069acaba81c3fd0a363fe7f64ae121c98fc8743e83f4109a9e166e7f3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/yolo.py",
+      "sha256": "1600e542dc4218592f9082b225c146628faaa50ccd9006f4e745aa43ec87d412",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/yolof.py",
+      "sha256": "7bc559614b024e319aa8aa1cc9a948ded58e23fda5240d3a9777cbf959510df3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/detectors/yolox.py",
+      "sha256": "d15c8c9401fad6a5ba0be5915bbdea1bb277a30824ac688261fcff8ee7950ec1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/language_models/__init__.py",
+      "sha256": "9e904bb73274bb65f5e1d8190c6e2e59a5bdec7823afa4fb495605d59518a9d4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/language_models/bert.py",
+      "sha256": "e08c1558d3e239b016191c885724ea9234d61bc6f763be01dddd3c88cda28109",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/__init__.py",
+      "sha256": "d18b0c9fe69dfca78c201adba3579a4650ab210aea3d6d5730dc61e1bf1e9f5e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/activations.py",
+      "sha256": "531685fb810ebb704805ccd060f175b55e00e3cd1652c6958237988f31d8e21a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/bbox_nms.py",
+      "sha256": "851aea3a3b45eb37246f8ff9acac5920edc9e83111817ea2754c801338e280bb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/brick_wrappers.py",
+      "sha256": "7d326904529d773a9cdc4ff53f3df1918d3b33fa765d4df869bd6ed40e7d9aab",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/conv_upsample.py",
+      "sha256": "833874e9f1d2afe7c9c36fc6f34164b36436a6ec75cdea9e8e5d79155a64728f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/csp_layer.py",
+      "sha256": "e7b71b23369f5b1bc0e89b03f3efab1ce4f103549c867466daae932e724dd3a4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/dropblock.py",
+      "sha256": "20074f3a19871e86d0a592a205f6398942b36ddde23a4d83809dcea8e91ebad2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/ema.py",
+      "sha256": "580e162ab3a74284ca1fbea7fa64cba172a2ed9413f7df749160999a91c3a6bb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/inverted_residual.py",
+      "sha256": "eac985484f07ed89d97d96ead9bb81dd674437a826c99c486d870aa23e5c9fc1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/matrix_nms.py",
+      "sha256": "1b02e43e85874f85441c2eb24a1c30bdfe0f7bbf70cf4a8ecb40db66df5d24f9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/msdeformattn_pixel_decoder.py",
+      "sha256": "9fa3a63dbdd18db6c5435e7e20c0511611a460d43bf504d20bbe403d7eb95c6b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/normed_predictor.py",
+      "sha256": "81585fe29364b8208f8d06fe0fd811f7a32d7cecca833cef432670d1230abf97",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/pixel_decoder.py",
+      "sha256": "42e7ff2c3935de518f791e4b72c76af864b185ba7aaf2436e148398b4aa3352d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/positional_encoding.py",
+      "sha256": "e6cd35c4286fc2e80b2897edaf94c37139f2595c9862034bdab0f56529372348",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/res_layer.py",
+      "sha256": "41c3578d53a4fc9fc611bd7ff9cedfe4ec8a7d2dec60d1d726c88d6791491bc6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/se_layer.py",
+      "sha256": "9025527f32ba5340ee1fbbb7e44e5fb16991f2ad0f8680c005633f4a51548ec1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/__init__.py",
+      "sha256": "39fd734bcec8469d80bda8e1310cca84aeee2a7ed978822a495240acf4558ad4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/conditional_detr_layers.py",
+      "sha256": "a5dcac4e0d1b00c5d347649feaa554ef04d5e3fa308f31bac3e756ba1eb476eb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/dab_detr_layers.py",
+      "sha256": "e3001090c978e507ccd61d3e7b94f129f2a0f918ba48a20ed4b7cbce4536d2b7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/ddq_detr_layers.py",
+      "sha256": "0983e7f686088c395093df54884680fa8f51682f5a24899fcfffb6b8137da226",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/deformable_detr_layers.py",
+      "sha256": "86cabc678e7d674128df1f66ed25d1df2908fcf15ed962b0da2c874718c0185a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/detr_layers.py",
+      "sha256": "8f5408fa9c809e8742519d10cc42483386084576195dd197ce2735899052bd42",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/dino_layers.py",
+      "sha256": "2e2537b67a1b809bf25056340b00d5ad6de86d3076c0783d8672986186b0e723",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/grounding_dino_layers.py",
+      "sha256": "4f2850a0af049acbc9f7bcfe07623a5c8c99722887c4d6995bc023c5e54cc5f8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/mask2former_layers.py",
+      "sha256": "2b2f153b969579749ad8924a8f5616774308f024d71fcb80f0deb15f088ab256",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/layers/transformer/utils.py",
+      "sha256": "e85ba3349bb33d00c7037196314a1c3db9da3156e937321ae035c73a323cb77d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/__init__.py",
+      "sha256": "1692d90de38de1ee491b82f67995c960ebd05d3fc8a4d476b0514e189b05e703",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/accuracy.py",
+      "sha256": "8beffc1b1668a613146e4ca63672c3d43129259484eb7a17866935ce0b5b5b03",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/ae_loss.py",
+      "sha256": "4536f39e6cee54835920fe993c04282bf5d7a728f5ed35ce72f8debd8cb28e75",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/balanced_l1_loss.py",
+      "sha256": "a7ea1d1d3d4fcb2049232ba50362d78d16977fe7dc2e82593794596935d34b84",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/cross_entropy_loss.py",
+      "sha256": "95f35a3f707f088c29fd5b9dd9cf3a47ba127ccbf54bdf966119664aad3c2e18",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/ddq_detr_aux_loss.py",
+      "sha256": "24773c12a66d70173e211d6be3df710f8eb150d803f1d076d9499e4bae4ccbf7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/dice_loss.py",
+      "sha256": "bd7845425c68ff0f8cc98c31d92b4c25782928161467e1cd4d8dd418f4f8a648",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/eqlv2_loss.py",
+      "sha256": "6f7af4e27f75b8bb282e90442b7de8bdd64547376e591b009fb0c1599be4a13a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/focal_loss.py",
+      "sha256": "2e378a9e66cd8ac68f0e723924643ba7a64937335c5c930894fff6366237b894",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/gaussian_focal_loss.py",
+      "sha256": "08722f8a0d2e03565c6ff3205294a94255dd4492808500a164fa4ee1b6d8a2d6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/gfocal_loss.py",
+      "sha256": "73109790791c4f81342ac2de475f0740cd4d5758b766f05712158ed8d9a5810e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/ghm_loss.py",
+      "sha256": "e9bb5fbdccd2eb7585bc7dc6c0629269c35a572f7835ff1cd362fe0ce6d89c44",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/iou_loss.py",
+      "sha256": "6c599984675eb0d8fd8e3fe6c271a69f6a055cfca3a90718a120ca4d8bb55ed5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/kd_loss.py",
+      "sha256": "0e7c52d021caf774af6444f1f915d7bd4a196194c7d7525521e530b7a9d46dfc",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/l2_loss.py",
+      "sha256": "cdd4dc39f44e29fc7c71c52932668e8929fedf9de21aa4d363c9f371fb48b858",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/margin_loss.py",
+      "sha256": "30260cf52cbded757df74403f4e28de911536028aec3ccb1babbeea97fc2d301",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/mse_loss.py",
+      "sha256": "f44c51d0332b2e8165470904822bb67877a83c0a377b6420981f62a79fdf282e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/multipos_cross_entropy_loss.py",
+      "sha256": "4b51ff0fba26623bd74507912e7acc65fbd08a6305c8c7b17a38b626b50a89f0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/pisa_loss.py",
+      "sha256": "baffb8896911847783ad30e9d5b3bda30089c6c3f60a6784c40598d08a67dd6e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/seesaw_loss.py",
+      "sha256": "69a591aad548828a777eb0041de92048627fca0a900ee3357f21cadab7712555",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/smooth_l1_loss.py",
+      "sha256": "a162447ff2bd22df8e34ffbdc93ad2b983bf4fa2f913d4909a63501880cbba95",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/triplet_loss.py",
+      "sha256": "91b2b743403250f09c9adc1b160e67e51d5bbdbd00e39fedfd6c2543bde46689",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/utils.py",
+      "sha256": "0842adf121d7192f97ca0adc2eb3786eca6b44a86fa4b1ff7139f781d4eece55",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/losses/varifocal_loss.py",
+      "sha256": "dd1f50bff22ee38aa9eeaca3419a0997a983551a284390fc521ef0b7a45a9941",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/__init__.py",
+      "sha256": "07aba6199f9b62101ac09608f9f8c4654a0ce28c44bb96927fec4961f2f98718",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/base.py",
+      "sha256": "d2f843c91a153b322fc095f9daff5abfd5c5bdd9529b8dc1e22b99d721eaf36a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/bytetrack.py",
+      "sha256": "0bb26a8eb4f03a76e7ff75ef05451f388d29f5d062d174ca67990315c2a81bbe",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/deep_sort.py",
+      "sha256": "79a6cfa5bb0f1d2d6f31a254a025ea197f2c1100bebc2724de7bc3007dbc869b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/ocsort.py",
+      "sha256": "ef10ad73dd785db1c6d7ef979e26444a526578318ecb6582f8b58bea6b53166d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/qdtrack.py",
+      "sha256": "7029b8eaa458cea6d679b548d18ee2ad29d0596b2a7597482095cb8a84fa1c4a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/mot/strongsort.py",
+      "sha256": "abd7f1320c9376b1cb83eb6341548817fcfe9d9a0c1b1eb13213d721df521237",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/__init__.py",
+      "sha256": "5075a3897d5d195eed5ac08064537dfedd9f7656fe5877a4ad66c841086809d7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/bfp.py",
+      "sha256": "4d2d15c2abfe422d7730c2bdfc8b7ea9b4aa6334e4804581b94408fb7f2fe405",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/channel_mapper.py",
+      "sha256": "9f2c8cd18599bad1bb0fd639acc673ef8d4a52f92c956d590af52c6d51e69d06",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/cspnext_pafpn.py",
+      "sha256": "bb70eef43e2c75e258510707d398e47e6a90f85568dc083ceeec9d54140408a9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/ct_resnet_neck.py",
+      "sha256": "d76dad9eab4b3d92809ef7dc175a14712f0cf43c72af021dcc2cfd569220ecc8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/dilated_encoder.py",
+      "sha256": "718a733f72b8a2a41636a14730ab484f89d3a875a609f327d11e3ea09a59a5a3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/dyhead.py",
+      "sha256": "5688a2a94fc98835ef0c1bd048da5d8061dceca31f0d3c1587c0b6a49da52d9d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/fpg.py",
+      "sha256": "89b367f7123d0b0f37ba110e8698e6100267eb76ce4c6ebecfc6c108042828f8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/fpn_carafe.py",
+      "sha256": "eea892e6fb68eef67f9712ddd1fb8833f4d2e3c5b7173bf0fcb67b1933bf30bb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/fpn_dropblock.py",
+      "sha256": "e81d8bb75137a5c4252710d7ea5944692fd2aa852df8aafa052624a03bc11b5b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/fpn.py",
+      "sha256": "bf852600a0b10d903f567ba9a1f03774a3e540c34b59850b7d33671f4258b1d4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/hrfpn.py",
+      "sha256": "66b9489fa582452ae1d71b2c87ea23634c9b3f21a8a09828ee95725b325c9349",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/nas_fpn.py",
+      "sha256": "99fd20e5ff4373e6860184140449abee00b3dc60eb58087d211a043c2441e272",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/nasfcos_fpn.py",
+      "sha256": "8206e15b6d75a1ac2253fc45c5deee9d502923e126dacf8aab9d467f6c6fba55",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/pafpn.py",
+      "sha256": "21e5e204e912df33c1dcff261eb5402475f5449addb45ba57e5e6bec48a84a70",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/rfp.py",
+      "sha256": "0877bb109e5b36c863513ff4b4272c686a7838e17b7ed8d2cd18f7ebd8732bde",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/ssd_neck.py",
+      "sha256": "8d9f12780bc0bed0028d8c99483cfce315f4913a4b06358779be957612587c50",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/ssh.py",
+      "sha256": "fd6f077995142c7875d15dd740b1573327d46b8a5b76ca03791c5591270cfc64",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/yolo_neck.py",
+      "sha256": "d106cfecec986a20558950ae156ffcee859e4e0aefc367252515e5e11b26c21f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/necks/yolox_pafpn.py",
+      "sha256": "efc147df1eee62b522ff31b0d6f647acc6db0526a4fdcd569992cbf4c90b9255",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/reid/__init__.py",
+      "sha256": "b8301d76fc49a3d53b3f435ae22ebb9d03f9f627e2aaf855af4b78df1d95913a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/reid/base_reid.py",
+      "sha256": "d911cb59c914051234882b5ffc88a9afb5f3b8cbbaf342ff9766f5b1f02e6ef9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/reid/fc_module.py",
+      "sha256": "c1d351759dc82353f472ca98c51371a223a4ed7f7586a4ffa2ef390d27fa0057",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/reid/gap.py",
+      "sha256": "848d61276084f46e05488f52098a3fbdb47ab2bf23fd3e37cc0518f5d6e70e49",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/reid/linear_reid_head.py",
+      "sha256": "cf91b65ffe6e13e571f06beba5808c7ed4a103dd043cf225f39df4b1d87505a8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/__init__.py",
+      "sha256": "0596cc58913a976122e15032555672832c9bb891f4a15beb9505fba999f8331b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/base_roi_head.py",
+      "sha256": "94b085a94baeb51300b693b16288740c83a696ac48071e7d513e62d2d0c9e71a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/cascade_roi_head.py",
+      "sha256": "b38019f8ae6294cc4779efdad713d7a3b5b643d860b87f4ea85666f38f4de766",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/double_roi_head.py",
+      "sha256": "675cf6a33cb71731b194b2da803207b0b29b42cbaf6f2f7036d2abb08ecc7b52",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/dynamic_roi_head.py",
+      "sha256": "bfca16fc15f22622ff32dad05743b0324ffec2690aec4b71000aa97a979d5df4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/grid_roi_head.py",
+      "sha256": "f41e960283953494bc0814f04d2c24f4a87c05a218bac36e87ed5c31a63ca990",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/htc_roi_head.py",
+      "sha256": "32a55248acaacede8ed4a31d69ebcb69b163db24634efc526beaf3382b4117cb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_scoring_roi_head.py",
+      "sha256": "ff081dbb832b8bfcaf3c21b291769e7bfc0a3f1284e1ca8e6a2b782e4d3acdab",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/multi_instance_roi_head.py",
+      "sha256": "8e611a6771a5e3c50795c47043a3966f0657bfebdf8c9295502a9db9a6a201c8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/pisa_roi_head.py",
+      "sha256": "450e8b8af287a3f0137e470316458aa4b7775e93f4b9098e721280129c545816",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/point_rend_roi_head.py",
+      "sha256": "2c0fc98c4e19e36ccf73c784cd0a49dbfdef3e0b09f5f7ef0d505aa27213d52b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/scnet_roi_head.py",
+      "sha256": "3a6cf578892b4f36f18058a1929f256c4be5f8f1b180a8ebbb04739d577d10da",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/sparse_roi_head.py",
+      "sha256": "e7826e6d14f988a22145cf6a04136dfb8099f8afadc66e1d542a600a36fa3c09",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/standard_roi_head.py",
+      "sha256": "9cd86cd05904777a3abcc6fc9530ffc78946da77152dbff03ffe094a4852189d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/test_mixins.py",
+      "sha256": "7ec63e9586813fdcc12e78b0a044823ae56f339cbfba9e76de2b01215d4ac667",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/trident_roi_head.py",
+      "sha256": "f2d60338401783ec46371ed565c05d57e3fb919cd39ae831a75fbf686abd2537",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/__init__.py",
+      "sha256": "d0c3ca8d061601559d666fe9987e3bded8fcc1be759ca98294ae3b3659a2a440",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/bbox_head.py",
+      "sha256": "ccb20e1be29d3da2d516cdba26a1cf2a5235a9945e5b0d4a09a3a6bf7a69fc3b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/convfc_bbox_head.py",
+      "sha256": "29b5dc26f752b8cff41e4423f289d388a4760b00649595efdecc3c3f74aeed0f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/dii_head.py",
+      "sha256": "02f8fed8cee2e3f8e0a6e345528dbdd906ff70d12a568fc61cb566de562489f6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/double_bbox_head.py",
+      "sha256": "837e9657b51f78fc038fc757896326fd55503a588d91c33f7125eeed46eb1e1f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/multi_instance_bbox_head.py",
+      "sha256": "7bf8c803872f26b0bf24280499f43a0e6e4e429d927c03da26ad498303fd975e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/sabl_head.py",
+      "sha256": "95df265889fed76c3fdda504254dafeaa15c2c942e41b2a58bff37bfd53bb443",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/bbox_heads/scnet_bbox_head.py",
+      "sha256": "6d646d213ff5aec9c5132c921a40a3fcb5a83e1fa9588065e64c4b2d20b924d4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/__init__.py",
+      "sha256": "218ed241cce53fada386d43adb7ebb22a278e372859f860d61c143f89e4a720a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/coarse_mask_head.py",
+      "sha256": "f69e80b5a57d3d838b12cf8e0c0fd1af2c107fbb29878f293ee0ecf74ae9da8b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/dynamic_mask_head.py",
+      "sha256": "ce3c8095057baa66210967e13258fb4d0fa18a83ff2ad3796cd6ec78f1936ab9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/fcn_mask_head.py",
+      "sha256": "3fbf36336eb14bc4bd64372aa9fb0afc5ec45d594a8720abaf1c32c3ce6a56a5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/feature_relay_head.py",
+      "sha256": "fa94ff9990bc8087eb8024364517de93655c8cfcd74482318120842ceff1958c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/fused_semantic_head.py",
+      "sha256": "2468d5bab32e5ddccc447ce5542ecb3c41a3fcc32aa1fba6549ffa920cfc5121",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/global_context_head.py",
+      "sha256": "0da16e4848efe89081e44a6a85ae9cb1fe0703350c2003f8da58c8887ef22a34",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/grid_head.py",
+      "sha256": "195f3663b0cbc3cfe8c2b795e03c9763f7ae348afa971f8cbb1266fbab9323b4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/htc_mask_head.py",
+      "sha256": "3668c9b32cdae42e0eacd9f8dc3e1b931d4042d6886cd1c29ca52193bb12ee09",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/mask_point_head.py",
+      "sha256": "30081675a16e06418b19ba78525f2ca2c8db4b358212b57209e18e2e038d8458",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/maskiou_head.py",
+      "sha256": "ac2d00913cca29d3c58f149263ae6ed674b81f9163dc8da835770621ae7c8501",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/scnet_mask_head.py",
+      "sha256": "ad8afb1c4e71c333a739aef9f4766552d8a807c641408b13f68dd1813e67be58",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/mask_heads/scnet_semantic_head.py",
+      "sha256": "d9b434f97d2a46d13a2575e6da8a892e5fa88e278f963c2da6fd343ad8b77ead",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/roi_extractors/__init__.py",
+      "sha256": "983293cb296187df2950baaebd6cfbf811fa575d03f861e2e821517dc042987b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/roi_extractors/base_roi_extractor.py",
+      "sha256": "6265e7daad35e4669aa8ae0d4f51346000e5a62402b84d9581153b27721ccb02",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/roi_extractors/generic_roi_extractor.py",
+      "sha256": "8bc18e32b113bd942b86212f871a93a25923fd591a4114ee2dd84920802555d7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/roi_extractors/single_level_roi_extractor.py",
+      "sha256": "2ccd27f3217b672fef5928ab8e4cdbaaa8881146e91d30c9c8a69aebfdf44b45",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/shared_heads/__init__.py",
+      "sha256": "ec9932c2b8371bca9d2c6986817b0df6f8e77660530cd118fd81afe51deadd3f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/roi_heads/shared_heads/res_layer.py",
+      "sha256": "1e68204a2cf7f1ed25cefd2d691e4c4148791e9d08eb6cfc419200adfa3d96b3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/__init__.py",
+      "sha256": "27d00cec1bb2126805b04729d0fb221a94912e355ae9b2f1ea2bf472c3ed29e6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/base_semantic_head.py",
+      "sha256": "ee33a47b5aa8443c84085e45f0a91bebf6da9fd4a33eddbb80f0e7b426d0d814",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/panoptic_fpn_head.py",
+      "sha256": "a08ea929819deef0aad607775569c3aae923b434a168400bdc7f273ef683f1cb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/panoptic_fusion_heads/__init__.py",
+      "sha256": "25f2e815f06a2b6f41b6e876f9ccc511c6adbb75b13293fdc0cb0b1cead6f3b5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/panoptic_fusion_heads/base_panoptic_fusion_head.py",
+      "sha256": "4a98f56c93ea7c24cf643514db81430b5294a419a4558cb6a4efee84278cb3df",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/panoptic_fusion_heads/heuristic_fusion_head.py",
+      "sha256": "fe31ed4e553250e47bbd43c68f944eb587385d82faf302a221ab555323456d1c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/seg_heads/panoptic_fusion_heads/maskformer_fusion_head.py",
+      "sha256": "416d387899d98ed1a8e8c27e6c03ac2f9c2c065246e2063f76c361268d133e95",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/__init__.py",
+      "sha256": "b9a38f95af5ddfbe604808d612f7899bfd1aa6b4411de53a07863e9cbacf5065",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/builder.py",
+      "sha256": "1041b9dfd616d8a3991428f7b765d9e9b8ca5a36fc0c227baa29080bc5af3887",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/__init__.py",
+      "sha256": "c7360eec6a0ffde107e6e5d0b6c13f047d6c3491133a3473d1a8298458868b38",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/approx_max_iou_assigner.py",
+      "sha256": "15c08e3667f88e4dcb91d4d98f0cffdf494a9542c476828f6f17ac4d550e85f1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/assign_result.py",
+      "sha256": "3dfe86885abcfd92eb363d23ba5f893f65bbc15c84315374bdfead4f08a887a5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/atss_assigner.py",
+      "sha256": "4063d732060c47aa0d490dc4250bed35a2673fe74d0c4746d83323f27ab4f32f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/base_assigner.py",
+      "sha256": "9b40fcbb83134dbe816b2b9b4af5ce8d1bd8a64bbf91126cd65f33ddde05022c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/center_region_assigner.py",
+      "sha256": "5520ad236d2676a98bda1e6e83ee081eab2f12894952c8bf4bb969fe0dcdc5ae",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/dynamic_soft_label_assigner.py",
+      "sha256": "aee9ff8a90a849bdfc5e70d3c943f8a28d1e4e4e2b0d4b5171664b0847a6eebf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/grid_assigner.py",
+      "sha256": "33499754802969813abe4e429e6449b487b64ea53e2ad2b80427f79de61c5cb0",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/hungarian_assigner.py",
+      "sha256": "43a21aa7ab0022fdcc9efc382519750f3addd5acef4baa3c32da9a8dafbd52f5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/iou2d_calculator.py",
+      "sha256": "e9a0dfdd305a267eeb7b6fc7c455d4062871c4f6e13ed3e559f796ad676955be",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/match_cost.py",
+      "sha256": "2e4044c192b8762df5e74dcaee5824c5150873d9cdaa360702e628955ad7cd36",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/max_iou_assigner.py",
+      "sha256": "2b1a9fd150a0235236333dc7ccc2fab2438e0457b3a510946ac7bce7fc489f5b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/multi_instance_assigner.py",
+      "sha256": "c233bd53cb9d391acdf52b59e664505af4864c05b43c2c06fc74cc5fc865a283",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/point_assigner.py",
+      "sha256": "df6f914dada02390dad92d1d9c8daa261a7390649903a793bdeddd82e8d44457",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/region_assigner.py",
+      "sha256": "afa8e550b7ea999f7a1764a007084d1d889b6a3feee831b4721b670fbb096c35",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/sim_ota_assigner.py",
+      "sha256": "23904947cdb20d6abae0d871ef80266af3dfe95dae2060353a946e03f2ec96bb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/task_aligned_assigner.py",
+      "sha256": "9cee84e761e507947e6e5940cecb968bdb8d46e67155ee6aa2146f7740fa50f4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/topk_hungarian_assigner.py",
+      "sha256": "5785408dd6a05d3969b714a26bfc5f9de0b6894149a9eebbfb9409e10d8b4c64",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/assigners/uniform_assigner.py",
+      "sha256": "cd6cfa9854aaf5e8edf224a07d2c5095db94b54cfa6868f7544c8febd5dd407f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/__init__.py",
+      "sha256": "a75677e11e0d012f73ba836978328eb823c68946b36b0efcc574fcbd52211649",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/base_bbox_coder.py",
+      "sha256": "aabe0ad2056d6ea810a4f17a7714fe2d704a35d791fe7fb5f84298bbedb8e8df",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/bucketing_bbox_coder.py",
+      "sha256": "66b8fd02f64dc39c6d53e82c1d1d3eca5422da1018b55f99626ab73e67fd2a3e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/delta_xywh_bbox_coder.py",
+      "sha256": "ba45fb8481d6471c966b6a0f19b93be56bfc55decc5e590261e128cad0053978",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/distance_point_bbox_coder.py",
+      "sha256": "91f93a2c00507b218a449521797a08c8e93cef6297daa32ff66ea864f426425f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/legacy_delta_xywh_bbox_coder.py",
+      "sha256": "9b8712d96529c4dab756b47de3696d70364f0af69ec9b3ad556477ea3889f6f4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/pseudo_bbox_coder.py",
+      "sha256": "81e3ecda939460a089e9b264fc08b766c42fa740d30fc69fe1cd26e760e9c1b2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/tblr_bbox_coder.py",
+      "sha256": "26595616fdb30e94334e70c84be7851f70f113f7d3865dcedb0ecf008452dfe3",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/coders/yolo_bbox_coder.py",
+      "sha256": "317224910207f27383ec862175d756e65f48f25fcb8fcf9557146c262bd5193b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/prior_generators/__init__.py",
+      "sha256": "9eda06fd6fbe7bbab51064b2a1367769110ee0814895c5a81fa53e2a7e7b38dd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/prior_generators/anchor_generator.py",
+      "sha256": "17e76cfe9852c6fc6e5f4eeffc1e690eda9b65c135835d64d413975f3101610b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/prior_generators/point_generator.py",
+      "sha256": "7f4b44314dbff5078f80db1c6a8d017eb90d893f4e613a38a8968d09d115c67b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/prior_generators/utils.py",
+      "sha256": "ed27cbc6d3f5cff4a0d721e1dbbab994b9b8b826244e2c0824f56729d373d335",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/__init__.py",
+      "sha256": "6a0665d53f0a9c2ccaa7fa57cfbaa8ab10d7ec20c5655e56c0a76b92d2e2d0cf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/base_sampler.py",
+      "sha256": "9316b3d5015c2b37c7730c33bb802f0843e527627cd2b61a47ed96e1345351c1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/combined_sampler.py",
+      "sha256": "f16b95ab30f34bd9cc2dd9c8a2b8219a35e31df6676a43d59e39ad3262f4d10e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/instance_balanced_pos_sampler.py",
+      "sha256": "4e180d0e199d3d1e5b131817ebdf7d2f0774520501e963636201f77f9fc090a2",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/iou_balanced_neg_sampler.py",
+      "sha256": "50b513bf004a14ecc0af3b467d0e5460d73c44346b6f34a8de5109207759af63",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/mask_pseudo_sampler.py",
+      "sha256": "6f7113bb67b9bc66369f3c674585f4773b888a2c475f6c3bc7acfdbbc53547fd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/mask_sampling_result.py",
+      "sha256": "1c990c8af55fedc12b49214bc69beb3c7b727717d27b3cf893200dfcaf4baace",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/multi_instance_random_sampler.py",
+      "sha256": "8cd78012284a153c063c29dadf16afcf7994e49dffb35cdbb9c1e4e10f3389b1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/multi_instance_sampling_result.py",
+      "sha256": "ba3cf9b9ef75804e446e0d771106f43a659370c813f6f526569a0013a4e2538f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/ohem_sampler.py",
+      "sha256": "0641240a3d0d439fd89dcbec31e326b6b288a8636fd3cee9bf56fea65bcace83",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/pseudo_sampler.py",
+      "sha256": "7b4df218c519874264964371a2d75ad83afdc416a9b2ea27896d2dbbb6b8319b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/random_sampler.py",
+      "sha256": "80d9025c451d2297ae0c9aabbf3c1be8d2e165e522e78f2118672ace698d0897",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/sampling_result.py",
+      "sha256": "16ac1c6007ee55791abae8d71e6e6cb636275816a577b137d5498b66932475ea",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/samplers/score_hlr_sampler.py",
+      "sha256": "a5e67e58aa023d50efb7299986f1f7e8137205737a0469d2d488309a52e5d6ba",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/__init__.py",
+      "sha256": "11613557ba91cab1890199791f618fb5e2e52ecd425469684511077af59d2457",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/aflink.py",
+      "sha256": "f55c7a2b5827c88d6402cd356c2b64d2b8a14dce063db227751955be515bffa8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/camera_motion_compensation.py",
+      "sha256": "9fddea8bef23fda2c84f9e191c1bf9bca26219e94a8e509af3695ce45e9b3e14",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/interpolation.py",
+      "sha256": "345d46b3ba365e199376c65902d06c2914651681684ec4622b023e35db8a80a1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/kalman_filter.py",
+      "sha256": "275cd8076a784289dc2875c9b4251b21be96919c2eca0e6d78741e7e517f800c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/task_modules/tracking/similarity.py",
+      "sha256": "d4f411368618f2332f15677f47d4f9dc7c0065a06ee913415008b358fe8b7a23",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/test_time_augs/__init__.py",
+      "sha256": "b4878dfb763a86cb9fc7cdc6705259f6931f057f90b7a6fad892b0be6db52a95",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/test_time_augs/det_tta.py",
+      "sha256": "2b1bbc35035cbb05e40fec57ab3f5721df071f56eea0a8da8e8728469f321605",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/test_time_augs/merge_augs.py",
+      "sha256": "fbb7c4c92063bc30504435240a5dafa93b420ee536dcf7157326fdec521a835b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/__init__.py",
+      "sha256": "f159400d1ab50185b73b925b71b9cb5a21f461686bc7183ffd940972afb958cb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/base_tracker.py",
+      "sha256": "65cd9c351b3de4a99fdf198d3c3071837783c61c2a7aa10ae609207ad7fc24d9",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/byte_tracker.py",
+      "sha256": "20511f4828b1e89710c8423607696fe778fd5be2dadb954a3f6356f15f93a52d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/masktrack_rcnn_tracker.py",
+      "sha256": "694c02fdb0d416a12eb52772ca865f17c3e0fa8605597e3ad2faf2bc253d242f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/ocsort_tracker.py",
+      "sha256": "b6b1cbf1b874fea058ff92426e00c6633868f2140e9d8623857d41dc71b7a7f4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/quasi_dense_tracker.py",
+      "sha256": "7a16843a705e9083fb657e96336e0c9e14da644d841d25d465f6bb97cd8d5527",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/sort_tracker.py",
+      "sha256": "2a3e8605dab0ff4d04b26fca35b9f69bc019e1aa3c6f9290ce89b1f3286b5b43",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/trackers/strongsort_tracker.py",
+      "sha256": "176f2efb3dd76c172f0cf84a2aa4fc8bff3776dd39388579f0558c2adaf330b1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/__init__.py",
+      "sha256": "8362aa68e395637eaa1ff02f8785b239038446da407e7a88ba7d7a775d811256",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/mask2former_track_head.py",
+      "sha256": "d554f4a9b3d17e860f4f7f93de0699c98f72c24aab3a46ad09596103a5fce292",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/quasi_dense_embed_head.py",
+      "sha256": "cffd1855560aee5b2ac400a1f07e0749b9394b652099c844ca6eb359656ddb0c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/quasi_dense_track_head.py",
+      "sha256": "f8f9e96b26cebdb26a26b2ca5d39ec896e92defebaddd8f0728b991aa4c4da05",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/roi_embed_head.py",
+      "sha256": "65c1826a7e9aec590bc37904ccda2f34838d831b6f8ea21a345124639d3c70cf",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/tracking_heads/roi_track_head.py",
+      "sha256": "5408314709206e86e098ab3585c093486bb70c2f0423a387b7ffedc1a9430bb6",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/__init__.py",
+      "sha256": "3425695bc42f4e04ba1b863cd1b0836179e74d972233f627b1a30adc8429cea1",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/gaussian_target.py",
+      "sha256": "b7433a236cada673d85b6606703554a700ecd2e7d5076090110547cd45fafd1c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/image.py",
+      "sha256": "169d1088f0c68a0c8390471e43d2836d45bd042660eac74aef138e2833a2ab52",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/make_divisible.py",
+      "sha256": "7d59efa6c4e7918f027faf0ecfca4ca23915eab0f6c1c8ea6d32b18864b4eb57",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/misc.py",
+      "sha256": "d6698a43835082d2bca4590be6857e8eabce7dc51dc8f8046daa1132a11d8148",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/panoptic_gt_processing.py",
+      "sha256": "7eea4e6df5e426a0089c7bf22e22a0693dd74192550362ecb44539bf45f96c9b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/point_sample.py",
+      "sha256": "ee4682039e307ba47d5ac270cb4dee0858370bcb4ac702367b63aecc334a31d4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/vlfuse_helper.py",
+      "sha256": "104d3a891c6e85c49c710cd1436a30c5d672e954f4b05c3d15d2579569dcd9a8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/utils/wbf.py",
+      "sha256": "42789ba3a47670f064d57f5344741538b9f4effb091693dd80acf9a10850f000",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/vis/__init__.py",
+      "sha256": "37829d5661bf03763ea8d42390a00f5ede1d85378a16dda0027db71f4d6d7b1c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/vis/mask2former_vis.py",
+      "sha256": "ece88946e816f5617e1fd6cc2f2e1b866dd6f2c87027caf2c32204ee85b5757b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/models/vis/masktrack_rcnn.py",
+      "sha256": "c848f1d06d36d5202d3bd6bb4c287b19e91a2be401d9a342e791d3d477f1c492",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/__init__.py",
+      "sha256": "69879af075672b77e88ee12839d90861753f8281d71b3a0c80cd82f3450c4211",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/det_data_sample.py",
+      "sha256": "880c18db7b52466780d616491ddf194f2766f20f72843335283f814755f9f25a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/reid_data_sample.py",
+      "sha256": "5bba90c0ae9abec6cbbaf8b49fe2931a7fbf0943cd309e26300cd69f1c4e978a",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/track_data_sample.py",
+      "sha256": "07fd5944424b2becbaea95fccb07c511c9356ad987068817e4c3e41c7bf843b5",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/__init__.py",
+      "sha256": "93578d796bb3841a36b40732c177145bbdd6a1320da6d4dbbb35926b6ea92e29",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/base_boxes.py",
+      "sha256": "3665d490988c68eba1677f0162bf8260a9c23ed44a407388824f31d46a12f7db",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/bbox_overlaps.py",
+      "sha256": "c0d466d61c72b37ba9babe621ab0598585a5a4b1d1e371cbfbd8121a4d372b75",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/box_type.py",
+      "sha256": "bb14bd40f0e256d76839c5763f6e8f0655e0be5125984fff9b04e6bfc14c19b8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/horizontal_boxes.py",
+      "sha256": "afe712bbd9620ddabf88e324665599f89a9cd0ff142eac6faa8b4ffae8dee1fd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/bbox/transforms.py",
+      "sha256": "141875c5aec1df7969db416bc1f03271838818b17a4fc791530b1bfefd8a059e",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/mask/__init__.py",
+      "sha256": "54ee54bbc647ab408ca8f6318f437d7ce4a8520072e7644608aefddf6e947780",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/mask/mask_target.py",
+      "sha256": "ddc22da0f5dd1eaefef69fde94023f94a4ac987a51cd5694c63804a7234834ad",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/mask/structures.py",
+      "sha256": "4a44221afb3ed113a92472d665b53f25a38a7671f6e54e5c6f43c7cc27235d59",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/structures/mask/utils.py",
+      "sha256": "911632c486c00088929991ec2dd60a94db25138758dbc1ec80ef14a2b261aa1c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/testing/__init__.py",
+      "sha256": "743586383d802bef70996aa27460356ea6a6f24500d1bb178295e8cdf1feb215",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/testing/_fast_stop_training_hook.py",
+      "sha256": "2e4787142087448157241ded1b4b963690658bd08965788b262b9fea647fe6fb",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/testing/_utils.py",
+      "sha256": "21a73f8756d65e8c70cf3891fde1d3181a8d1f3e8b24bd6107bc9748f84d34c7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/__init__.py",
+      "sha256": "12b01b1b60ea720199a6ec54b24057c686e8f94956c7b0cf340a8088978b89c4",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/benchmark.py",
+      "sha256": "505376a6357114295c8d083cf75843aede7104ee0e20c12d1b9768a010514c7d",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/collect_env.py",
+      "sha256": "5a7e4ab0abd7ab02087cfe0299bb86f4e8f46078fa5448aa1963358b6e7875fd",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/compat_config.py",
+      "sha256": "ab6bdbc861e8445a711ffb6a57c99dc94450e18a43a7633a7d6823ca9d26a36f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/contextmanagers.py",
+      "sha256": "8688fc55e4dc1700c2910eaa0dfc1b0d4b855300f02ee63d33c8bba9c307b2b8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/dist_utils.py",
+      "sha256": "274450d548cb044a1d4c0992a36638399feb7cc1c9f2c6be6e743de77c1d5a22",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/large_image.py",
+      "sha256": "3510f5c5b31f41e64557330ee272d998f22838d9af1ac9813e75c5a667826664",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/logger.py",
+      "sha256": "250fd4a9c15832365e07826f78128b68d04785aa8fe795f013b20b0ba3e27a2c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/memory.py",
+      "sha256": "050279dd8d731e0e237c5bb35a66dfe3f7a2885b24ed2003095ea8c11b6b8451",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/misc.py",
+      "sha256": "f2e112ccca5822e15d77f071b44a3c44302413f7d245f72709ffff724e4b4474",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/mot_error_visualize.py",
+      "sha256": "bfb24f7212ac1bf58f77eb2be3f0d51ffeae25ae8e0940180110744c0c100c59",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/profiling.py",
+      "sha256": "24be555769025ca3213470d8adf4a847403a8cef26ee0cd977ef5cc385e3823c",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/replace_cfg_vals.py",
+      "sha256": "26fa3fd5dbac86c12f5750327ef0c072f17538006c7682f79eb0e3b2cec66b6f",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/setup_env.py",
+      "sha256": "ad4e72ab1aac924ce73ad66392e0a6a95a1dba715f30c10a6008078aa78bf436",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/split_batch.py",
+      "sha256": "8a01842d4efbd1075cd336f6953918e96e819728ea31577895d0c12038acb366",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/typing_utils.py",
+      "sha256": "adabbe5c5a3bc7826d5cbfc8ee15302f5a97a031b7a65d30a125e5fe77e59b1b",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/util_mixins.py",
+      "sha256": "e8e92cb7d0ea742399bc4fb32b862c7dc6266ae92198bd06fc9c2da6216901b7",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/utils/util_random.py",
+      "sha256": "2c34dddc518c02f7bf3efc9fa2763ec1396481ae2fcd74f33eaa83f179082fca",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/visualization/__init__.py",
+      "sha256": "689754d2ddf67c6327053113d66f66bd30bb8953415b79baa070bc0ca2893609",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/visualization/local_visualizer.py",
+      "sha256": "5dad676181fa0737659f26f2933811668fa715ae3290af13905ec0764f3d91f8",
+      "unchanged": true
+    },
+    {
+      "path": "mmdet/visualization/palette.py",
+      "sha256": "2ba7efc01142db1417c8b8388f44dbdb814b9e45f1e3b74a8e7e0fba74af4bd1",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-4scale_r50_8xb2-12e_coco.py",
+      "sha256": "d604d0048c557447ea25947900fa2c352d249ed9155108b5fd82f92865bf6e20",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-4scale_r50_8xb2-24e_coco.py",
+      "sha256": "7e630caef8984320fe6138f5860d3beb66db4b7baaa8bccfc5158767559e7c0f",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-4scale_r50_8xb2-36e_coco.py",
+      "sha256": "6b99ac76341ebd74624a55bddefe4a25596c071270eff3a4730aaa9715eafc23",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-4scale_r50_improved_8xb2-12e_coco.py",
+      "sha256": "ce989f64ca1fa6b07ca9d58c5526c8c655583e9b7f2f7bd5618798ac040d1f70",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-5scale_swin-l_8xb2-12e_coco.py",
+      "sha256": "6e302485422110be787a96eee2153ea7de7dde6671f6b447eac233b7d170f47f",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/dino-5scale_swin-l_8xb2-36e_coco.py",
+      "sha256": "92266c27f9c7634d5d62e1f5f0d8b1de8f60b40fde50657416de8b31f77099ba",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/metafile.yml",
+      "sha256": "ce07d9898c657b8ece0212fcc9d2da20cb548871ef7b7b32fe57342213d5ee62",
+      "unchanged": true
+    },
+    {
+      "path": "configs/dino/README.md",
+      "sha256": "5f96d942eb3369bc452f4b6cb89bdc4ba9204110241acb828342147711e3ade2",
+      "unchanged": true
+    },
+    {
+      "path": "projects/OCRDINO/ocrdino/dataset.py",
+      "sha256": "4d578d61f5e6a0ccb8a6181bf31305b9d88e9a5fd646d36b7d93e837f656f8f4",
+      "unchanged": true
+    },
+    {
+      "path": "projects/OCRDINO/ocrdino/heads.py",
+      "sha256": "d1e6d9adf2234bfbd0631ff4ace3fb7dfdf7c20118bed682de2f3ac26258e0cc",
+      "unchanged": true
+    },
+    {
+      "path": "projects/OCRDINO/ocrdino/transforms.py",
+      "sha256": "6d111a35f7ebc90b0dfb233c345ff1b513451156ecfe8e86fa3b49fff1dd06d1",
+      "unchanged": true
+    }
+  ],
+  "parsed_python_files": 37,
+  "readme_broken_local_links": [],
+  "pytest_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "130",
+      "time": "7.353",
+      "timestamp": "2026-10-16T10:33:36.745523+08:00",
+      "hostname": "LAPTOP-3SJ9TBT5"
+    }
+  ],
+  "note": ".gitignore updated to exclude local test dependencies; it was outside baseline manifest. External original projects were only read. Local caches, test dependencies and checkpoint outputs are omitted from this source-file inventory."
+}

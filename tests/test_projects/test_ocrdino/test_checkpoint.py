@@ -38,6 +38,10 @@ class CheckpointMigrationTest(unittest.TestCase):
         for name, tensor in output.items():
             self.assertIs(tensor, source[name])
         self.assertIn('dn_query_generator.label_embedding.weight', source)
+        self.assertIn('three Character Query decoder layers', report['newly_initialized'])
+        self.assertIn('character plus EOS classifier', report['newly_initialized'])
+        self.assertFalse(any('CTC' in item or 'BiLSTM' in item
+                             for item in report['newly_initialized']))
 
     def test_distributed_prefix_does_not_lose_other_weights(self):
         source = official_state()
