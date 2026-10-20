@@ -1,0 +1,19 @@
+{
+  "schema_version": "ocrdino.audit.v1",
+  "images": 159049,
+  "total_annotations": 1887466,
+  "totalGT": 1887466,
+  "validrec": 1856498,
+  "maxchars": 24,
+  "maxroisperimage": 333,
+  "ignored": 0,
+  "recognition_ignored": 30968,
+  "incomplete": 0,
+  "widthbucketcounts": {
+    "32": 925433,
+    "64": 747423,
+    "128": 183642
+  },
+  "errors": [],
+  "ok": true
+}

@@ -1,0 +1,150 @@
+{
+  "counts": {
+    "eligible_rec": 479833,
+    "clipped_annotations": 27738,
+    "clip_area_loss_gt_0.01": 15861,
+    "clip_area_loss_gt_0.1": 4,
+    "clip_area_loss_gt_0.25": 1,
+    "full25_no_padding_rec_ignored": 1
+  },
+  "bucket_counts_all": {
+    "64": 267439,
+    "32": 131860,
+    "128": 80535
+  },
+  "bucket_counts_eligible": {
+    "64": 267439,
+    "32": 131860,
+    "128": 80534
+  },
+  "full25_bucket_counts": {
+    "128": 1
+  },
+  "ctc_required_steps_eligible": {
+    "2": 680,
+    "3": 728,
+    "4": 451,
+    "5": 250,
+    "6": 231879,
+    "7": 144654,
+    "8": 59915,
+    "9": 21097,
+    "10": 12691,
+    "11": 3917,
+    "12": 2231,
+    "13": 598,
+    "14": 338,
+    "15": 123,
+    "16": 77,
+    "17": 122,
+    "18": 21,
+    "19": 23,
+    "20": 17,
+    "21": 9,
+    "22": 4,
+    "23": 4,
+    "24": 3,
+    "25": 1
+  },
+  "ctc_required_steps_full25": {
+    "25": 1
+  },
+  "ctc_fail_eligible_samples": [],
+  "ctc_fail_full25_samples": [],
+  "marker_counts": {},
+  "overshoot_pixels_counts": {
+    "1.0": 27738
+  },
+  "max_clipped_area_fraction": 0.33333333333333337,
+  "max_clipped_area_sample": {
+    "image": {
+      "width": 600,
+      "date_captured": "",
+      "license": 0,
+      "flickr_url": "",
+      "file_name": "0002639.jpg",
+      "id": 2639,
+      "coco_url": "",
+      "height": 575
+    },
+    "annotation": {
+      "image_id": 2639,
+      "bbox": [
+        598.0,
+        345.0,
+        3.0,
+        205.0
+      ],
+      "area": 615.0,
+      "rec": [
+        69,
+        76,
+        69,
+        67,
+        84,
+        79,
+        82,
+        83,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "category_id": 1,
+      "iscrowd": 0,
+      "id": 23043,
+      "bezier_pts": [
+        600.0,
+        392.0,
+        600.0,
+        499.09,
+        600.0,
+        522.2,
+        600.0,
+        549.0,
+        600.0,
+        399.0,
+        601.08,
+        369.73,
+        603.81,
+        392.82,
+        598.0,
+        345.0
+      ]
+    },
+    "clipped_bbox": [
+      598.0,
+      345.0,
+      2.0,
+      205.0
+    ],
+    "area_loss_fraction": 0.33333333333333337
+  },
+  "full25_max_clipped_area_fraction": 0,
+  "category_counts": {
+    "1": 479834
+  },
+  "settings": {
+    "width_buckets": [
+      32,
+      64,
+      128
+    ],
+    "width_scale": 16,
+    "exclude_full25_no_padding": true,
+    "width": "first bucket >= ceil(clipped_width/clipped_height * 16), cap at 128"
+  }
+}

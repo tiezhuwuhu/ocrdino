@@ -1,0 +1,39 @@
+{
+  "dataset": "mlt2017",
+  "split": "train",
+  "summary": {
+    "source_images": 9999,
+    "source_annotations": 89418,
+    "image_frame_repairs": 0,
+    "unrecoverable_code_95": 30607,
+    "recognition_ignored_regions": 30678,
+    "recognition_supervised_regions": 58740,
+    "clipped_bboxes": 139,
+    "empty_recognition": 14,
+    "full_25_slots_possible_truncation": 130,
+    "full_25_slot_labels": 130,
+    "literal_marker_transcriptions": 1,
+    "output_annotations": 89418,
+    "detection_supervised_regions": 89418,
+    "images_with_no_detection_gt": 11,
+    "max_detection_gt_per_image": 333
+  },
+  "full_length_policy": "rec-ignore",
+  "ctc_width_buckets": [
+    32,
+    64,
+    128
+  ],
+  "ctc_width_scale": 16.0,
+  "image_repairs": [],
+  "errors": [],
+  "image_headers_checked": false,
+  "ok": true,
+  "notes": [
+    "rec 0..94 maps to ASCII 32..126; 95 is unrecoverable; 96 is padding.",
+    "Source has no language field; ASCII-decodable is not an English language label.",
+    "Positive intersections are clipped; original boxes remain in source_bbox.",
+    "Full 25-slot text may be truncated upstream; missing characters cannot be recovered.",
+    "Image extraction and header validation occur only with --extract-images."
+  ]
+}

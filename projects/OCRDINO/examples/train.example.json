@@ -1,0 +1,49 @@
+{
+  "schema_version": "ocrdino.text.v1",
+  "images": [
+    {
+      "id": 1,
+      "file_name": "example.jpg",
+      "width": 640,
+      "height": 480,
+      "annotation_complete": true
+    }
+  ],
+  "annotations": [
+    {
+      "id": 1,
+      "image_id": 1,
+      "category_id": 1,
+      "bbox": [
+        50,
+        80,
+        240,
+        48
+      ],
+      "text": "HELLO 2026",
+      "ignore": false,
+      "rec_ignore": false
+    },
+    {
+      "id": 2,
+      "image_id": 1,
+      "category_id": 1,
+      "bbox": [
+        320,
+        180,
+        200,
+        50
+      ],
+      "text": "OCRDINO",
+      "ignore": false,
+      "rec_ignore": false
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "text"
+    }
+  ],
+  "invalid_annotations": []
+}

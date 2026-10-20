@@ -1,0 +1,624 @@
+{
+  "archive": "C:\\Users\\14222\\Desktop\\ocrdino\\dataset\\eng\\totaltext.zip",
+  "annotation_member": "totaltext/train.json",
+  "annotation_sha256": "59c6e528080d8cba22b0f599b134ddba9e0729620e61ee0b25000861704a3682",
+  "image_count": 1255,
+  "annotation_count": 9722,
+  "categories": [
+    {
+      "supercategory": "beverage",
+      "id": 1,
+      "keypoints": [
+        "mean",
+        "xmin",
+        "x2",
+        "x3",
+        "xmax",
+        "ymin",
+        "y2",
+        "y3",
+        "ymax",
+        "cross"
+      ],
+      "name": "text"
+    }
+  ],
+  "all_image_keys": [
+    "coco_url",
+    "date_captured",
+    "file_name",
+    "flickr_url",
+    "height",
+    "id",
+    "license",
+    "width"
+  ],
+  "annotation_keysets": {
+    "area,bbox,bezier_pts,category_id,id,image_id,iscrowd,rec,segmentation": 9722
+  },
+  "category_counts": {
+    "1": 9722
+  },
+  "counts": {
+    "duplicate_image_ids": 0,
+    "duplicate_annotation_ids": 0,
+    "duplicate_image_filenames": 0,
+    "fully_decodable_ascii": 9722,
+    "has_segmentation": 9722,
+    "has_bezier_pts": 9722,
+    "bbox_out_of_bounds": 102,
+    "no_padding_96_potential_length_cap": 14,
+    "images_without_annotations": 0
+  },
+  "rec_code_histogram": {
+    "0": 23,
+    "6": 1,
+    "7": 14,
+    "11": 1,
+    "13": 20,
+    "14": 38,
+    "15": 9,
+    "16": 447,
+    "17": 433,
+    "18": 261,
+    "19": 191,
+    "20": 150,
+    "21": 209,
+    "22": 153,
+    "23": 145,
+    "24": 190,
+    "25": 219,
+    "26": 2,
+    "33": 3778,
+    "34": 967,
+    "35": 1617,
+    "36": 1163,
+    "37": 3847,
+    "38": 826,
+    "39": 943,
+    "40": 1316,
+    "41": 2483,
+    "42": 165,
+    "43": 704,
+    "44": 1803,
+    "45": 1226,
+    "46": 2491,
+    "47": 2572,
+    "48": 982,
+    "49": 75,
+    "50": 2634,
+    "51": 2557,
+    "52": 2559,
+    "53": 1191,
+    "54": 361,
+    "55": 562,
+    "56": 72,
+    "57": 653,
+    "58": 111,
+    "65": 1249,
+    "66": 181,
+    "67": 355,
+    "68": 365,
+    "69": 1490,
+    "70": 190,
+    "71": 302,
+    "72": 425,
+    "73": 988,
+    "74": 18,
+    "75": 195,
+    "76": 572,
+    "77": 371,
+    "78": 930,
+    "79": 976,
+    "80": 228,
+    "81": 3,
+    "82": 856,
+    "83": 655,
+    "84": 819,
+    "85": 462,
+    "86": 99,
+    "87": 168,
+    "88": 26,
+    "89": 282,
+    "90": 55,
+    "96": 190626
+  },
+  "rec_array_length_histogram": {
+    "25": 9722
+  },
+  "rec_content_length_histogram": {
+    "1": 318,
+    "2": 800,
+    "3": 1310,
+    "4": 1751,
+    "5": 1365,
+    "6": 1278,
+    "7": 1043,
+    "8": 750,
+    "9": 446,
+    "10": 301,
+    "11": 149,
+    "12": 73,
+    "13": 54,
+    "14": 18,
+    "15": 13,
+    "16": 8,
+    "17": 5,
+    "18": 6,
+    "19": 4,
+    "20": 6,
+    "21": 2,
+    "22": 4,
+    "23": 3,
+    "24": 1,
+    "25": 14
+  },
+  "recognized_ascii_charset": " &'+-./0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  "max_ctc_min_steps_on_fully_decodable": 30,
+  "max_annotations_per_image": 103,
+  "available_image_files": 1255,
+  "missing_image_files": [],
+  "unreferenced_image_files": [],
+  "image_header_checked": true,
+  "image_header_mismatches": [
+    {
+      "id": 894,
+      "declared": [
+        470,
+        400
+      ],
+      "actual": [
+        400,
+        470
+      ]
+    }
+  ],
+  "samples": {
+    "bbox_out_of_bounds": [
+      {
+        "id": 5,
+        "image_id": 0,
+        "bbox": [
+          148,
+          476,
+          60,
+          25
+        ],
+        "rec": [
+          33,
+          76,
+          80,
+          65,
+          67,
+          65,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "Alpaca"
+      },
+      {
+        "id": 8,
+        "image_id": 0,
+        "bbox": [
+          340,
+          480,
+          32,
+          21
+        ],
+        "rec": [
+          72,
+          65,
+          84,
+          83,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "hats"
+      },
+      {
+        "id": 36,
+        "image_id": 3,
+        "bbox": [
+          387,
+          480,
+          96,
+          21
+        ],
+        "rec": [
+          79,
+          87,
+          78,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "own"
+      },
+      {
+        "id": 175,
+        "image_id": 21,
+        "bbox": [
+          73,
+          384,
+          165,
+          117
+        ],
+        "rec": [
+          34,
+          37,
+          52,
+          52,
+          37,
+          50,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "BETTER"
+      },
+      {
+        "id": 176,
+        "image_id": 21,
+        "bbox": [
+          265,
+          405,
+          157,
+          96
+        ],
+        "rec": [
+          55,
+          41,
+          46,
+          37,
+          51,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "WINES"
+      }
+    ],
+    "no_padding_96_potential_length_cap": [
+      {
+        "id": 1145,
+        "image_id": 124,
+        "bbox": [
+          135,
+          78,
+          332,
+          129
+        ],
+        "rec": [
+          35,
+          40,
+          33,
+          47,
+          45,
+          53,
+          46,
+          39,
+          38,
+          37,
+          51,
+          52,
+          41,
+          54,
+          33,
+          44,
+          40,
+          33,
+          47,
+          36,
+          33,
+          44,
+          33,
+          52,
+          44
+        ],
+        "ascii_visible": "CHAOMUNGFESTIVALHAODALATL"
+      },
+      {
+        "id": 1193,
+        "image_id": 128,
+        "bbox": [
+          516,
+          201,
+          264,
+          24
+        ],
+        "rec": [
+          45,
+          79,
+          65,
+          37,
+          83,
+          80,
+          82,
+          69,
+          83,
+          83,
+          79,
+          33,
+          76,
+          73,
+          67,
+          85,
+          76,
+          73,
+          36,
+          65,
+          75,
+          76,
+          65,
+          75,
+          48
+        ],
+        "ascii_visible": "MoaEspressoAliculiDaklakP"
+      },
+      {
+        "id": 1941,
+        "image_id": 211,
+        "bbox": [
+          147,
+          13,
+          297,
+          177
+        ],
+        "rec": [
+          50,
+          45,
+          21,
+          47,
+          38,
+          38,
+          38,
+          47,
+          50,
+          38,
+          50,
+          41,
+          37,
+          46,
+          36,
+          51,
+          47,
+          38,
+          34,
+          57,
+          52,
+          37,
+          51,
+          48,
+          41
+        ],
+        "ascii_visible": "RM5OFFFORFRIENDSOFBYTESPI"
+      },
+      {
+        "id": 2979,
+        "image_id": 331,
+        "bbox": [
+          313,
+          551,
+          189,
+          16
+        ],
+        "rec": [
+          34,
+          50,
+          37,
+          33,
+          43,
+          39,
+          44,
+          33,
+          51,
+          51,
+          47,
+          38,
+          52,
+          40,
+          37,
+          38,
+          41,
+          50,
+          37,
+          33,
+          44,
+          33,
+          50,
+          45,
+          55
+        ],
+        "ascii_visible": "BREAKGLASSOFTHEFIREALARMW"
+      },
+      {
+        "id": 2980,
+        "image_id": 331,
+        "bbox": [
+          313,
+          575,
+          212,
+          17
+        ],
+        "rec": [
+          47,
+          48,
+          37,
+          46,
+          35,
+          47,
+          46,
+          52,
+          50,
+          47,
+          44,
+          54,
+          33,
+          44,
+          54,
+          37,
+          34,
+          37,
+          38,
+          47,
+          50,
+          37,
+          50,
+          53,
+          46
+        ],
+        "ascii_visible": "OPENCONTROLVALVEBEFORERUN"
+      }
+    ]
+  },
+  "exif_nonidentity_images": [
+    {
+      "image_id": 893,
+      "archive_member": "totaltext/train_images/0000893.jpg",
+      "json_dimensions": [
+        1600,
+        1064
+      ],
+      "raw_dimensions": [
+        1600,
+        1064
+      ],
+      "exif_orientation": 0,
+      "annotation_count": 12
+    },
+    {
+      "image_id": 894,
+      "archive_member": "totaltext/train_images/0000894.jpg",
+      "json_dimensions": [
+        470,
+        400
+      ],
+      "raw_dimensions": [
+        400,
+        470
+      ],
+      "exif_orientation": 6,
+      "annotation_count": 12
+    },
+    {
+      "image_id": 914,
+      "archive_member": "totaltext/train_images/0000914.jpg",
+      "json_dimensions": [
+        1176,
+        1025
+      ],
+      "raw_dimensions": [
+        1176,
+        1025
+      ],
+      "exif_orientation": 0,
+      "annotation_count": 10
+    }
+  ],
+  "known_raw_coordinate_repairs": {
+    "894": [
+      400,
+      470
+    ]
+  },
+  "default_roi_width_bucket_counts_fully_decodable": {
+    "32": 5341,
+    "64": 3610,
+    "128": 771
+  },
+  "additional_counts": {
+    "bbox_out_of_bounds_after_known_raw_repairs": 100,
+    "fully_decodable_without_padding": 14
+  },
+  "ctc_infeasible_samples": [],
+  "ctc_gt32_nontruncated_candidates": [],
+  "orientation_audit_note": "For TotalText train894/test228, annotations match unrotated encoded pixels although JSON dimensions reflect EXIF orientation6; repair canonical dimensions to raw and strip EXIF orientation from extracted copies without rotating/reencoding. Other images may require further audit; MLT image headers were not read."
+}

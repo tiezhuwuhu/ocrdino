@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "date": "2026-10-15",
+  "scope": "Actual MMEngine config inheritance and pretty_text serialization only",
+  "environment": {
+    "python": "3.13.9 (Anaconda)",
+    "mmengine": "0.10.7",
+    "mmengine_source": "Existing local ocrdino_testdeps cache, appended to sys.path",
+    "import_custom_modules": false
+  },
+  "command": {
+    "working_directory": "C:/Users/14222/.codex/visualizations/2026/10/08/01a11aeb-7a68-7721-b272-d464193a8739/ocrdino_twostage_build",
+    "argv": [
+      "C:/Users/14222/anaconda3/python.exe",
+      "-c",
+      "import sys, tempfile, json\nsys.path.append(r'C:\\Users\\14222\\.codex\\visualizations\\2026\\10\\08\\01a11aeb-7a68-7721-b272-d464193a8739\\ocrdino_testdeps')\ntempfile.tempdir=r'C:\\Users\\14222\\.codex\\visualizations\\2026\\10\\08\\01a11aeb-7a68-7721-b272-d464193a8739\\ocrdino_twostage_build\\.test_tmp'\nfrom mmengine import Config\nreports=[]\nfor name,epochs,lr,milestones,ann in [('pretrain_24e',24,1e-4,[19,22],'pretrain'),('totaltext_12e',12,5e-5,[8,11],'totaltext_train')]:\n    filename='projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_'+name+'.py'\n    cfg=Config.fromfile(filename,import_custom_modules=False)\n    assert cfg.model.type=='OCRDINO'\n    assert cfg.model.backbone.out_indices==(0,1,2,3)\n    assert cfg.model.bbox_head.num_classes==1\n    assert cfg.model.recognition_head.width_buckets==(32,64,128)\n    assert cfg.train_dataloader.dataset.type=='OCRTextDataset'\n    assert cfg.train_dataloader.dataset.ann_file=='annotations/'+ann+'.json'\n    assert cfg.train_dataloader.dataset.data_prefix.img==''\n    assert [x.type for x in cfg.train_dataloader.dataset.pipeline]==['LoadImageFromFile','OCRLoadAnnotations','Resize','OCRPackDetInputs']\n    assert cfg.train_cfg.type=='EpochBasedTrainLoop' and cfg.train_cfg.max_epochs==epochs\n    assert cfg.optim_wrapper.type=='AmpOptimWrapper'\n    assert cfg.optim_wrapper.optimizer.type=='AdamW' and cfg.optim_wrapper.optimizer.lr==lr\n    assert cfg.optim_wrapper.accumulative_counts==4\n    assert cfg.optim_wrapper.paramwise_cfg.custom_keys.backbone.lr_mult==0.1\n    assert cfg.param_scheduler[1].milestones==milestones and cfg.param_scheduler[1].end==epochs\n    assert cfg.val_dataloader is None and cfg.val_cfg is None and cfg.val_evaluator is None\n    assert cfg.test_dataloader is None and cfg.test_cfg is None and cfg.test_evaluator is None\n    assert cfg.resume is False and cfg.default_scope=='mmdet'\n    rendered=cfg.pretty_text\n    reports.append(dict(config=filename,epochs=epochs,lr=lr,load_from=cfg.load_from,work_dir=cfg.work_dir,pretty_text_length=len(rendered)))\nprint(json.dumps(dict(mmengine='0.10.7',import_custom_modules=False,configs=reports)))"
+    ]
+  },
+  "results": [
+    {
+      "config": "projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_pretrain_24e.py",
+      "epochs": 24,
+      "learning_rate": 0.0001,
+      "milestones": [
+        19,
+        22
+      ],
+      "load_from": "checkpoints/ocrdino_init.pth",
+      "work_dir": "work_dirs/ocrdino_pretrain24",
+      "pretty_text_length": 7025
+    },
+    {
+      "config": "projects/OCRDINO/configs/ocrdino_r50_4scale_ctc_totaltext_12e.py",
+      "epochs": 12,
+      "learning_rate": 0.00005,
+      "milestones": [
+        8,
+        11
+      ],
+      "load_from": "work_dirs/ocrdino_pretrain24/epoch_24.pth",
+      "work_dir": "work_dirs/ocrdino_totaltext12",
+      "pretty_text_length": 7050
+    }
+  ],
+  "checks": [
+    "Both configs resolve their full official DINO -> improved DINO -> OCRDINO inheritance chain",
+    "OCRDINO type, C2-C5 backbone output indices, one text detection class, recognition width buckets (32,64,128)",
+    "OCRTextDataset, correct stage annotation path, empty image prefix, OCR-specific pipeline preserved",
+    "EpochBasedTrainLoop and requested 24/12 epochs",
+    "AmpOptimWrapper, AdamW, stage LR, accumulation 4 and backbone LR multiplier 0.1 preserved",
+    "Stage MultiStepLR milestone list and end replace inherited schedule",
+    "Validation and test dataloaders, loops and evaluators are None",
+    "resume=False and default_scope=mmdet",
+    "cfg.pretty_text completes for both merged configurations"
+  ],
+  "limitations": [
+    "import_custom_modules=False: project model registration/imports were not executed",
+    "No dataset, model, optimizer, Runner or CUDA operator was built by this check",
+    "No forward/backward, GPU memory, OCR accuracy or convergence measurement",
+    "The supplied trained/initialization checkpoints were not opened by this check"
+  ]
+}

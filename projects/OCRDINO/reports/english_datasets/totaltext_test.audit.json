@@ -1,0 +1,49 @@
+{
+  "dataset": "totaltext",
+  "split": "test",
+  "summary": {
+    "source_images": 300,
+    "source_annotations": 1975,
+    "image_frame_repairs": 1,
+    "recognition_supervised_regions": 1974,
+    "clipped_bboxes": 12,
+    "full_25_slots_possible_truncation": 1,
+    "full_25_slot_labels": 1,
+    "recognition_ignored_regions": 1,
+    "output_annotations": 1975,
+    "detection_supervised_regions": 1975,
+    "images_with_no_detection_gt": 4,
+    "max_detection_gt_per_image": 52
+  },
+  "full_length_policy": "rec-ignore",
+  "ctc_width_buckets": [
+    32,
+    64,
+    128
+  ],
+  "ctc_width_scale": 16.0,
+  "image_repairs": [
+    {
+      "file_name": "images/totaltext/test/0000228.jpg",
+      "source_dimensions": [
+        294,
+        392
+      ],
+      "corrected_dimensions": [
+        392,
+        294
+      ],
+      "operation": "strip_exif_without_rotating_pixels"
+    }
+  ],
+  "errors": [],
+  "image_headers_checked": false,
+  "ok": true,
+  "notes": [
+    "rec 0..94 maps to ASCII 32..126; 95 is unrecoverable; 96 is padding.",
+    "Source has no language field; ASCII-decodable is not an English language label.",
+    "Positive intersections are clipped; original boxes remain in source_bbox.",
+    "Full 25-slot text may be truncated upstream; missing characters cannot be recovered.",
+    "Image extraction and header validation occur only with --extract-images."
+  ]
+}

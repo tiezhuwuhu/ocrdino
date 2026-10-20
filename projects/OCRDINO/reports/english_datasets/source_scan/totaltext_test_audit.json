@@ -1,0 +1,581 @@
+{
+  "archive": "C:\\Users\\14222\\Desktop\\ocrdino\\dataset\\eng\\totaltext.zip",
+  "annotation_member": "totaltext/test.json",
+  "annotation_sha256": "a14bdb3fe5ecdc511edbef609a576977537a9d9b7bc5d1f16a5d5bb3ee44f163",
+  "image_count": 300,
+  "annotation_count": 1975,
+  "categories": [
+    {
+      "supercategory": "beverage",
+      "id": 1,
+      "keypoints": [
+        "mean",
+        "xmin",
+        "x2",
+        "x3",
+        "xmax",
+        "ymin",
+        "y2",
+        "y3",
+        "ymax",
+        "cross"
+      ],
+      "name": "text"
+    }
+  ],
+  "all_image_keys": [
+    "coco_url",
+    "date_captured",
+    "file_name",
+    "flickr_url",
+    "height",
+    "id",
+    "license",
+    "width"
+  ],
+  "annotation_keysets": {
+    "area,bbox,bezier_pts,category_id,id,image_id,iscrowd,rec": 1975
+  },
+  "category_counts": {
+    "1": 1975
+  },
+  "counts": {
+    "duplicate_image_ids": 0,
+    "duplicate_annotation_ids": 0,
+    "duplicate_image_filenames": 0,
+    "fully_decodable_ascii": 1975,
+    "has_bezier_pts": 1975,
+    "bbox_out_of_bounds": 17,
+    "bbox_no_image_intersection": 3,
+    "no_padding_96_potential_length_cap": 1,
+    "images_without_annotations": 4
+  },
+  "rec_code_histogram": {
+    "6": 6,
+    "7": 15,
+    "13": 14,
+    "14": 11,
+    "15": 1,
+    "16": 90,
+    "17": 91,
+    "18": 76,
+    "19": 36,
+    "20": 37,
+    "21": 62,
+    "22": 36,
+    "23": 43,
+    "24": 41,
+    "25": 44,
+    "26": 2,
+    "33": 741,
+    "34": 189,
+    "35": 323,
+    "36": 200,
+    "37": 732,
+    "38": 188,
+    "39": 202,
+    "40": 264,
+    "41": 518,
+    "42": 35,
+    "43": 149,
+    "44": 337,
+    "45": 205,
+    "46": 522,
+    "47": 513,
+    "48": 185,
+    "49": 19,
+    "50": 539,
+    "51": 523,
+    "52": 494,
+    "53": 240,
+    "54": 62,
+    "55": 119,
+    "56": 23,
+    "57": 115,
+    "58": 23,
+    "65": 220,
+    "66": 31,
+    "67": 97,
+    "68": 80,
+    "69": 323,
+    "70": 60,
+    "71": 62,
+    "72": 83,
+    "73": 202,
+    "74": 6,
+    "75": 43,
+    "76": 132,
+    "77": 71,
+    "78": 174,
+    "79": 236,
+    "80": 35,
+    "81": 4,
+    "82": 198,
+    "83": 167,
+    "84": 163,
+    "85": 80,
+    "86": 11,
+    "87": 32,
+    "88": 3,
+    "89": 44,
+    "90": 8,
+    "96": 38745
+  },
+  "rec_array_length_histogram": {
+    "25": 1975
+  },
+  "rec_content_length_histogram": {
+    "1": 53,
+    "2": 178,
+    "3": 243,
+    "4": 353,
+    "5": 303,
+    "6": 281,
+    "7": 212,
+    "8": 123,
+    "9": 77,
+    "10": 77,
+    "11": 38,
+    "12": 15,
+    "13": 9,
+    "14": 3,
+    "15": 1,
+    "17": 3,
+    "18": 2,
+    "20": 1,
+    "22": 2,
+    "25": 1
+  },
+  "recognized_ascii_charset": "&'-./0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  "max_ctc_min_steps_on_fully_decodable": 26,
+  "max_annotations_per_image": 52,
+  "available_image_files": 300,
+  "missing_image_files": [],
+  "unreferenced_image_files": [],
+  "image_header_checked": true,
+  "image_header_mismatches": [
+    {
+      "id": 228,
+      "declared": [
+        294,
+        392
+      ],
+      "actual": [
+        392,
+        294
+      ]
+    }
+  ],
+  "samples": {
+    "bbox_out_of_bounds": [
+      {
+        "id": 17,
+        "image_id": 4,
+        "bbox": [
+          139.0,
+          -2.0,
+          207.0,
+          34.0
+        ],
+        "rec": [
+          50,
+          33,
+          41,
+          44,
+          55,
+          33,
+          57,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "RAILWAY"
+      },
+      {
+        "id": 140,
+        "image_id": 24,
+        "bbox": [
+          389.0,
+          253.0,
+          179.0,
+          128.0
+        ],
+        "rec": [
+          52,
+          47,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "TO"
+      },
+      {
+        "id": 267,
+        "image_id": 42,
+        "bbox": [
+          401.0,
+          398.0,
+          101.0,
+          43.0
+        ],
+        "rec": [
+          34,
+          53,
+          38,
+          38,
+          37,
+          52,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "BUFFET"
+      },
+      {
+        "id": 412,
+        "image_id": 58,
+        "bbox": [
+          77.0,
+          163.0,
+          79.0,
+          52.0
+        ],
+        "rec": [
+          17,
+          24,
+          18,
+          24,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "1828"
+      },
+      {
+        "id": 413,
+        "image_id": 58,
+        "bbox": [
+          175.0,
+          109.0,
+          84.0,
+          106.0
+        ],
+        "rec": [
+          36,
+          47,
+          35,
+          43,
+          51,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "DOCKS"
+      }
+    ],
+    "bbox_no_image_intersection": [
+      {
+        "id": 1412,
+        "image_id": 228,
+        "bbox": [
+          324.0,
+          274.0,
+          27.0,
+          14.0
+        ],
+        "rec": [
+          19,
+          21,
+          18,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "352"
+      },
+      {
+        "id": 1413,
+        "image_id": 228,
+        "bbox": [
+          354.0,
+          274.0,
+          17.0,
+          14.0
+        ],
+        "rec": [
+          21,
+          23,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "57"
+      },
+      {
+        "id": 1414,
+        "image_id": 228,
+        "bbox": [
+          374.0,
+          271.0,
+          17.0,
+          16.0
+        ],
+        "rec": [
+          18,
+          25,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96,
+          96
+        ],
+        "ascii_visible": "29"
+      }
+    ],
+    "no_padding_96_potential_length_cap": [
+      {
+        "id": 1812,
+        "image_id": 274,
+        "bbox": [
+          526.0,
+          331.0,
+          283.0,
+          34.0
+        ],
+        "rec": [
+          35,
+          46,
+          33,
+          39,
+          53,
+          33,
+          46,
+          39,
+          36,
+          47,
+          46,
+          39,
+          48,
+          41,
+          44,
+          47,
+          52,
+          38,
+          50,
+          37,
+          37,
+          52,
+          50,
+          33,
+          36
+        ],
+        "ascii_visible": "CNAGUANGDONGPILOTFREETRAD"
+      }
+    ]
+  },
+  "exif_nonidentity_images": [
+    {
+      "image_id": 88,
+      "archive_member": "totaltext/test_images/0000088.jpg",
+      "json_dimensions": [
+        1600,
+        1329
+      ],
+      "raw_dimensions": [
+        1600,
+        1329
+      ],
+      "exif_orientation": 0,
+      "annotation_count": 4
+    },
+    {
+      "image_id": 228,
+      "archive_member": "totaltext/test_images/0000228.jpg",
+      "json_dimensions": [
+        294,
+        392
+      ],
+      "raw_dimensions": [
+        392,
+        294
+      ],
+      "exif_orientation": 6,
+      "annotation_count": 16
+    },
+    {
+      "image_id": 287,
+      "archive_member": "totaltext/test_images/0000287.jpg",
+      "json_dimensions": [
+        2592,
+        1944
+      ],
+      "raw_dimensions": [
+        2592,
+        1944
+      ],
+      "exif_orientation": 0,
+      "annotation_count": 16
+    }
+  ],
+  "known_raw_coordinate_repairs": {
+    "228": [
+      392,
+      294
+    ]
+  },
+  "default_roi_width_bucket_counts_fully_decodable": {
+    "32": 979,
+    "64": 732,
+    "128": 264
+  },
+  "additional_counts": {
+    "bbox_out_of_bounds_after_known_raw_repairs": 12,
+    "fully_decodable_without_padding": 1
+  },
+  "ctc_infeasible_samples": [],
+  "ctc_gt32_nontruncated_candidates": [],
+  "orientation_audit_note": "For TotalText train894/test228, annotations match unrotated encoded pixels although JSON dimensions reflect EXIF orientation6; repair canonical dimensions to raw and strip EXIF orientation from extracted copies without rotating/reencoding. Other images may require further audit; MLT image headers were not read."
+}

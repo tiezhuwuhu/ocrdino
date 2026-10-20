@@ -1,0 +1,5 @@
+# Install CUDA-matched torch and mmcv first; see the repository README.
+numpy>=1.23,<2
+mmengine==0.10.7
+Pillow>=9
+scipy>=1.8
